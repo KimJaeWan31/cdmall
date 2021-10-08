@@ -19,12 +19,12 @@ header, nav, aside, footer, section ,li, a{
 	<div class="container-fluid">
 		
 		<ul sec:authorize="isAnonymous()" class="nav navbar-nav" id="menu_anonymous">
-        	<li><a class="" href="/boardMain" style="font-size: 30px;">HOME</a></li>
+        	<li><a href="/boardMain" style="font-size: 30px;">HOME</a></li>
 			<li><a href="/noticeBoard/list" style="font-size: 30px;">공지사항</a></li>
-			<li><a  onclick="alert('회원만 접근 가능한 페이지 입니다.');" href="/member/join" style="cursor:pointer; font-size: 30px;">사진게시판</a></li>
-			<li><a  onclick="alert('회원만 접근 가능한 페이지 입니다.');" href="/member/join" style="cursor:pointer; font-size: 30px;">질문게시판</a></li>
-			<li><a  onclick="alert('회원만 접근 가능한 페이지 입니다.');" href="/member/join" style="cursor:pointer; font-size: 30px;">자유게시판</a></li>
-			<li><a  onclick="alert('회원만 접근 가능한 페이지 입니다.');" href="/member/join" style="cursor:pointer; font-size: 30px;">추천게시판</a></li>
+			<li><a onclick="loginAccess()">사진게시판</a></li>
+			<li><a onclick="loginAccess()">질문게시판</a></li>
+			<li><a onclick="loginAccess()">자유게시판</a></li>
+			<li><a onclick="loginAccess()">추천게시판</a></li>
     	</ul>
     	<ul sec:authorize="isAuthenticated()" class="nav navbar-nav" id="menu_authenticated">
         	<li><a class="" href="/boardMain">HOME</a></li>
@@ -49,6 +49,16 @@ header, nav, aside, footer, section ,li, a{
 			}).done(()=> location.href = '/boardMain');
 			
 		});	
+		
+		
+
+        function loginAccess() {
+            if (!confirm("회원만 접근 가능합니다. \n (확인)버튼을 누르면 로그인 창으로 이동합니다. ")) {
+          	  document.location.reload();
+            } else {
+                document.location.href='/member/login'
+            }
+        }
 	</script>
 </div>
 </body>
