@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/header.css">
+</head>
+
+<body>
+
+
+
+
+	<div id="header" >
+	<ul id="menuChange" class="nav navbar-nav">
+        <li class="menu"><a href="/">STORE</a> </li>
+        <li class="menu" style="background-color: #9BC3FF; border-radius: 50px;"><a href="/boardMain" >COMMUNITY</a></li> 
+      </ul>
+      	<div id="mainLogo" >
+      			<img  src="/image/main.png" class=main_logo >
+      	</div>
+      	  <ul sec:authorize="isAnonymous()" class="nav navbar-nav" id="top_menu_anonymous">
+                <li><a class="" href="/boardMain">HOME</a> </li>
+                <li><a href="/member/join">JOIN</a></li>
+                <li><a href="/member/login">LOGIN</a></li>
+                <li><a href='/member/read'>MYPAGE</a></li>
+           </ul>
+
+
+         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav" id="top_menu_authenticated">
+                <li><a class="" href="/boardMain">HOME</a> </li>
+				<li><a href="#" id="logout">LOGOUT</a></li>
+                <li><a href='/member/read'>MYPAGE</a></li>
+                <li><a href="/product/list">ORDER</a></li>
+                <li><a href="/product/read">CART</a></li>
+                
+    	</ul>
+		<script th:inline="javascript">
+		$("#top_menu_authenticated").on("click", "#logout", (e)=> {
+			// a태그는 클릭하면 이동(동작이 2개, 그때 두번째 동작을 막아버린다)
+			e.preventDefault();
+			
+			// 이벤트가 발생한 곳을 넓은 곳에서 좁은 곳으로 찾는다
+			// <div id="parent"><div id="child"><button>클릭</button></div></div>
+			// e.stopPropagation();
+			
+			var choice = confirm('로그아웃하시겠습니까?');
+			if(choice==false)
+				return;
+			$.ajax({
+				url:"http://localhost:8081/member/logout",
+				method: "post",
+			}).done(()=> location.href = '/');
+			
+		});	
+	</script>
+
+	</div>
+</body>
+</html>

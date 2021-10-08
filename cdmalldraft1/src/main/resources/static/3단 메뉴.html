@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/css/main.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+/* 전체 선택자 : 우선순위 0. 가급적 사용을 권장하지 않는다 -> reset.css */
+* {
+	margin: 0; padding: 0; list-style: none; 
+}
+/*
+	왼쪽으로 정렬하기 -> display:inline-block;  
+					float:left;  			-> 부모의 높이가 0이 된다. -> 부모의 높이를 지정 -> 불가능한 경우(레이아웃할 때 section의 높이:모른다 -> overflow)
+					position:absolute;		-> 부모의 높이가 0이 된다. -> 부모의 높이를 지정
+*/
+#menu { height: 50px; background-color: #fcc; }
+
+/* .main1 li : .main의 하위 li, .main1>li : 자식선택자. .main의 자식인 li */	
+/* 1단 메뉴를 왼쪽 정렬 */
+.main1>li { 
+	float: left; height: 50px; line-height: 50px; text-align: center; position: relative;
+}
+
+/* 2단 메뉴를 안보이게 날려버리자. top:50px은 1단 메뉴 밑에 표시하기 위해서 줌. */
+.main2 {
+	position: absolute; top:50px; left:-9999px;
+}
+
+/*1단 메뉴에서 호버하면 2단 메뉴를 땡겨오자 */
+.main1>li:hover .main2 {
+	left: 0;
+}
+
+/* 너비들을 적절히 지정하자. */
+.main1 { width: 600px; height: 50px; margin: 0 auto; }
+.main1>li { width: 25%; }
+.main2 { background-color: #ccc; width: 120%; }
+
+/* 3단 날리자 */
+.main2>li { position: relative; }
+.main3 { position: absolute; top:0; background-color: #68D089; width: 80%; left: -9999px; }
+
+/* 2단 메뉴 호버시 3단 땡겨오기 */
+.main2>li:hover .main3 {
+	left:100%;		/*2단 메뉴의 너비만큼 떨어뜨려라*/
+}
+
+/* 호버시 효과 */
+.main1>li a { display: inline-block; width: 100%; }
+.main1>li a:hover {
+	background-color: #b21016; color: white; font-weight: 700;
+}
+</style>
+</head>
+
+<body>
+	<!--가로형 3단 드롭다운 메뉴-->
+	<div id="menu">
+		<ul class="main1">
+			<li><a href="#">메뉴1</a>
+				<ul class="main2">
+					<li><a href="#">소메뉴1</a></li>
+					<li><a href="#">소메뉴2</a>
+						<ul class="main3">
+							<li><a href="#">2단소메뉴1</a></li>
+							<li><a href="#">2단소메뉴2</a></li>
+							<li><a href="#">2단소메뉴3</a></li>
+						</ul>
+					</li>
+					<li><a href="#">소메뉴3</a>
+						<ul class="main3">
+							<li><a href="#">2단소메뉴4</a></li>
+							<li><a href="#">2단소메뉴5</a></li>
+							<li><a href="#">2단소메뉴6</a></li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li><a href="#">메뉴2</a>
+				<ul class="main2">
+					<li><a href="#">소메뉴1</a>
+						<ul class="main3">
+							<li><a href="#">2단소메뉴7</a></li>
+							<li><a href="#">2단소메뉴8</a></li>
+							<li><a href="#">2단소메뉴9</a></li>
+						</ul>
+					</li>
+					<li><a href="#">소메뉴2</a>
+						<ul class="main3">
+							<li><a href="#">2단소메뉴10</a></li>
+							<li><a href="#">2단소메뉴11</a></li>
+							<li><a href="#">2단소메뉴12</a></li>
+						</ul>
+					</li>
+					<li><a href="#">소메뉴3</a>
+						<ul class="main3">
+							<li><a href="#">2단소메뉴13</a></li>
+							<li><a href="#">2단소메뉴14</a></li>
+							<li><a href="#">2단소메뉴15</a></li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li><a href="#">메뉴3</a>
+				<ul class="main2">
+					<li><a href="#">소메뉴1</a></li>
+					<li><a href="#">소메뉴2</a></li>
+					<li><a href="#">소메뉴3</a>
+						<ul class="main3">
+							<li><a href="#">2단소메뉴16</a></li>
+							<li><a href="#">2단소메뉴17</a></li>
+							<li><a href="#">2단소메뉴18</a></li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li><a href="#">메뉴4</a>
+				<ul class="main2">
+					<li><a href="#">소메뉴1</a></li>
+					<li><a href="#">소메뉴2</a></li>
+					<li><a href="#">소메뉴3</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</body>
+
+</html>

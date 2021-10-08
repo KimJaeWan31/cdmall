@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+header, nav, aside, footer, section ,li, a{
+	font-family: 'Jua', sans-serif;
+} 
+
+</style>
+</head>
+<body>
+<div th:fragment="nav" id="nav" class="navbar navbar-inverse">
+
+		<div sec:authentication="name" style="margin-left: 150px;"> </div>
+
+	<div class="container-fluid">
+		
+		<ul sec:authorize="isAnonymous()" class="nav navbar-nav" id="menu_anonymous">
+        	<li><a class="" href="/boardMain" style="font-size: 30px;">HOME</a></li>
+			<li><a href="/noticeBoard/list" style="font-size: 30px;">공지사항</a></li>
+			<li><a  onclick="alert('회원만 접근 가능한 페이지 입니다.');" href="/member/join" style="cursor:pointer; font-size: 30px;">사진게시판</a></li>
+			<li><a  onclick="alert('회원만 접근 가능한 페이지 입니다.');" href="/member/join" style="cursor:pointer; font-size: 30px;">질문게시판</a></li>
+			<li><a  onclick="alert('회원만 접근 가능한 페이지 입니다.');" href="/member/join" style="cursor:pointer; font-size: 30px;">자유게시판</a></li>
+			<li><a  onclick="alert('회원만 접근 가능한 페이지 입니다.');" href="/member/join" style="cursor:pointer; font-size: 30px;">추천게시판</a></li>
+    	</ul>
+    	<ul sec:authorize="isAuthenticated()" class="nav navbar-nav" id="menu_authenticated">
+        	<li><a class="" href="/boardMain">HOME</a></li>
+			<li><a href="/noticeBoard/list">공지사항</a></li>
+			<li><a href="/imageBoard/list">사진게시판</a></li>
+			<li><a href="/questionBoard/list">질문게시판</a></li>
+			<li><a href="/board/list">자유게시판</a></li>
+			<li><a href="/questionBoard/list">추천게시판</a></li>
+    	</ul>
+	</div>
+	<script th:inline="javascript">
+		$("#menu_authenticated").on("click", "#logout", (e)=> {
+
+			e.preventDefault();
+		
+			var choice = confirm('로그아웃하시겠습니까?');
+			if(choice==false)
+				return;
+			$.ajax({
+				url:"http://localhost:8081/member/logout",
+				method: "post",
+			}).done(()=> location.href = '/boardMain');
+			
+		});	
+	</script>
+</div>
+</body>
+</html>

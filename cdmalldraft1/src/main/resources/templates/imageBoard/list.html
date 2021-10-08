@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://use.fontawesome.com/0206006232.js"></script>
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<link rel="stylesheet" href="/css/img.css">
+
+<style>
+	img1 { 
+			display: block;
+  			width: 300px;
+  			height:280px;
+  			object-fit: cover;
+	}
+</style>
+
+<script sec:authorize="isAuthenticated()">
+	const isLogin = true
+</script>
+<script  sec:authorize="isAnonymous()">
+	const isLogin = false;
+</script>
+
+<script>
+	// 서버 응답을 저장할 변수
+	let isWriter = undefined;
+	let page = null;
+
+	const printImageBoard = ()=>{
+		const $list = $("#list");
+		
+		// 서버가 보낸 board들은 page.content에 저장되어 있다
+		for(c of page.content) {
+
+			// 사진게시판 화면 구성
+			const $li = $("<li>").appendTo($list);
+			const $figure = $("<figure>").appendTo($li).css("display","flex");
+			$("<img>").attr("src", "/upload/ibmage/" + c.imageFileName).appendTo($figure);
+			$('img1').attr('id', c.ibno+"_"+c.imageFileName);
+			const $figcaption = $("<figcaption>").appendTo($li);
+			$("<p>").text(c.writer).appendTo($figcaption);  //글쓴이 출력
+			
+			
+			
+			
+			
+			const $div = $("<div>").css({"border-bottom" :"1px solid black", "width":"350px"}).appendTo($figcaption);
+			$("<a>").attr("href", "/imageBoard/read?ibno=" + c.ibno).text(c.title).text(c.title).css("margin-right","20px").appendTo($div);		
+			
+			
+			const $button = $("<good_btn>").attr("id","goodBnt").attr("type", "button").attr("class","fa fa-heart-o").css({"color": "red", "font-size": "20px","cursor":"pointer"})
+			.attr("onclick","like("+c.ibno+",'"+c.writer+"')").text("").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
+			
+			$("<span>").attr("id", "good_cnt_"+c.ibno).text(c.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
+ 			$("<span>").attr("id", "likeCheck").text("").css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
+	        
+
+			
+			
+			
+		}
+		
+// 		$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
+	};
+	
+
+//     $('#good_btn_').click(function(){
+//         $('.glyphicon glyphicon-heart-empty').css({"color": "blue", "font-size": "20px"});
+//     });
+
+
+	
+	const getPagination = () => {
+		// 한번에 다섯개의 페이지씩
+		const blockSize = 5;
+		
+		// 서버 응답에 현재 페이지가 포함되어 있지 않다....재계산하자
+		let pageno = location.search.substr(8);
+		if(pageno=="")
+			pageno=1;
+		
+		// 0번 블록 : 1~5 page, 1번 블록 : 6~10 page
+		const blockNo = Math.floor((pageno-1)/blockSize);
+		const prev = blockNo * blockSize;
+		const first = prev + 1;
+		let last = first + blockSize - 1;
+		let  next = last + 1;
+		const countOfPage = Math.ceil(page.totalcount/10)
+		// 페이지의 개수는 page.totalPages에 저장되어 있다
+		if(last>=page.totalPages) {
+			last = page.totalPages;
+			next = 0;
+		}
+		
+		/*
+			자바스크립트 객체 필드의 이름과 값을 저장한 변수명을 같은 경우 59라인과 같이 줄여서 쓸 수 있다
+			return { 
+				pageno: pageno, 
+				prev : prev, 
+				next : next, 
+				first : first, 
+				last : last
+			}
+		*/
+		return {pageno, prev, next, first, last};
+		
+	};
+	
+	// 구조 분해 할당 : 객체를 변수로 풀어헤치는 문법
+	// const {pageno, prev, next, first, last} = getPagination();
+	const printPagination = ({pageno, prev, next, first, last}) => {
+		const $pagination = $("ul.pagination");
+		const url = "/imageBoard/list?pageno="
+				
+		// 이전으로 
+		if(prev>0) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+prev).text("이전으로").appendTo($li);
+		}
+		
+		// 시작 페이지에서 마지막 페이지....현재 페이지 번호일 경우 active 클래스 추가
+		for(let idx=first; idx<=last; idx++) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+idx).text(idx).appendTo($li);
+			if(idx==pageno)
+				$li.attr("class", "active");
+		}
+		
+		// 다음으로
+		if(next>0) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+next).text("다음으로").appendTo($li);
+		}
+	}
+
+	
+	const like = (ibno, cWriter)=>{
+		// 추천
+		if(isLogin==true && isWriter!=cWriter){
+			const param = {
+					ibno: ibno,
+					isGood: 1
+			}
+			
+// 			$.ajax({ url: "/imageBoard_member/good_or_bad", data: param, method: "patch"})
+// 				.done(goodCnt=>goodClicked(goodCnt, ibno));
+// 		}
+			$.ajax({ url: "/imageBoard_member/good_or_bad", data: param, method: "patch"})
+			.done(goodCnt=>goodClicked(goodCnt, ibno));
+			
+
+	}
+		
+		
+	}
+	
+	const goodClicked=(goodCnt, ibno)=>{
+		$("#good_cnt_"+ibno).text(goodCnt);
+		$("#good_btn_"+ibno).prop("disabled", true);
+	}
+	
+	
+	$(document).ready(()=>{
+		//const $username = $("#username").text();
+		isWriter = $("#username").text();
+		// 주소창에서 페이지 번호를 잘라낸다. 페이지 번호가 없으면 1로
+		console.log(isWriter);
+		let pageno = location.search.substr(8);
+		if(pageno=="")
+			pageno=1;
+		
+		$.ajax("/imageBoard/all?pageno="+pageno).done(result=>{
+			page=result;
+			printImageBoard();
+			printPagination(getPagination());
+		});
+		
+	});
+	
+	
+	
+</script>
+</head>
+<body>
+	<div id="page">
+	<div id="username" sec:authentication="name" style="display:none;"></div>
+
+ 		<!-- <div id="username" sec:authentication="name"></div> -->
+ 
+ 		<header id="header" th:replace="/fragments/headerBoard"> </header>
+	<nav id="nav" th:replace="/fragments/navBoard">
+	</nav>
+		<div id="communitypic">사 진 게 시 판</div>
+
+		<div id="main" class="image_button" >
+			<a class="btn btn-info" role="button" href="/imageBoard/write">글쓰기</a>
+			<section id="section" >
+				<div id="wrap" >
+				
+				
+					<ol id="list" class="image-list grid-view" style="margin-top: 30px;">
+					<!-- <li>
+						<figure>
+							<img src=""	alt="">
+							<figcaption>
+							<a href=""	target="_blank"></a>
+								<p></p>
+								<p></p>
+							</figcaption>
+							<div>
+							<p>
+							<a>
+							<p>추천버튼
+							</div>
+						</figure>
+					</li> -->
+					</ol>
+					
+					<!-- ---------------------------- -->
+					<div id="pagination" style="text-align: center;">
+
+						<ul class="pagination">
+						</ul>
+
+					</div>
+					
+				</div>
+			</section>
+		</div>
+
+		<footer id="footer" th:replace="/fragments/footer"> </footer>
+	</div>
+</body>
+</html>

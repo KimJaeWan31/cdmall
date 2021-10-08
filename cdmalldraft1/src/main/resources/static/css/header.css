@@ -1,0 +1,87 @@
+@charset "UTF-8";
+* {
+	margin: 0;
+	padding: 0;	
+}
+
+
+ul, li {
+	list-style: none;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, label {
+	font-family: 'Jua', sans-serif;
+} 
+
+#header  {
+
+/*border : 1px solid #d89a1d;*/
+
+	 display: flex;
+     width: 1280px;
+     margin: auto;
+     height: 80px;
+     margin-top: 20px;
+
+}
+#menuChange  {
+	flex: 1;
+	width: 426.66px;
+} 
+
+
+#menuChange > li {
+	
+	/*background: aqua;*/
+	float: left;
+	margin-right: 30px;
+}
+#menuChange > li > a{
+	font-size: 1.8em;
+    text-align: center;
+    border-radius: 50px;
+}
+
+/* 왼쪽 상단  */
+
+#mainLogo {
+	flex: 1;
+	width: 426.66px;
+}
+
+/* 메인로고 */
+
+#top_menu_anonymous {
+	flex: 1;
+	width: 426.66px;
+}
+#top_menu_anonymous >li{
+	float: right;
+	/*background: aqua;*/
+	font-size: 1.2em;
+}
+/* 오른쪽상단, 로그인하기전 */
+
+#top_menu_authenticated {
+	flex: 1;
+	width: 426.66px;
+}
+#top_menu_authenticated >li{
+	float: right;
+
+		font-size: 1.2em;
+}
+/* 오른쪽 상단, 로그인 후 */
+
+
+.main_logo {
+	width:250px;
+	margin-right: 120px;
+	display: block;
+	margin: 0 auto;
+}
+
+/*메인로고 사진 "댕댕의 정석"*/
+
+

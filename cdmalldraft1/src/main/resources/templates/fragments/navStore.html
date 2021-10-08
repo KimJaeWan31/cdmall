@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+header, nav, aside, footer, section ,li, a{
+	font-family: 'Jua', sans-serif;
+} 
+
+</style>
+
+<script type="text/javascript">
+
+</script>
+
+
+</head>
+<body>
+<div th:fragment="nav" id="nav" class="navbar navbar-inverse">
+	<!-- 사용자 권한 확인 -->
+	<!-- 
+		<div sec:authorize="hasRole('ADMIN')">ROLE_ADMIN</div>
+	<div sec:authorize="hasRole('USER')">ROLE_USER</div>
+	
+	<!--  로그인 여부 확인 -->
+	<!-- 
+	<div sec:authorize="isAuthenticated()">인증</div>
+	<div sec:authorize="isAnonymous()">비인증</div> -->
+	
+	<div sec:authentication="name" style="margin-left: 150px;"> </div>
+	
+	<div class="container-fluid">
+		<!-- 
+				<div class="navbar-header">
+			<a class="navbar-brand" href="/">HOME</a>
+		</div>
+		
+		 -->
+
+		<ul sec:authorize="isAnonymous()" class="nav navbar-nav" id="menu_anonymous">
+        	<li><a href="/shop/newList">NEW</a></li>
+			<li><a href="/shop/bestList">BEST</a></li>
+			<li><a href="/shop/outdoorList">야외용품</a></li>
+			<li><a href="/board/list">훈련용품</a></li>
+			<li><a href="/board/list">푸드</a></li>
+			<li><a href="/board/list">패션</a></li>
+			<nav class="navbar navbar-light bg-light">
+			  <a class="navbar-brand"></a>
+			  <form class="form-inline">
+			    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchArea">
+			    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+			  </form>
+			</nav>
+    	</ul>
+    	
+
+	
+    	<ul sec:authorize="isAuthenticated()" class="nav navbar-nav" id="menu_authenticated">
+        	<li><a href="/shop/newList">NEW</a></li>
+			<li><a href="/shop/bestList">BEST</a></li>
+			<li><a href="/shop/outdoorList">야외용품</a></li>
+			<li><a href="/board/list">훈련용품</a></li>
+			<li><a href="/board/list">푸드</a></li>
+			<li><a href="/board/list">패션</a></li>
+			<nav class="navbar navbar-light bg-light">
+			  <a class="navbar-brand"></a>
+			  <form class="form-inline">
+			    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchArea">
+			    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+			  </form>
+			</nav>
+    	</ul>
+	</div>
+	<script th:inline="javascript">
+		$("#menu_authenticated").on("click", "#logout", (e)=> {
+			// a태그는 클릭하면 이동(동작이 2개, 그때 두번째 동작을 막아버린다)
+			e.preventDefault();
+			
+			// 이벤트가 발생한 곳을 넓은 곳에서 좁은 곳으로 찾는다
+			// <div id="parent"><div id="child"><button>클릭</button></div></div>
+			// e.stopPropagation();
+			
+			var choice = confirm('로그아웃하시겠습니까?');
+			if(choice==false)
+				return;
+			$.ajax({
+				url:"http://localhost:8081/member/logout",
+				method: "post",
+			}).done(()=> location.href = '/');
+			
+		});	
+	</script>
+</div>
+</body>
+</html>

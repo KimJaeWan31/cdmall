@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/script/main.js"></script>
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+header, nav, aside, footer, section ,li, a,div{
+	font-family: 'Jua', sans-serif;
+} 
+
+</style>
+<script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
+<script>
+	// 서버에서 수신할 사용자 정보
+	let member = undefined;
+	
+	const printPage=()=>{
+		console.log(member);
+		$("#show_sajin").attr("src", member.profile);
+		$("#irum").text(member.irum);
+		$("#username").text(member.username);
+		$("#birthday").text(member.birthday);
+		$("#joinday").text(member.createTime);
+		$("#level").text(member.level);
+		$("#days").text(member.days);
+		
+		const emails = member.email.split("@");
+		$("#email2").prop("disabled", true);
+		$("#email1").val(emails[0]);
+		$("#email2").val(emails[1]);
+		
+		const $options = $("#selectEmail option");
+		let isFind = false;
+		
+		$.each($options, function(idx, option) {				
+			if($(option).text()==emails[1]) {
+				$(option).prop("selected", true);
+				isFind = true;
+			}
+		});
+		
+		if(isFind==false) {
+			$("#email2").prop("disabled", false);
+			$($options[0]).prop("selected", true)
+		}		
+	}
+	
+	const changeEmail = ()=>{
+		const $choice = $("#selectEmail").val();
+		
+		if($choice=="직접 입력")
+			$("#email2").prop("disabled", false).val("").attr("placeholder", $choice).focus();
+		else
+			$("#email2").val($choice).prop("disabled", true);
+	}
+	
+	// 프사를 출력하는 함수
+	const loadSajin = ()=>{
+		const file = $("#sajin")[0].files[0];
+		const maxSize = 1024*1024;			
+		if(file.size>maxSize) {
+			Swal.fire('프로필 크기 오류', '프로필 사진은 1MB를 넘을 수 없습니다','error');
+			$("#sajin").val("");
+			$("#show_sajin").removeAttr("src");
+			return false;
+		}
+		const reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = function() {
+			$("#show_sajin").attr("src", reader.result);
+		}
+		return true;
+	}
+	
+	
+	$(document).ready(()=>{
+		// html이 로딩되면 서버에 멤버 정보를 요청
+		$.ajax("/members/member").done(result=>{
+			// 멤버 정보 저장
+			member = result;
+			// 출력
+			printPage();
+		});
+		
+		$("#sajin").on("change", loadSajin);
+		$("#pwdArea").css("display", "none");
+		
+		$("#activateChangePwd").on("click", ()=>{
+			$("#pwdArea").toggle();		// hide(), show(), toggle()
+		});
+		
+		$("#selectEmail").on("change", changeEmail);
+		
+		// 비밀번호 변경
+		$("#changePwd").on("click", ()=>{
+			const $password = $("#password").val();
+			const $newPassword = $("#newPassword").val();
+			const $newPassword2 = $("#newPassword2").val();
+			
+			const pattern = /^(?=.*[!@#$%^&*])^[A-Za-z0-9!@#$%^&*]{8,10}$/;
+			
+			if(pattern.test($password)==false) 
+				return false;
+			if(pattern.test($newPassword)==false)
+				return false;
+			if($newPassword!=$newPassword2)
+				return false;
+			
+			const params= {
+					_method: "put",
+					password: $password,
+					newPassword: $newPassword
+			};
+			
+			$.ajax({
+				url: "/members/member",
+				method: "post",
+				data: params
+			}).done(()=>Swal.fire("변경","비밀번호를 변경했습니다", "success"))
+				.fail(()=>Swal.fire("변경 실패", "비밀번호를 변경하지 못했습니다", "error"));
+			
+		});
+		
+		// 전체 변경
+		$("#update").on("click", ()=>{
+			const formData = new FormData();
+			if($("#sajin")[0].files[0]!=undefined)
+				formData.append("sajin", $("#sajin")[0].files[0]);
+			
+			const $inputEmail = $("#email1").val() + "@" + $("#email2").val();
+			if(member.email!=$inputEmail)
+				formData.append("email", $inputEmail);
+			
+			const $password = $("#password").val();
+			const $newPassword = $("#newPassword").val();
+			const $newPassword2 = $("#newPassword2").val();
+			
+			const pattern = /^(?=.*[!@#$%^&*])^[A-Za-z0-9!@#$%^&*]{8,10}$/;
+			
+			if(pattern.test($password)==true && pattern.test($newPassword)==true && $newPassword==$newPassword2) {
+				formData.append("password", $password);
+				formData.append("newPassword", $newPassword);
+			} 
+			
+			$.ajax({
+				url: "/members/member",
+				method: "post",
+				data: formData,
+				processData:  false,
+				contentType: false
+			}).done(()=>Swal.fire("변경","회원 정보를 변경했습니다", "success"))
+				.fail(()=>Swal.fire("변경 실패", "회원 정보를 변경하지 못했습니다", "error"));
+		});
+		
+		$("#resign").on("click", ()=>{
+			$.ajax({
+				url: "/members/member",
+				method : "delete"
+			}).fail(()=>Swal.fire("삭제 실패", "회원 정보를 삭제하지 못했습니다", "error"));
+		});
+	})
+</script>
+</head>
+<body>
+<div th:text="${member}"></div>
+<div id="page">
+	<header id="header" th:replace="/fragments/headerMember">
+	</header>
+	<div id="main">
+		<aside id="aside" th:replace="/fragments/aside">
+		</aside>
+		<section id="section">
+			<table class="table table-hover">
+				<colgroup>
+					<col width="30%">
+					<col width="70%">
+				</colgroup>
+				<tr>
+					<td colspan="2">
+						<img id="show_sajin" height="200px;">
+						<input type="file" name="sajin" id="sajin">
+					</td>
+				</tr>
+				<tr>
+					<td class="first">이름</td>
+					<td id="irum"></td>
+				</tr>
+				<tr>
+					<td class="first">아이디</td>
+					<td id="username"></td>
+				</tr>
+				<tr>
+					<td class="first">생년월일</td>
+					<td id="birthday"></td>
+				</tr>
+				<tr>
+					<td class="first">가입일</td>
+					<td colspan="2" id="joinday"></td>
+				</tr>
+				<tr><td class="first">비밀번호</td>
+					<td colspan="2">
+						<button type="button" class="btn btn-info" id="activateChangePwd">비밀번호 수정</button>
+						<div id="pwdArea">
+							<span class="key">현재 비밀번호 : </span><input type="password" id="password"><br>
+							<span class="key">새 비밀번호 : </span><input type="password" id="newPassword"><br>
+							<span class="key">새 비밀번호 확인 : </span><input type="password" id="newPassword2">
+			  				<button type="button" class="btn btn-info" id="changePwd">변경</button>
+						</div>
+					</td></tr>
+				<tr>
+					<td class="first">이메일</td>
+					<td>
+						<input type="text" name="email1" id="email1">
+							&nbsp;@&nbsp;
+						<input type="text" name="email2" id="email2">&nbsp;&nbsp;
+						<select id="selectEmail">
+							<option selected="selected">직접 입력</option>
+							<option>naver.com</option>
+							<option>daum.net</option>
+							<option>gmail.com</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="first">회원정보</td>
+					<td>
+						가입기간 : <span id="days"></span><br>
+						레벨 : <span id="level"></span>
+					</td></tr>
+			</table>
+			<button type="button" class="btn btn-success" id="update">변경하기</button>&nbsp;&nbsp;&nbsp;&nbsp;
+			<button type="button" class="btn btn-success" id="resign">탈퇴하기</button>
+		</section>
+	</div>
+	<footer id="footer" th:replace="/fragments/footer">
+	</footer>
+</div>
+</body>
+</html>
