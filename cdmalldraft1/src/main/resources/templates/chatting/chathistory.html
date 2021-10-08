@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <title>채팅기록</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+    <!--    libs for stomp and sockjs-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!--    end libs for stomp and sockjs-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" type="text/css">
+    <link href="/css/chat.css" rel="stylesheet">
+    <!-- sweet alert -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/script/custom.js"></script>
+	<script src="/script/chat.js"></script>
+	<script src="/script/arraylist.js"></script>
+</head>
+<body>
+<div class="noRightClick" id="noRightClick"> 
+	<div class="container clearfix" id="container">
+	    <div class="people-list" id="people-list">
+	        <div class="search">
+	        	<div><label for="userName">현재 권한 : </label></div>
+				<input id="authorityName" name="authorityName" type="text" disabled="true"/>
+	        	<div><label for="userName">현재 유저 : </label></div>
+	            <input id="userName" name="username" type="text" disabled="true"/>
+	            
+	            <!-- <button id="registration" onclick="registration()">채팅참여</button> -->
+	            <button sec:authorize="hasRole('ADMIN')" id="fetchAll" onclick="fetchAll()">유저확인</button>
+	        </div>
+	        <!-- <ul sec:authorize="hasRole('ADMIN')" class="list" id="usersList"> -->
+	        <ul class="list" id="usersList">
+	
+	
+	        </ul>
+	    </div>
+	
+	    <div class="chat">
+	        <div class="chat-header clearfix">
+	            <img alt="avatar" height="55px"
+	                 src="/image/chatting/defaultAvatar.jpg"
+	                 width="55px"/>
+	
+	            <div class="chat-about">
+	                <div class="chat-with" id="selectedUserId"></div>
+	                <div class="chat-num-messages"></div>
+	            </div>
+	            <i class="fa fa-star"></i>
+	        </div> <!-- end chat-header -->
+	
+	        <div class="chat-history">
+	            <ul id="chatlist">
+					
+	            </ul>
+	
+	        </div> <!-- end chat-history -->
+	
+	        <div class="chat-message clearfix">
+	            <textarea id="message-to-send" name="message-to-send" placeholder="메세지를 입력하세요" rows="3"></textarea>
+	
+	            <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
+	            <i class="fa fa-file-image-o"></i>
+	
+	            <button id="sendBtn">Send</button>
+	            
+	            <button sec:authorize="hasRole('ADMIN')" id="saveBtn">Save</button>
+				<button id="exitBtn">Exit</button>
+	        </div> <!-- end chat-message -->
+			
+	    </div> <!-- end chat -->
+		
+		
+		
+	</div> <!-- end container -->
+	
+	<!-- 메세지 기록  -->
+	<script id="message-template" type="text/x-handlebars-template">
+    	<li class="clearfix">
+        	<div class="message-data align-right">
+            	<span class="message-data-time">{{time}}, Today</span> &nbsp; &nbsp;
+            	<span class="message-data-name">{{messageSender}}</span> <i class="fa fa-circle me"></i>
+        	</div>
+        	<div class="message other-message float-right">
+       	    	 {{messageOutput}}
+       		</div>
+    	</li>
+	</script>
+	
+	<script id="message-response-template" type="text/x-handlebars-template">
+    	<li>
+        	<div class="message-data">
+            	<span class="message-data-name"><i class="fa fa-circle online"></i> {{userName}}</span>
+            	<span class="message-data-time">{{time}}, Today</span>
+        	</div>
+        	<div class="message my-message">
+            	{{response}}
+        	</div>
+    	</li>
+	</script>
+	
+</div>
+<!-- 화면 닫기 전 경고 -->
+
+</body>
+</html>
