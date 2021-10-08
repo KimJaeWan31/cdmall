@@ -41,6 +41,7 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
 	font-size: 1.8em;
     text-align: center;
     border-radius: 50px;
+    color: #337AB7;
 }
 
 /* 왼쪽 상단  */
@@ -72,6 +73,12 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
 
 		font-size: 1.2em;
 }
+
+#top_menu_authenticated >li >a{
+    color: #337AB7;
+}
+
+
 /* 오른쪽 상단, 로그인 후 */
 
 
