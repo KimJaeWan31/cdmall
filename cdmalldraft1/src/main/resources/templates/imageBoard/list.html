@@ -7,29 +7,22 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-<script src="https://use.fontawesome.com/0206006232.js"></script>
-<link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/main.css">
-<link rel="stylesheet" href="/css/nav.css">
 <link rel="stylesheet" href="/css/img.css">
-
 <style>
-	img1 { 
+	img { 
 			display: block;
   			width: 300px;
   			height:280px;
   			object-fit: cover;
 	}
 </style>
-
 <script sec:authorize="isAuthenticated()">
 	const isLogin = true
 </script>
 <script  sec:authorize="isAnonymous()">
 	const isLogin = false;
 </script>
-
 <script>
 	// 서버 응답을 저장할 변수
 	let isWriter = undefined;
@@ -40,46 +33,34 @@
 		
 		// 서버가 보낸 board들은 page.content에 저장되어 있다
 		for(c of page.content) {
-
+			
+			/* const $li = $("<li>").appendTo($list);
+			const $figure = $("<figure>").appendTo($li);
+			$("<img>").attr("src", "/upload/image/" + c.imageFileName).appendTo($figure);
+			$('img').attr('id', 'img');
+			const $figcaption = $("<figcaption>").appendTo($li);
+			$("<p>").text(c.writer).appendTo($figcaption);
+			$("<a>").attr("href", "/imageBoard/read?ibno=" + c.ibno).text(c.title).appendTo($figcaption); */
+			
 			// 사진게시판 화면 구성
 			const $li = $("<li>").appendTo($list);
-			const $figure = $("<figure>").appendTo($li).css("display","flex");
-			$("<img>").attr("src", "/upload/ibmage/" + c.imageFileName).appendTo($figure);
-			$('img1').attr('id', c.ibno+"_"+c.imageFileName);
+			const $figure = $("<figure>").appendTo($li);
+			$("<img>").attr("src", "/upload/ibimage/" + c.imageFileName).appendTo($figure);
+			$('img').attr('id', c.ibno+"_"+c.imageFileName);
 			const $figcaption = $("<figcaption>").appendTo($li);
-			$("<p>").text(c.writer).appendTo($figcaption);  //글쓴이 출력
-			
-			
-			
-			
-			
-			const $div = $("<div>").css({"border-bottom" :"1px solid black", "width":"350px"}).appendTo($figcaption);
-			$("<a>").attr("href", "/imageBoard/read?ibno=" + c.ibno).text(c.title).text(c.title).css("margin-right","20px").appendTo($div);		
-			
-			
-			const $button = $("<good_btn>").attr("id","goodBnt").attr("type", "button").attr("class","fa fa-heart-o").css({"color": "red", "font-size": "20px","cursor":"pointer"})
-			.attr("onclick","like("+c.ibno+",'"+c.writer+"')").text("").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
-			
-			$("<span>").attr("id", "good_cnt_"+c.ibno).text(c.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
- 			$("<span>").attr("id", "likeCheck").text("").css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
-	        
-
-			
-			
+			$("<p>").text(c.writer).appendTo($figcaption);
+			const $div = $("<div>").appendTo($figcaption);
+			$("<a>").attr("href", "/imageBoard/read?ibno=" + c.ibno).text(c.title).appendTo($div);
+			const $button = $("<good_btn>").attr("type", "button").attr("class","btn btn-primary")
+			.attr("id","good_btn_" + c.ibno).attr("onclick","like("+c.ibno+",'"+c.writer+"')").text("추천").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
+			$("<span>").attr("class", "badge").attr("id", "good_cnt_"+c.ibno).text(c.goodCnt).appendTo($button);
 			
 		}
 		
-// 		$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
 	};
 	
-
-//     $('#good_btn_').click(function(){
-//         $('.glyphicon glyphicon-heart-empty').css({"color": "blue", "font-size": "20px"});
-//     });
-
-
-	
 	const getPagination = () => {
+		// console.log(page.totalPages);
 		// 한번에 다섯개의 페이지씩
 		const blockSize = 5;
 		
@@ -93,14 +74,13 @@
 		const prev = blockNo * blockSize;
 		const first = prev + 1;
 		let last = first + blockSize - 1;
-		let  next = last + 1;
-		const countOfPage = Math.ceil(page.totalcount/10)
-		// 페이지의 개수는 page.totalPages에 저장되어 있다
-		if(last>=page.totalPages) {
-			last = page.totalPages;
+		let next = last + 1;
+		const countOfPage = Math.ceil(page.totalcount/9)
+		if(last>=countOfPage) {
+			last = countOfPage;
 			next = 0;
 		}
-		
+	
 		/*
 			자바스크립트 객체 필드의 이름과 값을 저장한 변수명을 같은 경우 59라인과 같이 줄여서 쓸 수 있다
 			return { 
@@ -141,7 +121,8 @@
 			$("<a>").attr("href", url+next).text("다음으로").appendTo($li);
 		}
 	}
-
+	
+	
 	
 	const like = (ibno, cWriter)=>{
 		// 추천
@@ -151,14 +132,10 @@
 					isGood: 1
 			}
 			
-// 			$.ajax({ url: "/imageBoard_member/good_or_bad", data: param, method: "patch"})
-// 				.done(goodCnt=>goodClicked(goodCnt, ibno));
-// 		}
 			$.ajax({ url: "/imageBoard_member/good_or_bad", data: param, method: "patch"})
-			.done(goodCnt=>goodClicked(goodCnt, ibno));
-			
-
-	}
+				.done(goodCnt=>goodClicked(goodCnt, ibno));
+		}
+		
 		
 		
 	}
@@ -196,18 +173,15 @@
 
  		<!-- <div id="username" sec:authentication="name"></div> -->
  
- 		<header id="header" th:replace="/fragments/headerBoard"> </header>
-	<nav id="nav" th:replace="/fragments/navBoard">
-	</nav>
-		<div id="communitypic">사 진 게 시 판</div>
-
-		<div id="main" class="image_button" >
-			<a class="btn btn-info" role="button" href="/imageBoard/write">글쓰기</a>
-			<section id="section" >
-				<div id="wrap" >
+ 		<header id="header" th:replace="/fragments/header"> </header>
+		<nav id="nav" th:replace="/fragments/nav"></nav>
+		<div id="main">
+			<aside id="aside" th:replace="/fragments/aside"></aside>
+			<section id="section">
+				<div id="wrap">
 				
 				
-					<ol id="list" class="image-list grid-view" style="margin-top: 30px;">
+					<ol id="list" class="image-list grid-view">
 					<!-- <li>
 						<figure>
 							<img src=""	alt="">
@@ -232,7 +206,7 @@
 						</ul>
 
 					</div>
-					
+					<a class="btn btn-info" role="button" href="/imageBoard/write">글쓰기</a>
 				</div>
 			</section>
 		</div>
