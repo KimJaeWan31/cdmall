@@ -55,6 +55,7 @@ public class QSCommentController {
 	// 댓글 삭제
 	@DeleteMapping(path="/qscomments", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> deleteQSComment(@Valid QSCommentDto.Delete dto, BindingResult results, Principal principal) throws BindException {
+		
 		if(results.hasErrors())
 			throw new BindException(results);
 		
@@ -64,10 +65,12 @@ public class QSCommentController {
 		// post방식으로 BoardController에게 댓글 수 업데이트를 요청
 		MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
 		params.add("qbno", dto.getQbno()+"");
-		Integer cnt = template.postForObject("http://localhost:8081/questionBoard/qscomments", params, Integer.class);
-		System.out.println(cnt);
+		System.out.println("111111111");
+		Integer cnt = template.postForObject("http://localhost:8081/questionBoard/comments", params, Integer.class);
+
 		
 		// 댓글들 리턴
+		
 		return ResponseEntity.ok(qscomments);
 		
 	}

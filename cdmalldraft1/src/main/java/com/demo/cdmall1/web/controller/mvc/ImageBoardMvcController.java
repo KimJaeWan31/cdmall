@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class ImageBoardMvcController {
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/imageBoard/list")
 	public void list() {
 	}
-	
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/imageBoard/read")
 	public void read() {
 	}

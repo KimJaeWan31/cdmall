@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class QuestionBoardMvcController {
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/questionBoard/list")
 	public void list() {
 	}
-	
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/questionBoard/read")
 	public void read() {
 	}

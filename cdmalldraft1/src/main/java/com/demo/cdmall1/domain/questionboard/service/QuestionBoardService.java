@@ -16,6 +16,7 @@ import org.springframework.util.*;
 import org.springframework.web.multipart.*;
 
 import com.demo.cdmall1.domain.board.entity.*;
+import com.demo.cdmall1.domain.noticeboard.entity.*;
 import com.demo.cdmall1.domain.questionboard.entity.*;
 import com.demo.cdmall1.util.*;
 import com.demo.cdmall1.web.dto.*;
@@ -159,6 +160,13 @@ private final ModelMapper modelMapper;
 		} else if(state==2)
 			return questionBoard.getGoodCnt();
 		return questionBoard.getBadCnt();
+	}
+
+	public void delete(Integer qbno, String loginId) {
+		QuestionBoard questionBoard = dao.findById(qbno).orElseThrow(BoardFail.BoardNotFoundException::new);
+		if(questionBoard.getWriter().equals(loginId)==false)
+			throw new BoardFail.IllegalJobException();
+		dao.delete(questionBoard);
 	}
 	
 

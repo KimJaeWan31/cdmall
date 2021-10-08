@@ -109,5 +109,19 @@ public class QuestionBoardController {
 			return ResponseEntity.ok(cnt);
 		}
 		
+		
+		@DeleteMapping("/questionBoard/{qbno}")
+		public ResponseEntity<?> delete(@PathVariable Integer qbno, Principal principal) {
+			questionService.delete(qbno, principal.getName());
+			URI uri = UriComponentsBuilder.newInstance().path("/").build().toUri();
+			
+			// 201일 때는 주소를 보내줘야 한다. ResponseEntity의 created메소드는 uri를 주면 Location이름으로 헤더에 추가해준다
+			// 201이 아니면 백에서 수동으로 헤더에 Location을 추가해야 한다
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.add("Location", uri.toString());
+			
+			// ResponseEntity에 header를 추가하려면 new 해야 한다
+			return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
+		}
 
 }

@@ -14,7 +14,7 @@ public class NoticeBoardMvcController {
 	public void read() {
 	}
 	
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/noticeBoard/write")
 	public void write() {
 	}

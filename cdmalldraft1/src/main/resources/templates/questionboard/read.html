@@ -11,7 +11,8 @@
 <script src="/script/ckeditor/ckeditor.js"></script>
 <link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/main.css">
-<link rel="stylesheet" href="/css/nav.css">>
+<link rel="stylesheet" href="/css/nav.css">
+<link rel="stylesheet" href="/css/read.css">
 <style>
 	#attachment { width: 250px; }
 	.td1 { width: 30px; }
@@ -27,17 +28,17 @@
 <script>
 	let isWriter = undefined;
 	let questionBoard = undefined;
+	let currentUser = undefined;
 	
 	const init=(questionBoard)=>{
 		// board의 필드들을 출력
-		$("#qbno").text(questionBoard.bno);
+		$("#qbno").text(questionBoard.qbno);
 		$("#writeday").text(questionBoard.createTime);
 		$("#writer").text(questionBoard.writer);
 		$("#title").val(questionBoard.title);
 		$("#content").html(questionBoard.content);
 		$("#read_cnt").text(questionBoard.readCnt);
-		$("#good_cnt").text(questionBoard.goodCnt);
-		$("#bad_cnt").text(questionBoard.badCnt);
+
 		// 비로그인, 글쓴이, 글쓴이 아님에 따른 화면 구성
 		if(isLogin==true && isWriter==true) {
 			$("#title").prop("disabled", false);
@@ -52,63 +53,43 @@
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
 			$("<button>").attr("id","delete").attr("class","btn btn-info").text("삭 제").appendTo($btnArea);
 			
-			$("#comment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
+			$("#qscomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
 
-			const $commentBtnArea = $("#commentBtnArea");
-			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($commentBtnArea);
+
 
 		} else if(isLogin==true && isWriter==false) {
 			$("#good_btn").prop("disabled", false);
 			$("#bad_btn").prop("disabled", false);
+			
+			const $qscommentBtnArea = $("#qscommentBtnArea");
+			$("#qscomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
+			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($qscommentBtnArea);
 		}
 	};
 	
-	const printAttachments=(attachments)=>{
-		const $table = $("#attachment");
-		// 자식들 삭제
-		$table.empty();
-		
-		// $("어쩌구").each(function(idx, item)) -> jQuery 객체 전용
-		// $.each(집합, function(idx, item)) -> 범용
-		$.each(attachments, function(i, attachment) {
-			const $tr = $("<tr>").appendTo($table);
-			
-			const $td1 = $("<td class='td1'>").appendTo($tr)
-			if(attachment.isImage==true)
-				$('<i class="fa fa-file-image-o"></i>').appendTo($td1);
-			else
-				$('<i class="fa fa-paperclip"></i>').appendTo($td1);
-			
-			const $td2 = $("<td class='td2'>").appendTo($tr)
-			$("<a href='/attachments/" + attachment.ano + "'>" + attachment.originalFileName + "</a>").appendTo($td2);
-							
-			const $td3 = $("<td class='td3'>").appendTo($tr)
-			if(isLogin==true && isWriter==true) {
-				$("<span class='delete_attachment' data-ano='" + attachment.ano + "' data-qbno='" + questionBoard.qbno + "'>X</span>").appendTo($td3);
-				$(".delete_attachment").css("cursor","pointer").attr("title", attachment.originalFileName + " 삭제");
-			}
-		});
-	};
+
 	
-	const printComments=(comments)=>{
-		$("#comments").empty();
-		$.each(comments, function(idx, comment) {
-			const $outer_div = $("<div>").appendTo($("#comments"));
-			
+	const printQSComments=(qscomments)=>{
+
+		$("#qscomments").empty();
+		console.log("111111")
+		$.each(qscomments, function(idx, qscomment) {
+			const $outer_div = $("<div>").appendTo($("#qscomments"));
 			const $upper_div = $("<div>").appendTo($outer_div);
-			$("<span>").css("color","blue").text(comment.writer).appendTo($upper_div);
-			$("<span>").text(" [" + comment.createTime+"]").appendTo($upper_div);
+
+			$("<span>").css("color","blue").text(qscomment.writer).appendTo($upper_div);
+			$("<span>").text(" [" + qscomment.createTime+"]").appendTo($upper_div);
 			
 			const $lower_div = $("<div>").css("overflow", "hidden").appendTo($outer_div);
-			$("<img>").attr("src",comment.profile).css("width","60px").appendTo($lower_div);
-			$("<span>").text(comment.content).appendTo($lower_div);
+			$("<img>").attr("src",qscomment.profile).css("width","60px").appendTo($lower_div);
+			$("<span>").text(qscomment.content).appendTo($lower_div);
 
-			console.log(comment);
-			if(isLogin==true && isWriter==true) {
-				$("<button>").attr("class","delete_comment").attr("data-cno", comment.cno).attr("data-qbno", questionBoard.qbno)
+			console.log(qscomment);
+			if(isLogin==true && currentUser==qscomment.writer) {
+				$("<button>").attr("class","delete_qscomment").attr("data-qbcno", qscomment.qbcno).attr("data-qbno", questionBoard.qbno)
 					.text("삭제").css("float","right").appendTo($lower_div);
 			}
-			$("<hr>").appendTo($("#comments"));
+			$("<hr>").appendTo($("#qscomments"));
 		});
 	};
 
@@ -124,20 +105,22 @@
 			// ES6는 키워드없이 변수를 만들 수 없다. 변수의 스코프는 {} , 중괄호는 스코프를 만들지 않습니다
 			questionBoard = result;
 			isWriter = $username == questionBoard.writer;
+			currentUser = $("#username").text();
 			init(questionBoard);
-			printAttachments(questionBoard.attachments);
-			printComments(questionBoard.comments);
+// 			console.log(questionBoard)
+// 			console.log(questionBoard.qscomments);
+			printQSComments(questionBoard.qscomments);
 		});
 		
 		// 댓글 작성
-		$("#commentBtnArea").on("click", "#write", ()=> {
+		$("#qscommentBtnArea").on("click", "#write", ()=> {
 			const param = {
 				qbno: qbno, // 앞에는 이름, 뒤에는 값
-				content : $("#comment_textarea").val()
+				content : $("#qscomment_textarea").val()
 			};
-			$.ajax({url: "/qscomments", method:"post", data:param}).done(comments=>{
-				$("#comment_textarea").val("");
-				printComments(comments);
+			$.ajax({url: "/qscomments", method:"post", data:param}).done(qscomments=>{
+				$("#qscomment_textarea").val("");
+				printQSComments(qscomments);
 			});
 		});
 		
@@ -145,10 +128,15 @@
 		// 댓글 삭제
 		// 자바의 경우 this가 고정되어 있다. 자바스크립트의 경우 this는 상황에 따라 바뀐다 => 화살표 함수는 this 고정.
 		// this를 사용해야 하는 경우는 화살표 함수를 사용하지 말자
-		$("#comments").on("click", ".delete_comment", function() {
-			const param = {cno : $(this).attr("data-cno"), bno : questionBoard.bno};
-			$.ajax({url: "/comments", method:"delete", data:param}).done(comments=>	printComments(comments));
+		$("#qscomments").on("click", ".delete_qscomment", function() {
+			console.log($(this));
+			console.log($(this).attr("data-qbcno"));
+			const param = {qbcno : $(this).attr("data-qbcno"), qbno : questionBoard.qbno};
+			$.ajax({url: "/qscomments", method:"delete", data:param}).done(qscomments=>	printQSComments(qscomments));
 		});
+		
+		
+		
 		
 		// 추천
 				$("#good_btn").on("click", ()=>{
@@ -163,11 +151,7 @@
 			$.ajax({ url: "/questionBoard_member/good_or_bad", data: param, method: "patch"})
 				.done(goodCnt=>$("#bad_cnt").text(goodCnt));
 		});
-		// 첨부파일 삭제
-				$("#attachment").on("click", ".delete_attachment", function() {
-			const param = {ano : $(this).attr("data-ano"), bno : questionBoard.qbno};
-			$.ajax({url: "/attachments", method:"delete", data:param}).done(attachments=>printAttachments(attachments));
-		});
+
 		// 변경
 				$("#btnArea").on("click", "#update", ()=>{
 			const param = {
@@ -189,7 +173,7 @@
 						url: "/questionBoard/" + questionBoard.qbno,
 						method:"delete",
 					})
-					.done((result, text, response)=>{ location.href = "/" })
+					.done((result, text, response)=>{ location.href = "/questionBoard/list" })
 					.fail((response, text, message)=>{})
 				});
 				
@@ -230,9 +214,6 @@
 				</div>
 			</div>
 			<div>
-				<table id="attachment">
-				
-				</table>
 			</div>
 			<!--  본문, 갱신 버튼, 삭제 버튼 출력 영역 -->
 			<div id="content_div1" >
@@ -244,15 +225,15 @@
 			</div>
 			<hr>
 			<div class="form-group1">
-      			<label for="comment_teaxarea">댓글을 입력하세요</label>   
-      			<textarea class="form-control1" rows="5" id="comment_textarea" readonly="readonly"
+      			<label for="qscomment_teaxarea">댓글을 입력하세요</label>   
+      			<textarea class="form-control1" rows="5" id="qscomment_textarea" readonly="readonly"
       				placeholder="댓글을 작성하려면 로그인 해주세요"></textarea>
     		</div>
-			<div id="commentBtnArea">
+			<div id="qscommentBtnArea">
     			<!-- 로그인하면 댓글 달기 버튼을 추가 -->
 			</div>
 			<hr>
-			<div id="comments">
+			<div id="qscomments">
 				<div>
 					<div><span style="color:blue;"></span> </div>
 					<div style="overflow:hidden;">
