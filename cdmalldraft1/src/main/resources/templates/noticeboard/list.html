@@ -15,24 +15,33 @@
 
 	// 서버 응답을 저장할 변수
 	let page = null;
+	let pagenumber = null;
+	let contentcnt = 0;
 	
 	const printNoticeBoard = ()=>{
 		console.log(page);
 		const $list = $("#list");
 		// 서버가 보낸 board들은 page.content에 저장되어 있다
 		for(c of page.content) {
+			
 			let createdTime = c.writeTime.substr(-26,10);	
 			const $tr = $("<tr>").appendTo($list);
 			$("<td>").text(c.nbno).appendTo($tr);
 			const $td = $("<td>").appendTo($tr);
 			if(c.attachmentCnt>0)
 				$("<i class='fa fa-paperclip'></i>").appendTo($td);
-			$("<a>").attr("href", "/noticeBoard/read?nbno=" + c.nbno).attr("id","nbtitle").text("** "+c.title+" **").appendTo($td);
+			
+			$("<a>").attr("href", "/noticeBoard/read?nbno=" + c.nbno).attr("id","nbtitle_"+c.nbno).text("** "+c.title+" **").appendTo($td);
+			if(pagenumber==1 && contentcnt==0) {
+				cssBlink(c.nbno);
+			}
+			
 			if(c.commentCnt>0)
 				$("<span>").text(" [" + c.commentCnt + "]").appendTo($td);
 			// $("<td>").text(c.writer).appendTo($tr);
 			$("<td>").text(createdTime).appendTo($tr);
 			$("<td>").text(c.readCnt).appendTo($tr);
+			contentcnt++;
 		}
 	};
 
@@ -44,7 +53,7 @@
 	
 	
 	function cssBlink() {
-	    var blink = document.getElementById("nbtitle");
+	    var blink = document.getElementById("nbtitle_"+c.nbno);
 	    setInterval(function() {
 	        blink.style.opacity = (blink.style.opacity == 0 ? 1 : 0);
 	        blink.style.color = "red"; 
@@ -117,8 +126,6 @@
 			page=result;
 			printNoticeBoard();
 			printPagination(getPagination());
-			//cssChange();
-			cssBlink();
 		});
 		
 	});
