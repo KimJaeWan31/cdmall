@@ -42,4 +42,5 @@ public class MemoDto {
 		private LocalDateTime createTime;
 		private Boolean isRead;
 	}
+	
 }

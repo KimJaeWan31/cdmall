@@ -87,4 +87,13 @@ public class MemberDto {
 		@Password
 		private String newPassword;
 	}
+	
+//	채팅기능시 권한으로 회원 찾기 위해 필요한 Dto 클래스
+	@Data
+	public class FindByAuthority{
+		private String username;
+		public Member toEntity() {
+			return Member.builder().username(username).build();
+		}
+	}
 }

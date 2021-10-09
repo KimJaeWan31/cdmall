@@ -23,6 +23,8 @@ import lombok.*;
 @Service
 public class MemberService {
 	private final MemberRepository dao;
+	private final AuthorityRepository AuthDao;
+
 	private final MailUtil mailUtil;
 	private final PasswordEncoder passwordEncoder;
 	
@@ -135,5 +137,10 @@ public class MemberService {
 
 	public String getProfile(String username) {
 		return dao.findById(username).get().getProfile();
+	}
+	
+	public Authority readAuthority(Member member) {
+		Authority authority = AuthDao.findByMember(member);
+		return authority;
 	}
 }
