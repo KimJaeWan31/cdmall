@@ -19,20 +19,33 @@
       	<div id="mainLogo" >
       			<img  src="/image/main.png" class=main_logo >
       	</div>
-      	  <ul sec:authorize="isAnonymous()" class="nav navbar-nav" id="top_menu_anonymous">
-                <li><a class="" href="/boardMain">HOME</a> </li>
+      	  <ul sec:authorize="isAnonymous()" class="nav navbar-nav" id="top_menu_anonymous" style="font-size: 1.1em;">
+                <li><a class="" href="/">HOME</a> </li>
                 <li><a href="/member/join">JOIN</a></li>
                 <li><a href="/member/login">LOGIN</a></li>
                 <li><a href='/member/read'>MYPAGE</a></li>
+            	<li class="sub-button" id="nav-sub-button" style="width:120px"><a>고객센터</a>
+            	    <ul class="list-group nav-sub">
+				      <li class="list-group-item" id="oneOnOneInquiry">1:1문의</li>
+				      <li class="list-group-item" id="frequentlyQuestion">자주묻는질문</li>
+				      <li class="list-group-item" id="VoiceOfCustomer">고객의소리</li>
+				    </ul>
+            	</li>
            </ul>
 
 
-         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav" id="top_menu_authenticated">
-                <li><a class="" href="/boardMain">HOME</a> </li>
+         <ul sec:authorize="isAuthenticated()" class="nav navbar-nav" id="top_menu_authenticated" style="font-size: 1.1em;">
 				<li><a href="#" id="logout">LOGOUT</a></li>
-                <li><a href='/member/read'>MYPAGE</a></li>
                 <li><a href="/product/list">ORDER</a></li>
                 <li><a href="/product/read">CART</a></li>
+                <li><a href='/member/read'>MYPAGE</a></li>
+				<li id="nav-sub-button" style="width:120px"><a>고객센터</a>
+                	  <ul class="list-group nav-sub">
+				      <li class="list-group-item" id="oneOnOneInquiry">1:1문의</li>
+				      <li class="list-group-item" id="frequentlyQuestion">자주묻는질문</li>
+				      <li class="list-group-item" id="VoiceOfCustomer">고객의소리</li>
+				    </ul>
+            	</li>
                 
     	</ul>
 		<script th:inline="javascript">
