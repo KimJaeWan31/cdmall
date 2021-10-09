@@ -21,13 +21,14 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
 	 display: flex;
      width: 1280px;
      margin: auto;
-     height: 80px;
+     height: 100px;
      margin-top: 20px;
 
 }
 #menuChange  {
 	flex: 1;
 	width: 426.66px;
+	position: static;
 } 
 
 
@@ -46,38 +47,47 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
 
 /* 왼쪽 상단  */
 
+
+
+
 #mainLogo {
 	flex: 1;
 	width: 426.66px;
+	position: static;
+	margin-left: 100px;
 }
 
 /* 메인로고 */
 
+
+
 #top_menu_anonymous {
-	flex: 1;
-	width: 426.66px;
+
+	width: 500px;
 }
 #top_menu_anonymous >li{
 	float: right;
-	/*background: aqua;*/
-	font-size: 1.2em;
+	font-size: 1.1em;
+	width: 90px;
+	text-align: center;
 }
 /* 오른쪽상단, 로그인하기전 */
 
 #top_menu_authenticated {
-	flex: 1;
-	width: 426.66px;
+
+	width: 500px;
 }
+
 #top_menu_authenticated >li{
 	float: right;
-
-		font-size: 1.2em;
+	font-size: 1.1em;
+	width: 90px;
+	text-align: center;
 }
 
 #top_menu_authenticated >li >a{
     color: #337AB7;
 }
-
 
 /* 오른쪽 상단, 로그인 후 */
 
@@ -87,8 +97,25 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
 	margin-right: 120px;
 	display: block;
 	margin: 0 auto;
+	position: static;
 }
 
 /*메인로고 사진 "댕댕의 정석"*/
 
+#nav-sub-button {
+	width:120px;
+	text-align: center
+}
+	
+.nav-sub {
+    display: none;
+    cursor: pointer;
+	width:120px;
+}
+.list-group-item{
+    cursor: pointer;
+    z-index: 1;
 
+}
+
+	
