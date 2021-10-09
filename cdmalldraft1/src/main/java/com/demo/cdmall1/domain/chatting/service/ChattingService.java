@@ -67,10 +67,10 @@ public class ChattingService {
 	}
 
 	//	채팅기록 객체 불러와서 dto로 리턴하기
-	
+	 
 	@Transactional
-	public ChattingHistoryDto.Read read(Integer msghno) {
-		ChattingHistory messageHistory = dao.findById(msghno).orElseThrow(ChattingFail.MessageHistoryNotFoundException::new);
+	public ChattingHistoryDto.Read read(Integer chathno) {
+		ChattingHistory messageHistory = dao.findById(chathno).orElseThrow(ChattingFail.MessageHistoryNotFoundException::new);
 		
 		
 		// 나중에 추가작업을 위한 코드 

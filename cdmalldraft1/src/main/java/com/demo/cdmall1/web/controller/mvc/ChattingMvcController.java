@@ -11,12 +11,13 @@ public class ChattingMvcController {
 	}
 	
 	@GetMapping("/chatting/chatlist")	// 저장된 채팅기록 리스트 화면
-	public void chattingHistory() {
+	public void chattingList() {
 		
 	}
 	
 	@GetMapping("/chatting/chatread")	//	저장된 채팅기록 읽기 화면
-	public void chattingRead() {
+	public void chattingHistory() {
+
 		
 	}
   }

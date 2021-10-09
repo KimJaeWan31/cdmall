@@ -4,13 +4,14 @@
 <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <title>Insert title here</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="/script/main.js"></script>
-<script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="/script/ckeditor/ckeditor.js"></script>
-<link rel="stylesheet" href="/css/read.css">
-<style>
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<!-- <style>
 	#attachment { width: 250px; }
 	.td1 { width: 30px; }
 	.td2 { width: 170px; }
@@ -21,7 +22,7 @@
 </script>
 <script  sec:authorize="isAnonymous()">
 	const isLogin = false;
-</script>
+</script> -->
 <script>
 	let isWriter = undefined;
 	
@@ -40,23 +41,14 @@
 		}
 		
 		// board의 필드들을 출력
-		$("#msghno").text(messageHistory.bno);
+		$("#chathno").text(messageHistory.chathno);
 		$("#writeday").text(messageHistory.created_date);
 		$("#guestid").text(messageHistory.guestid);
 		$("#hostid").val(messageHistory.hostid);
 		$("#content").html(messageHistory.content);
 		
 		// 비로그인, 글쓴이, 글쓴이 아님에 따른 화면 구성
-		if(isLogin==true && isWriter==true) {
-			$("#title").prop("disabled", false);
-			const ck = CKEDITOR.replace('content', {
-				height: 600,
-				filebrowserUploadUrl : '/board/image'
-			});
-			
-			
-
-		} 
+		
 	};
 	
 	const printAttachments=(attachments)=>{
@@ -111,8 +103,8 @@
 		// 로그인 아이디를 자바스크립트에서 접근하고 싶다. JSTL은 <c:set>을 이용해 변수 생성이 가능한데 타임리프는 안되는 것 같다
 		// 그래서 hidden div를 만들어 div에 아이디를 저장한 다음 자바스크립트로 읽었다
 		/* const $username = $("#username").text(); */
-		const msghno = location.search.substr(8);		
-		$.ajax("/message/readhistory/" + msghno).done(result=> {
+		const chathno = location.search.substr(9);		
+		$.ajax("/chatting/readchathistory/" + chathno).done(result=> {
 			// ES5의 변수는 var로 만든다 -> 스코프는 함수
 			// ES5에서 변수를 var없이 만들 수 있다 -> 전역
 			
@@ -198,17 +190,15 @@
 </script>
 
 </head>
-<script>
-	// 화면 구성, 댓글 출력, 댓글 작성, 댓글 삭제, 추천, 비추, 변경, 삭제
-</script>
+
 <body>
 <div id="page">
-	<div id="username" sec:authentication="name" style="display:none;"></div>
-	<nav id="nav" th:replace="/fragments/nav">
+	<header id="header" th:replace="/fragments/headerStore">
+	</header>
+	<nav id="nav" th:replace="/fragments/navStore">
 	</nav>
 	<div id="main">
-		<aside id="aside" th:replace="/fragments/aside">
-		</aside>
+		
 		<section id="section">
 			<div id="wrap">
 				<div class="chat-history">
@@ -237,11 +227,7 @@
 				</table>
 			</div>
 			<!--  본문, 갱신 버튼, 삭제 버튼 출력 영역 -->
-			<div id="content_div">
-				<div class="form-group">
-					<div class="form-control" id="content"></div>
-				</div>
-			</div>
+			
 		</section>
 	</div>
 	

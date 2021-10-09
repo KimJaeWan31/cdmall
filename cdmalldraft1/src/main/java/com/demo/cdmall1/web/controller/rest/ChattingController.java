@@ -39,8 +39,8 @@ public class ChattingController {	//	메세지 컨트롤러
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;	// SimpMessagingTemplate 활용해 상대방에게 메세지를 보낸다
     
-    private final ChattingService messageservice;	
-    private final MemberService memberservice;
+    private final ChattingService chattingService;	
+    private final MemberService memberService;
     
 //    private final MessageRestService service;	// 추가 기능을 위한 임시 코드
     
@@ -62,7 +62,7 @@ public class ChattingController {	//	메세지 컨트롤러
     //	채팅기록 DB에 저장하기
     @GetMapping(path="/message/add", produces=MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<?> saveMessage(@ModelAttribute @Valid ChattingHistoryDto.Save dto, BindingResult bindingResult ) {	
-    	messageservice.addMessage(dto, TempChattingHistory.getInstance().getHistory());	//	'임시 채팅기록 저장소'에 있는 정보를 DB에 저장하기
+    	chattingService.addMessage(dto, TempChattingHistory.getInstance().getHistory());	//	'임시 채팅기록 저장소'에 있는 정보를 DB에 저장하기
     	TempChattingHistory.getInstance().removeAllHistory();	//	'임시 채팅기록 저장소'에 있는 정보들 다 지우기(리셋하는 용도)
     	return ResponseEntity.ok("DB에 추가 되었습니다.");
     }
@@ -71,7 +71,7 @@ public class ChattingController {	//	메세지 컨트롤러
     @PreAuthorize("isAuthenticated()")
     @GetMapping(path="/message/memberinfo")
     public ResponseEntity<?> getMemberInfo(Principal principal){	//	DB에 저장된 회원 정보 불러오기
-    	Member member = memberservice.read(principal.getName());
+    	Member member = memberService.read(principal.getName());
     	
     	return ResponseEntity.ok(member);
     }
@@ -81,20 +81,20 @@ public class ChattingController {	//	메세지 컨트롤러
     @GetMapping(path="/message/authorityinfo")
     public ResponseEntity<?> getAuthorityInfo(@ModelAttribute @Valid MemberDto.FindByAuthority dto, BindingResult bindingResult){	
     	Member member = dto.toEntity();
-    	return ResponseEntity.ok(memberservice.readAuthority(member));
+    	return ResponseEntity.ok(memberService.readAuthority(member));
     }
     
     //	DB에 저잗된 채팅기록 리스트 불러오기
-    @GetMapping(path="/message/chatlist", produces=MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, String guestid){	
-    	return ResponseEntity.ok(messageservice.list(pageno, guestid));
+    @GetMapping(path="/chatting/list", produces=MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> chatList(@RequestParam(defaultValue="1") Integer pageno, String guestid){
+    	return ResponseEntity.ok(chattingService.list(pageno, guestid));
     }
     
     //	메세지 기록 읽기
-    @GetMapping(path="/message/readhistory/{msghno}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> read(@PathVariable Integer msghno) {
+    @GetMapping(path="/chatting/readchathistory/{chathno}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> readChatHistory(@PathVariable Integer chathno) {
 		// String username = (principal==null)? null : principal.getName();
-		return ResponseEntity.ok(messageservice.read(msghno));
+		return ResponseEntity.ok(chattingService.read(chathno));
 	}
 	 
 	 

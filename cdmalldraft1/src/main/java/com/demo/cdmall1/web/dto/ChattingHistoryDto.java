@@ -36,7 +36,7 @@ public class ChattingHistoryDto {
 	@Data
 	@AllArgsConstructor
 	public static class ListView {
-		private Integer msghno;
+		private Integer chathno;
 		
 		@JsonFormat(pattern="yyyy년MM월dd일 HH:mm:ss")
 		@JsonProperty("created_date")
@@ -47,7 +47,7 @@ public class ChattingHistoryDto {
 	
 	@Data
 	public static class Read{
-		private Integer msghno;
+		private Integer chathno;
 		private String guestid;
 		private String hostid;
 		private LocalDateTime createdTime;
