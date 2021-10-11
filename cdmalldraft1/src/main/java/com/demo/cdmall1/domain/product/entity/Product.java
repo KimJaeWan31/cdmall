@@ -33,7 +33,7 @@ public class Product extends BaseCreateAndUpdateTimeEntity {
 	
 	@Lob
 	private String info;
-	
+		
 	private Integer price;
 	
 	private Integer salesVolume;
