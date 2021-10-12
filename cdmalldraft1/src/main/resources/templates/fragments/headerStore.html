@@ -6,8 +6,13 @@
 <link rel="stylesheet" href="/css/header.css">
 </head>
 <body>
-	<div id="header" >
-	<ul id="menuChange" class="nav navbar-nav">
+
+	<div class="header-main"style="width:1300px; margin:0 auto">
+	
+	
+
+	<div class="header" >
+	<ul id="menuChange" class="nav navbar-nav" >
         <li class="menu" style="background-color: #9BC3FF; border-radius: 50px;"><a href="/">STORE</a> </li>
         <li class="menu" ><a href="/boardMain" >COMMUNITY</a></li> 
       </ul>
@@ -79,6 +84,20 @@
         	location.href="/member/login";
           })
           
+                 $(window).on('scroll',function() {
+        if($(window).scrollTop() >150){
+          $('.header').addClass('backgroundChange');
+          $('.navbar-nav a').addClass('fontSizeUp');
+        }else if($(window).scrollTop() <50){
+        	$('.header').removeClass('backgroundChange');
+        	 $('.navbar-nav a').removeClass('fontSizeUp');
+          
+     
+        }
+
+
+      })     
+       
 	</script>
 	
 	<script sec:authorize="hasRole('ADMIN')" th:inline="javascript">
@@ -108,5 +127,6 @@
 	
 
 	</div>
+</div>
 </body>
 </html>

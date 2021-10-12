@@ -14,7 +14,10 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
 	font-family: 'Jua', sans-serif;
 } 
 
-#header  {
+.header-main {
+	height: 100px;
+}
+.header  {
 
 /*border : 1px solid #d89a1d;*/
 
@@ -23,12 +26,28 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
      margin: auto;
      height: 100px;
      margin-top: 20px;
+     justify-content: space-between; 
+     position: fixed; 
+     background-color: transparent;
+     z-index: 5;
+     margin-left: 10px;
+     
+/*     display: flex;   */
+/*     justify-content: space-between;  양쪽 정렬 */
+/*     padding: 15px; */
+/*     align-items: center; 가운데 정렬 */
+/*     background-color: transparent; */
+/*     position: fixed; */
+/*     z-index: 5; */
+/*     width: 100%; */
+/*     color: white; */
 
 }
 #menuChange  {
-	flex: 1;
+	flex: 2;
 	width: 426.66px;
 	position: static;
+	margin-top: 20px;
 } 
 
 
@@ -54,7 +73,8 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
 	flex: 1;
 	width: 426.66px;
 	position: static;
-	margin-left: 100px;
+	margin-left: 150px;
+	
 }
 
 /* 메인로고 */
@@ -62,7 +82,7 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
 
 
 #top_menu_anonymous {
-
+	margin-top:20px;
 	width: 500px;
 }
 #top_menu_anonymous >li{
@@ -74,7 +94,7 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
 /* 오른쪽상단, 로그인하기전 */
 
 #top_menu_authenticated {
-
+	margin-top:20px;
 	width: 500px;
 }
 
@@ -117,5 +137,8 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
     z-index: 1;
 
 }
-
+.backgroundChange{
+	background-color:#E8F5FF;
+	border-radius: 15px;
+}
 	

@@ -9,9 +9,9 @@
 <body>
 
 
+<div  class="header-main" style="width:1300px; margin:0 auto">
 
-
-	<div id="header" >
+	<div class="header" >
 	<ul id="menuChange" class="nav navbar-nav">
         <li class="menu"><a href="/">STORE</a> </li>
         <li class="menu" style="background-color: #9BC3FF; border-radius: 50px;"><a href="/boardMain" >COMMUNITY</a></li> 
@@ -66,8 +66,23 @@
 			}).done(()=> location.href = '/');
 			
 		});	
+		
+        $(window).on('scroll',function() {
+            if($(window).scrollTop() >150){
+              $('.header').addClass('backgroundChange');
+              $('.navbar-nav a').addClass('fontSizeUp');
+            }else if($(window).scrollTop() <50){
+            	$('.header').removeClass('backgroundChange');
+            	 $('.navbar-nav a').removeClass('fontSizeUp');
+              
+         
+            }
+
+
+          });     
 	</script>
 
+	</div>
 	</div>
 </body>
 </html>
