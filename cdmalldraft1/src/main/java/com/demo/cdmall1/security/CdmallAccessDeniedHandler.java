@@ -11,7 +11,7 @@ import org.springframework.stereotype.*;
 
 // 권한없음이 발생했을 때 /error/e403으로 유도할 AccessDenialHandler
 @Component
-public class ZmallAccessDeniedHandler implements AccessDeniedHandler {
+public class CdmallAccessDeniedHandler implements AccessDeniedHandler {
 	@Override
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {
