@@ -34,26 +34,87 @@ public class BoardCustomRepositoryImpl extends QuerydslRepositorySupport impleme
 	}
 
 	// select * from board where bno>0;
+	/*
+	 * @Override public List<BoardDto.ListView> readAll(Pageable pageable, String
+	 * writer) { BooleanBuilder condition = new BooleanBuilder();
+	 * condition.and(board.bno.gt(0)); if(writer!=null)
+	 * condition.and(board.writer.eq(writer)); return
+	 * factory.from(board).select(Projections.constructor(BoardDto.ListView.class,
+	 * board.bno, board.title, board.writer, board.createTime, board.readCnt,
+	 * board.attachmentCnt, board.commentCnt)).where(condition)
+	 * .orderBy(board.bno.desc()).offset(pageable.getOffset()).limit(pageable.
+	 * getPageSize()).fetch(); }
+	 * 
+	 * //
+	 * 
+	 * @Override public Long countAll(String writer) { BooleanBuilder condition =
+	 * new BooleanBuilder(); condition.and(board.bno.gt(0)); if(writer!=null)
+	 * condition.and(board.writer.eq(writer));
+	 * 
+	 * return
+	 * factory.from(board).select(board.bno.count()).where(condition).fetchOne(); }
+	 */
+	
 	@Override
-	public List<BoardDto.ListView> readAll(Pageable pageable, String writer) {
+	public List<BoardDto.List> readAll(Pageable pageable, String writer, String category) {
 		BooleanBuilder condition = new BooleanBuilder();
 		condition.and(board.bno.gt(0));
 		if(writer!=null)
 			condition.and(board.writer.eq(writer));
-		return factory.from(board).select(Projections.constructor(BoardDto.ListView.class, board.bno, board.title, board.writer, 
-				board.createTime, board.readCnt, board.attachmentCnt, board.commentCnt)).where(condition)
+		if(category!=null)
+			condition.and(board.category.eq(category));
+		return factory.from(board).select(Projections.constructor(BoardDto.List.class, board.bno, board.title, board.writer, 
+				board.createTime, board.readCnt, board.attachmentCnt, board.commentCnt, board.goodCnt, board.badCnt, board.category, board.warnCnt)).where(condition)
 				.orderBy(board.bno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	}
-
-	//
+	
+	// geo(>=) gt(=)
 	@Override
-	public Long countAll(String writer) {
+	public List<BoardDto.BestList> readBestAll(Pageable pageable, Integer goodCnt) {
+		QBoard board = QBoard.board;
+		return factory.from(board).select(Projections.constructor(BoardDto.BestList.class, board.bno, board.title, board.writer, 
+				board.createTime, board.readCnt, board.attachmentCnt, board.commentCnt, board.goodCnt, board.category, board.warnCnt))
+				.where(board.bno.gt(0).and(board.goodCnt.goe(10)))
+				.orderBy(board.goodCnt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+	}
+
+	
+	@Override
+	public List<BoardDto.BestRank> readBestRank(Pageable pageable, Integer goodCnt){
+		QBoard board = QBoard.board;
+		return factory.from(board).select(Projections.constructor(BoardDto.BestRank.class, board.bno, board.title, board.writer,
+				board.commentCnt, board.category))
+				.where(board.bno.gt(0))
+	.orderBy(board.goodCnt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+	}
+	
+	@Override
+	public Long countByGoodCnt2(){
+		QBoard board = QBoard.board;
+		return factory.from(board).select(board.bno.count()).where(board.bno.gt(0)).limit(3).fetchOne();
+	}
+	
+	@Override
+	public Long countByBno() {
+		QBoard board = QBoard.board;
+		return factory.from(board).select(board.bno.count()).where(board.bno.gt(0)).fetchOne();
+	}
+	
+	@Override
+	public Long countAll(String writer, String category) {
 		BooleanBuilder condition = new BooleanBuilder();
 		condition.and(board.bno.gt(0));
 		if(writer!=null)
 			condition.and(board.writer.eq(writer));
-		
+		if(category!=null)
+			condition.and(board.category.eq(category));
 		return factory.from(board).select(board.bno.count()).where(condition).fetchOne();
+	}
+	
+	@Override
+	public Long countByGoodCnt() {
+		QBoard board = QBoard.board;
+		return factory.from(board).select(board.bno.count()).where(board.bno.gt(0).and(board.goodCnt.goe(10))).fetchOne();
 	}
 
 }

@@ -49,6 +49,10 @@ public class Board extends BaseCreateAndUpdateTimeEntity {
 	
 	private Integer attachmentCnt;
 	
+	private String category;
+	
+	private Integer warnCnt;
+	
 	// DB에서는 외래키를 가진 쪽이 자식 테이블, JPA에서는 외래키를 가진 쪽이 관계의 주인(관계의 주인만 외래키 필드를 변경할 수 있다)
 	// 관계의 주인이 아닌 쪽은 mappedBy를 이용해 외래키를 지정한다(주인이 가진 외래키 엔티티의 이름)
 	@OneToMany(mappedBy="board", cascade=CascadeType.REMOVE)
@@ -73,6 +77,7 @@ public class Board extends BaseCreateAndUpdateTimeEntity {
 		this.badCnt = 0;
 		this.commentCnt = 0;
 		this.attachmentCnt = 0;
+		this.warnCnt=0;
 		if(this.attachments!=null)
 			this.attachmentCnt = attachments.size();
 	}

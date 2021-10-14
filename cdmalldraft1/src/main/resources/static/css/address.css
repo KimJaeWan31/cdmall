@@ -1,0 +1,37 @@
+@charset "UTF-8";
+html{
+	min-width : 500px; 
+}
+	
+*{
+	margin : 0;
+	padding: 0;
+}
+main {
+	width: 90%;
+	margin: 20px auto;
+}
+.delete_address {
+	background-color: #C9302C;
+	color : white;
+	border: 0;
+	border-radius: 5px;
+	padding: 6px 12px;
+	margin: 5px 0;
+		 
+}
+.table th{
+	background-color: #F0F0F0;
+	font-size: 20px;
+	font-weight: bold;	
+}
+#address_search{
+	margin-bottom: 10px;
+}
+#add_address{
+	display : block;
+	width: 100%;
+	margin: 10px auto;
+}
+#address{margin-bottom: 5px;}
+	

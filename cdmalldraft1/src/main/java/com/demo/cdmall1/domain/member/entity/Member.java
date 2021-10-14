@@ -6,6 +6,7 @@ import java.util.*;
 import javax.persistence.*;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.OrderBy;
 
 import org.hibernate.annotations.*;
 
@@ -26,7 +27,7 @@ import lombok.experimental.*;
 // lombok의 빌더를 사용하면 instance 초기화 동작 안함
 @Getter
 @Setter
-@ToString(exclude="authorities")
+@ToString(exclude={"authorities","address"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -36,8 +37,9 @@ import lombok.experimental.*;
 public class Member extends BaseCreateTimeEntity {
 	@PrePersist
 	public void init() {
-		buyCount = 0;
-		buyMoney = 0;
+		point = 0;
+		//buyCount = 0;
+		//buyMoney = 0;
 		loginFailCnt = 0;
 		enabled = false;
 		level = Level.BRONZE;
@@ -57,15 +59,22 @@ public class Member extends BaseCreateTimeEntity {
 	@Column(length=60)
 	private String password;
 	
+	@Column(length=30)
+	private String tel;
+	
 	//@DateTimeFormat(pattern="yyyy-MM-dd")
 	//@JsonFormat(pattern = "yyyy년 MM월 dd일")			사용자  -> 스프링 ProperyEditor			<- MessageConverter
 	private LocalDate birthday;
 	
 	private String profile;
 	
-	private Integer buyCount;
+	private Integer point;
 	
-	private Integer buyMoney;
+	/*
+	 * private Integer buyCount;
+	 * 
+	 * private Integer buyMoney;
+	 */
 	
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name="levels")
@@ -85,6 +94,16 @@ public class Member extends BaseCreateTimeEntity {
 	@OneToMany(mappedBy="member", cascade={CascadeType.MERGE, CascadeType.REMOVE})
 	private Set<Authority> authorities;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy="member", cascade={CascadeType.MERGE, CascadeType.REMOVE})
+	@OrderBy(value="adno DESC")
+	private Set<Address> address;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="member", cascade={CascadeType.MERGE, CascadeType.REMOVE})
+	@OrderBy(value="petno DESC")
+	private Set<Pet> pets;
+	
 	// DB에 저장되지 않는 필드
 	@Transient
 	private Long days;
@@ -97,6 +116,21 @@ public class Member extends BaseCreateTimeEntity {
 		this.password = encodedPassword;
 		authorities.forEach(authorityName->this.authorities.add(new Authority(this, authorityName)));
 	}
+	
+	//주소록 저장
+		public void addAddressInfo(List<String> adrressList ) {
+			if(this.address==null)
+				this.address = new HashSet<Address>();
+			adrressList.forEach(addressName->this.address.add(new Address(0, this, addressName)));
+		}
+		
+		//펫 정보 저장
+		public void setPets(String petName, String petSajin, Integer petAge, Boolean gender, String petKind) {
+			if(this.pets==null)
+				this.pets = new HashSet<Pet>();
+			this.pets.add(new Pet(0, this, petName, petSajin, petAge, gender, petKind));
+			
+		}
 	
 	public void loginFail() {
 		if(this.loginFailCnt<4)

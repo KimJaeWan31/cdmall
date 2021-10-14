@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>MY PET</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/nav.css">
+
+<style type="text/css">
+.delete_pet{
+	margin: 0;
+	border:0;
+	border-radius: 5px;
+	background-color: #DC3545;
+	color: white;
+	padding: 5px 12px;
+}
+#pet_profile{
+	width: 100px;
+	height: 100px; 
+	object-fit : content;
+}
+</style>
+<script>
+$(document).ready(() => {
+	let pets = undefined;
+	const printPets = ()=>{
+		const $list = $("#list");
+		for(p of pets) {
+			console.log(p.profile);
+			console.log(p.petName);
+			const $tr = $("<tr>").appendTo($list);
+			$("<td>").text(p.petName).appendTo($tr);
+			const $td = $("<td>").appendTo($tr);
+			$("<img>").attr("id", "pet_profile").attr("src", "/upload/pet_profile/" + p.profile).appendTo($td);
+			$("<td>").text(p.petAge).appendTo($tr);
+			if(p.gender == true){
+				$("<td>").text("암컷").appendTo($tr);
+			}else{
+				$("<td>").text("수컷").appendTo($tr);
+			}
+			$("<td>").text(p.petKind).appendTo($tr);
+			$("<td>").html($("<button>").attr("data-petno", p.petno).attr("class","delete_pet").text("삭제")).appendTo($tr);
+		}
+	}
+	$.ajax("/members/member/pets").done(result=>{
+		pets = result;
+		printPets();
+	});
+	
+	//내 정보 보기
+	$("#my_info").on("click", ()=>{
+		location.href ="/member/read"
+	});
+	
+	//내 펫 정보 보기
+	$("#my_pet").on("click", ()=>{
+		location.href ="/member/pet"
+	});
+	
+	$("#addPet").on("click", ()=>{
+		let url = '/member/pet_add';
+			let name = 'petOpen';
+			let option = "width=520, height=400, left=500, top=250";
+			window.open(url, name, option);
+	});
+	
+	$("#list").on("click",".delete_pet", function() {
+		let choice = confirm('반려동물 정보를 삭제하시겠습니까?');
+		if(choice==false)
+			return;
+		const param = {petno :$(this).attr("data-petno")};
+		$.ajax({url: "/pets", method:"delete", data:param})
+		.done(()=>location.reload())
+		.fail(()=>Swal.fire('삭제 실패', "반려동물 정보를 삭제하지 못했습니다.",'error'));
+	});
+})
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+header, nav, aside, footer, section ,li, a,div{
+	font-family: 'Jua', sans-serif;
+} 
+
+</style>
+</head>
+<body>
+<div th:text="${member}"></div>
+<div id="page">
+	<header id="header" th:replace="/fragments/headerMember">
+	</header>
+	<hr>
+	<main>
+		<section id="section">
+		<div id="buttons" style="margin-bottom: 10px; text-align: right;" >
+			<button id="my_info" class="btn btn-info">MY INFO</button>
+			<button id="my_pet" class="btn btn-info">MY PET</button>
+		</div>
+		<div id="wrap">
+				<table class="table table-hover" style="text-align: center;">
+					<tr>
+						<th style="text-align: center;">이름</th>
+						<th style="text-align: center;">사진</th>
+						<th style="text-align: center;">나이</th>
+						<th style="text-align: center;">성별</th>
+						<th style="text-align: center;">품종</th>
+						<th></th>
+					</tr>
+					<tbody id="list">
+					</tbody>
+				</table>
+				<div id="pagination" style="text-align: center; border: 0">
+					<ul class="pagination">
+					</ul>
+				</div>
+				<a class="btn btn-info" role="button" id="addPet">신규 등록</a>
+			</div>
+			<!-- 
+			<table class="table">
+				<colgroup>
+					<col width="30%">
+					<col width="70%">
+				</colgroup>
+				<tr>
+					<td colspan="2">
+						<img id="show_sajin" height="200px;">
+						<input type="file" name="sajin" id="sajin">
+					</td>
+				</tr>
+				<tr>
+					<td class="first">아이디</td>
+					<td id="username"></td>
+				</tr>
+				<tr><td class="first">비밀번호</td>
+					<td colspan="2">
+						<button type="button" class="btn btn-info" id="activateChangePwd">비밀번호 수정 ▼</button>
+						<div id="pwdArea">
+							<span class="key">현재 비밀번호 : </span><input type="password" id="password"  class="form-control"><br>
+							<span class="key">새 비밀번호 : </span><input type="password" id="newPassword" class="form-control"><br>
+							<span class="key">새 비밀번호 확인 : </span><input type="password" id="newPassword2" class="form-control"><br>
+			  				<button type="button" class="btn btn-success" id="changePwd">비밀번호 변경</button>
+						</div>
+					</td></tr>
+				<tr>
+				<tr>
+					<td class="first">배송지</td>
+					<td id="address">
+						<button type="button" class="btn btn-info" id="addressBtn">배송지 관리</button>
+					</td>
+				</tr>
+				<tr>
+					<td class="first">이름</td>
+					<td>
+					<input type="text" id="irum" class="form-control">
+					</td>
+				</tr>
+				<tr>
+					<td class="first">전화번호</td>
+					<td >
+					<input type="tel" id="tel" class="form-control">
+					</td>
+				</tr>
+				<tr>
+					<td class="first">생년월일</td>
+					<td >
+					<input type="date" id="birthday" class="form-control"> 
+					</td>
+				</tr>
+				<tr>
+					<td class="first">이메일</td>
+					<td>
+						<input id="email" type="text" name="email" class="form-control" style="width: 600px; display: inline-block;">
+						<select id="domain" class="form-control" style="width: 244px; display: inline-block;">
+							<option value="0">직접입력</option>
+							<option value="naver.com">naver.com</option>
+							<option value="gmail.com">gmail.com</option>
+							<option value="daum.net">daum.net</option>
+							<option value="kakao.com">kakao.com</option>
+							<option value="yahoo.com">yahoo.com</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="first">보유 포인트</td>
+					<td colspan="2" id="point"></td>
+				</tr>
+				<tr>
+					<td class="first">회원정보</td>
+					<td>
+						<ul>
+							<li>가입일 : <span id="joinday"></span></li>
+							<li>가입기간 : <span id="days"></span></li>
+							<li>레벨 : <span id="level"></span></li>
+						</ul>
+						<br>
+						
+					</td></tr>
+			</table>
+			<hr>
+			<div id="click">
+				<button type="button" class="btn btn-success" id="update">변경하기</button>
+				<button type="button" class="btn btn-danger" id="resign">탈퇴하기</button>
+				<a href="" id="transform" style="font-style: italic; float: right;">판매자 계정 전환 > </a>
+			</div>
+			 -->
+		</section>
+	</main>
+	<footer id="footer" th:replace="/fragments/footer">
+	</footer>
+</div>
+</body>
+</html>

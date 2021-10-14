@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
+	type="text/css">
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
+<link href="/css/sb-admin-2.min.css" rel="stylesheet">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
+<script src="/script/join.js"></script>
+<style>
+.success {
+	color: blue;
+	margin-left:15px;
+	font-size: 0.75em;
+}
+
+.fail {
+	color: red;
+	margin-left:15px;
+	font-size: 0.75em;
+}
+</style>
+<title>댕댕의 정석 회원가입</title>
+</head>
+
+<body class="bg-gradient-primary">
+	<div class="container">
+		<div class="card o-hidden border-0 shadow-lg my-5">
+			<div class="card-body p-0">
+				<!-- Nested Row within Card Body -->
+				<div class="row">
+					<div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+					<div class="col-lg-7">
+						<div class="p-5">
+							<div class="text-center">
+								<h1 class="h4 text-gray-900 mb-4">신규 회원가입</h1>
+							</div>
+							<form class="user" id="join_form">
+								<div class="form-group ">
+									<input type="text" class="form-control form-control-user"
+										id="irum" name="irum" placeholder="이름" required> 
+									<span id="irum_msg"></span>	
+								</div>
+								<div class="form-group ">
+									<input type="text" class="form-control form-control-user"
+										id="username" name="username" placeholder="아이디" required> 
+									<span id="username_msg"></span>	
+								</div>
+								<div class="form-group">
+									<input type="email" class="form-control form-control-user"
+										id="email" name="email" placeholder="이메일">
+									<span id="email_msg"></span>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-6 mb-3 mb-sm-0">
+										<input type="password" class="form-control form-control-user"
+											id="password" name="password" placeholder="비밀번호">
+									<span id="password_msg"></span>
+									</div>
+									
+									<div class="col-sm-6">
+										<input type="password" class="form-control form-control-user"
+											id="password2" name="password2" placeholder="비밀번호 재확인">
+									<span id="password2_msg"></span>
+									</div>
+							
+								</div>
+								<button type="button" id ="join" class="btn btn-primary btn-user btn-block">
+									회원가입	 
+								</button>
+								<hr>
+								<a href="index.html" class="btn btn-google btn-user btn-block">
+									<i class="fab fa-google fa-fw"></i> Register with Google
+								</a> <a href="index.html"
+									class="btn btn-facebook btn-user btn-block"> <i
+									class="fab fa-facebook-f fa-fw"></i> Register with Facebook
+								</a>
+							</form>
+							<hr>
+							<div class="text-center">
+								<a class="small" href="/member/login">
+									이미 댕댕의 정석 회원이신가요? 바로 로그인해주세요
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -66,4 +66,38 @@ public class MemberMvcController {
 			return "redirect:/member/password_check";
 		return "/member/read";
 	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/member/pet")
+	public String pet() {
+		return "/member/pet";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/member/pet_add")
+	public String pet_add() {
+		return "/member/pet_add";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/member/cart")
+	public void cart() {
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/payment/payment")
+	public void pay() {
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/payment/order_address")
+	public void order_address() {
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/member/address")
+	public void address() {
+	}
+	
+	
 }

@@ -71,11 +71,20 @@ public class BoardController {
 		return ResponseEntity.ok(service.read(bno, username));
 	}
 	
+	/*
+	 * @GetMapping(path="/board/all", produces=MediaType.APPLICATION_JSON_VALUE)
+	 * public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno,
+	 * String writer) { return ResponseEntity.ok(service.list(pageno, writer)); }
+	 */
 	@GetMapping(path="/board/all", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, String writer) {
-		return ResponseEntity.ok(service.list(pageno, writer));
+	public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, String writer, String category) {
+		return ResponseEntity.ok(service.list(pageno, writer, category));
 	}
 	
+	@GetMapping(path="board/best", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> list(@RequestParam(defaultValue = "1") Integer pageno, Integer goodCnt){
+		return ResponseEntity.ok(service.bestList(pageno, goodCnt));
+	}	
 	
 	@PutMapping(path="/board/{bno}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@Valid BoardDto.Update dto, BindingResult bindingResult, Principal principal) throws BindException {
@@ -98,6 +107,12 @@ public class BoardController {
 	@GetMapping("/board/good_or_bad")
 	public ResponseEntity<?> GoodOrBadCnt(@RequestParam Integer bno, @RequestParam Integer state) {
 		Integer cnt = service.goodOrBad(bno, state);
+		return ResponseEntity.ok(cnt);
+	}
+	
+	@GetMapping("/board/warn")
+	public ResponseEntity<?> WarnCnt(@RequestParam Integer bno, @RequestParam Integer state){
+		Integer cnt = service.warnCheck(bno, state);
 		return ResponseEntity.ok(cnt);
 	}
 	

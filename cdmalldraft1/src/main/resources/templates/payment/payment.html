@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="/css/payment.css">
+<script src="/script/payment.js"></script>
+<title>결제창</title>
+</head>
+<body>
+    <div id="page">
+        <header id="header">
+            <img id="logo" src="/images/마켓로고.png" alt="댕댕예찬 로고 검정">
+        </header>
+        <hr>
+        <nav id="nav">
+        </nav>
+        <main>
+            <section id="section">
+                <div id="midde">
+                    <div id="ordTitle">
+                        <h2>주문/결제</h2>
+                        <div id="title_span">
+                            <span>장바구니></span>
+                            <span style="color: blue;"><em>주문결제></em></span>
+                            <span>주문완료</span>
+                        </div>
+                    </div>
+                    <div id="customer_info">
+                        <h3 style="font-size: 19px; font-weight: bold;">구매자정보</h3>
+                        <table id="customer_table">
+                            <tr>
+                                <td class="customer_col">이름</td>
+                                <td id="customer_name"></td>
+                               
+                            </tr>
+                            <tr>
+                                <td class="customer_col">이메일</td>
+                                <td id="customer_email"></td>
+                            </tr>
+                            <tr>
+                                <td class="customer_col">휴대폰 번호</td>
+                                <td id="customer_tel">
+                                   <p style="font-size: 10px;"> * 올바른 휴대폰 번호인지 확인해 주세요</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="delivery_info">
+                        <h3 style="font-size: 19px; font-weight: bold;">받는사람정보</h3>
+                        <input type="checkbox" id="isSame">구매자정보와 동일
+                        <table id="delivery_table">
+                            <tr>
+                                <td class="delivery_col">이름</td>
+                                <td id="delivery_name">
+                                    <input type="text" id="ship_name">
+                                </td>
+                               
+                            </tr>
+                            <tr>
+                                <td class="delivery_col">배송주소</td>
+                                <td id="delivery_address">
+                                    <input type="text" id="address">
+                                    <button type="button" id="address_search">배송지 검색</button>
+                                    <button type="button" id="my_address">내 배송지</button>
+                                    <br>
+                                    <input type="text" id="detail_address" placeholder="상세주소를 입력해주세요">
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="delivery_col">연락처</td>
+                                <td id="delivery_tel">
+                                    <input type="tel" id="ship_tel">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="delivery_col">배송 요청사항</td>
+                                <td id="delivery_memo">
+                                    <input type="text" id="input_memo">
+                                    <select id="memo">
+                                        <option value="0">직접입력</option>
+                                        <option value="배송 전 연락주세요">배송 전 연락주세요</option>
+                                        <option value="택배함에 배송해주세요">택배함에 배송해주세요</option>
+                                        <option value="빨리 배송해주세요">빨리 배송해주세요</option>
+                                        <option value="취급 주의해주세요">취급 주의해주세요</option>
+                                        <option value="문앞에 배송해주세요">문앞에 배송해주세요</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="checkout_info">
+                        <h3 style="font-size: 19px; font-weight: bold;">결제정보</h3>
+                        <table id="checkout_table">
+                            <tr>
+                                <td class="checkout_col">총상품가격</td>
+                                <td id="checkout_price">7800</td>
+                            </tr>
+                            <tr>
+                                <td class="checkout_col">배송비</td>
+                                <td id="checkout_shipping">5000</td>
+                            </tr>
+                            <tr>
+                                <td class="checkout_col">포인트</td>
+                                <td>
+                                    <span id="checkout_point"></span>
+                                    <input type="checkbox">포인트 사용
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="checkout_col">할인금액</td>
+                                <td id="checkout_discount" style="color: red;">1000</td>
+                            </tr>
+                            <tr>
+                                <td class="checkout_col">총결제금액</td>
+                                <td id="checkout_total"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr>
+                    <div style="text-align: center;">
+                        <input type="checkbox">위 주문 내용을 확인 하였으며, 회원 본인은 결제에 동의합니다.
+                        <br>
+                        <button type="button" id="payment">결제하기</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer id="footer">
+        </footer>
+    </div>
+</body>
+</html>

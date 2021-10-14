@@ -5,6 +5,7 @@ import java.io.*;
 import org.springframework.http.*;
 import org.springframework.web.multipart.*;
 
+
 public class ZmallUtil {
 	// 파일 업로드할 때 확장자 잘라내는 함수
 	public static String getMultipartExtension(MultipartFile sajin) {
@@ -37,4 +38,19 @@ public class ZmallUtil {
 			type=MediaType.IMAGE_GIF;
 		return type;
 	}
+	
+	// 반려동물 이미지 저장하는 함수
+	public static String savePetProfile(MultipartFile Petsajin, String username, String petName) {
+		if(Petsajin!=null && Petsajin.isEmpty()==false) {
+			File file = new File(ZmallConstant.PET_PROFILE_FOLDER, username + petName + ZmallUtil.getMultipartExtension(Petsajin));
+			try {
+				Petsajin.transferTo(file);
+				return file.getName();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return ZmallConstant.DEFAULT_PROFILE_NAME;
+	}
+	
 }

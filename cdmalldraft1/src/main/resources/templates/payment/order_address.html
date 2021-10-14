@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="/css/order_address.css">
+<script type="text/javascript">
+$(document).ready(() => {
+	let address = undefined;
+	
+	const printAddress = ()=>{
+		const $list = $("#list");
+		for(a of address) {
+			const $tr = $("<tr>").appendTo($list);
+			$("<td>").text(a.addressName).appendTo($tr);
+			$("<button>").attr("data-adno", a.adno).attr("class","choice_address").text("선택").appendTo($tr);
+		}
+	};
+	$.ajax("/members/member/address").done(result=>{
+		address = result;
+		printAddress();
+	});
+
+	$("#list").on("click",".choice_address", function() {
+		const param = {adno :$(this).attr("data-adno")};
+		$.ajax({
+    		url : "/address",
+    		method :"post",
+    		data : param
+    	}).done(result=>{
+    		window.close();
+    	}).fail(()=>Swal.fire('주소 선택 실패', "주소를 선택하지 못했습니다.",'error'));
+		
+	});
+	
+})
+</script>
+<title>주소록</title>
+</head>
+<body onresize="parent.resizeTo(520,500)" onload="parent.resizeTo(520,500)">
+	<main>
+		<table class="table">
+			<tr>
+				<th>내 주소록</th><th></th>
+			</tr>
+			<tbody id="list"></tbody>
+		</table>
+		<hr>
+		<a href="/member/read" id="go_member_read" target="_blank">내 주소록 관리하기</a>
+	</main>	
+</body>
+</html>

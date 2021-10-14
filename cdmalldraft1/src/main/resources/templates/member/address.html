@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="/css/address.css">
+<script type="text/javascript">
+$(document).ready(() => {
+	let address = undefined;
+	
+	const printAddress = ()=>{
+		const $list = $("#list");
+		for(a of address) {
+			const $tr = $("<tr>").appendTo($list);
+			$("<td>").text(a.addressName).appendTo($tr);
+			$("<button>").attr("data-adno", a.adno).attr("class","delete_address").text("삭제").appendTo($tr);
+		}
+	};
+	$.ajax("/members/member/address").done(result=>{
+		address = result;
+		printAddress();
+	});
+	
+	$("#address_search").on("click", ()=>{
+        new daum.Postcode({
+            oncomplete: function(data){
+
+                let addr = data.roadAddress;
+                if (data.userSelectedType === 'R')
+                    addr = data.roadAddress; // 도로명 주소    
+                else  
+                    addr = data.jibunAddress; // 지번 주소
+    
+                $("#address").val(addr);
+                $("#detail_address").focus();  
+            }
+        }).open();
+    });	
+	
+	$("#add_address").on("click", ()=>{
+        if($("#address").val() =="" || $("#detail_address").val()==""){        	
+        	Swal.fire('주소 추가 실패', "주소를 입력해 주세요.",'error')
+        }
+        else{
+        	const param ={
+        		address : $("#address").val() +" / "+ $("#detail_address").val()	
+        	}
+        	$.ajax({
+        		url : "/members/member/address",
+        		method :"post",
+        		data : param
+        	}).done(result=>{
+        		address = result;
+        		location.reload();
+        	}).fail(()=>Swal.fire('주소 추가 실패', "주소를 추가하지 못했습니다.",'error'));
+        }
+    });
+	
+	$("#list").on("click",".delete_address", function() {
+		let choice = confirm('주소를 삭제하시겠습니까?');
+		if(choice==false)
+			return;
+		const param = {adno :$(this).attr("data-adno")};
+		$.ajax({url: "/address", method:"delete", data:param})
+		.done(()=>location.reload())
+		.fail(()=>Swal.fire('주소 삭제 실패', "주소를 삭제하지 못했습니다.",'error'));
+	});
+	
+})
+</script>
+<title>주소록</title>
+</head>
+<body onresize="parent.resizeTo(520,700)" onload="parent.resizeTo(520,700)">
+	<main>
+		<table class="table table-hover">
+			<tr>
+				<th>내 주소록</th><th></th>
+			</tr>
+			<tbody id="list">
+			</tbody>
+		</table>
+		<hr>
+	 	<button type="button" class="btn btn-info" id="address_search">배송지 검색</button>
+		<form id="join_form">
+			<div class="address_details">
+				<div class="input-box">
+					<input type="text" id="address" name="address" class="form-control">
+				</div>
+				<div class="input-box">
+					<input type="text"  id="detail_address" name="detail_address" placeholder="상세주소 입력" class="form-control">
+				</div>	
+			</div>	
+		</form>
+		<hr>
+		<button type="button"  class="btn btn-info" id="add_address">주소 추가</button>
+	</main>		
+</body>
+</html>

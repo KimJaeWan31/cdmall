@@ -6,7 +6,6 @@ import java.time.format.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.hibernate.internal.build.*;
 import org.jsoup.*;
 import org.modelmapper.*;
 import org.springframework.data.domain.*;
@@ -67,14 +66,43 @@ public class BoardService {
 	}
 	
 	// 읽기
+	/*
+	 * @Transactional public BoardDto.Read read(Integer bno, String loginId) { Board
+	 * board = dao.findById(bno).orElseThrow(BoardFail.BoardNotFoundException::new);
+	 * board.increaseReadCnt(loginId); List<CommentDto.Read> comments =
+	 * board.getComments().stream().map(c->c.toDto()).collect(Collectors.toList());
+	 * BoardDto.Read dto = modelMapper.map(board, BoardDto.Read.class); return
+	 * dto.setComments(comments); }
+	 */
 	@Transactional
-	public BoardDto.Read read(Integer bno, String loginId) {
+	public Map<String,Object> read(Integer bno, String loginId) {
 		Board board = dao.findById(bno).orElseThrow(BoardFail.BoardNotFoundException::new);
 		board.increaseReadCnt(loginId);		
 		List<CommentDto.Read> comments = board.getComments().stream().map(c->c.toDto()).collect(Collectors.toList());
-		BoardDto.Read dto = modelMapper.map(board, BoardDto.Read.class);
-		return dto.setComments(comments);
+		Map<String,Object> map = new HashMap<>();
+		
+		
+		map.put("bno", board.getBno());
+		map.put("title", board.getTitle());
+		map.put("content", board.getContent());
+		System.out.println(board.getContent());
+		map.put("badCnt", board.getBadCnt());
+		map.put("commentCnt", board.getCommentCnt());
+		
+		// map에는 @JsonFormat을 걸수가 없으므로 직접 변환해서 map에 저장하자
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+		map.put("createTime", dtf.format(board.getCreateTime()));
+		map.put("goodCnt", board.getGoodCnt());
+		map.put("readCnt", board.getReadCnt());
+		map.put("updateTime", board.getUpdateTime());
+		map.put("writer", board.getWriter());
+		map.put("attachments", board.getAttachments());
+		map.put("comments", comments);
+		map.put("category", board.getCategory());
+		map.put("warnCnt", board.getWarnCnt());
+		return map;
 	}
+	
 	
 	// 글 변경
 	@Transactional
@@ -91,22 +119,55 @@ public class BoardService {
 		return board.updateCommentCnt();
 	}
 
-	public BoardDto.ListResponse list(Integer pageno, String writer) {
+	/*
+	 * public BoardDto.ListResponse list(Integer pageno, String writer) { //
+	 * JPARepository의 findAll은 findById와 마찬가지로 관련 엔티티를 모두 읽어온다 -> 상관없다면 사용 //
+	 * Pageable pageable = PageRequest.of(pageno-1, 10, Sort.by(Sort.Direction.DESC,
+	 * "bno")); // return dao.findAll(pageable);
+	 * 
+	 * // 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을
+	 * 사용하자 Pageable pageable = PageRequest.of(pageno-1, 10); BoardDto.ListResponse
+	 * dto = new BoardDto.ListResponse(dao.readAll(pageable, writer),
+	 * dao.countAll(writer), pageno, 10); //Map<String,Object> map = new
+	 * HashMap<>(); //map.put("content", dao.readAll(pageable, writer));
+	 * //map.put("totalcount", dao.countAll(writer)); //map.put("pageno", pageno);
+	 * //map.put("pagesize", 10); return dto; }
+	 */
+	
+	public Map<String,Object> list(Integer pageno, String writer, String category) {
 		// JPARepository의 findAll은 findById와 마찬가지로 관련 엔티티를 모두 읽어온다 -> 상관없다면 사용
 		// Pageable pageable = PageRequest.of(pageno-1, 10, Sort.by(Sort.Direction.DESC, "bno"));
 		// return dao.findAll(pageable);
 		
 		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
 		Pageable pageable = PageRequest.of(pageno-1, 10);
-		BoardDto.ListResponse dto = new BoardDto.ListResponse(dao.readAll(pageable, writer), dao.countAll(writer), pageno, 10);
-		//Map<String,Object> map = new HashMap<>();
-		//map.put("content", dao.readAll(pageable, writer));
-		//map.put("totalcount", dao.countAll(writer));
-		//map.put("pageno", pageno);
-		//map.put("pagesize", 10);
-		return dto;
+		Map<String,Object> map = new HashMap<>();
+		map.put("content", dao.readAll(pageable, writer, category));
+		map.put("totalcount", dao.countAll(writer, category));
+		map.put("pageno", pageno);
+		map.put("pagesize", 10);
+		return map;
+	}
+	
+	public Map<String,Object> bestList(Integer pageno, Integer goodCnt){
+		Pageable pageable = PageRequest.of(pageno-1, 10);
+		Map<String,Object> map = new HashMap<>();
+		map.put("content", dao.readBestAll(pageable, goodCnt));
+		map.put("totalcount", dao.countByGoodCnt());
+		map.put("pageno", pageno);
+		map.put("pagesize", 10);
+		return map;
 	}
 
+	/*
+	 * @Transactional public Integer goodOrBad(Integer bno, Integer state) { Board
+	 * board = dao.findById(bno).orElseThrow(BoardFail.BoardNotFoundException::new);
+	 * if(state==0) { board.setGoodCnt(board.getGoodCnt()+1); return
+	 * board.getGoodCnt(); } else if(state==1) {
+	 * board.setBadCnt(board.getBadCnt()+1); return board.getBadCnt(); } else
+	 * if(state==2) return board.getGoodCnt(); return board.getBadCnt(); }
+	 */
+	
 	@Transactional
 	public Integer goodOrBad(Integer bno, Integer state) {
 		Board board = dao.findById(bno).orElseThrow(BoardFail.BoardNotFoundException::new);
@@ -118,7 +179,27 @@ public class BoardService {
 			return board.getBadCnt();
 		} else if(state==2)
 			return board.getGoodCnt();
+		else if(state==3) {
+			return board.getBadCnt();
+		}else if(state==4) {
+			board.setGoodCnt(board.getGoodCnt()-1);
+			return board.getGoodCnt();
+		}
+		board.setBadCnt(board.getBadCnt()-1);
 		return board.getBadCnt();
+	}
+	
+	@Transactional
+	public Integer warnCheck(Integer bno, Integer state) {
+		Board board = dao.findById(bno).orElseThrow(BoardFail.BoardNotFoundException::new);
+		if(state==0) {
+			board.setWarnCnt(board.getWarnCnt()+1);
+			return board.getWarnCnt();
+		}else if(state==1) {
+			return board.getWarnCnt();
+		}
+		board.setWarnCnt(board.getWarnCnt()-1);
+		return board.getWarnCnt();
 	}
 
 	// ck 이미지 업로드

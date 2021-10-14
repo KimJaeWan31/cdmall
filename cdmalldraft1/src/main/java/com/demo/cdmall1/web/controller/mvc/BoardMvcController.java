@@ -32,4 +32,9 @@ public class BoardMvcController {
 	@GetMapping("/shop/outdoorList")
 	public void shopOutdoorList() {
 	}
+	
+	@GetMapping("/board/readMap")
+	public void map() {
+		
+	}
 }

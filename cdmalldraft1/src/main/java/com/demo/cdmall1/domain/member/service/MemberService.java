@@ -3,6 +3,7 @@ package com.demo.cdmall1.domain.member.service;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.*;
 import org.springframework.http.*;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.*;
 import com.demo.cdmall1.domain.member.entity.*;
 import com.demo.cdmall1.util.*;
 import com.demo.cdmall1.web.dto.*;
+import com.demo.cdmall1.web.dto.AddressDto.Read;
 import com.demo.cdmall1.web.dto.MemberDto.*;
 
 import lombok.*;
@@ -110,7 +112,8 @@ public class MemberService {
 		member.setDays(ChronoUnit.DAYS.between(LocalDate.from(member.getCreateTime()), LocalDate.now()));
 		return member;
 	}
-
+	
+	//업데이트 하기
 	@Transactional
 	public void update(MemberDto.Update dto, String loginId) {
 		Member member = dao.findById(loginId).orElseThrow(MemberFail.MemberNotFoundException::new);
@@ -130,17 +133,51 @@ public class MemberService {
 			member.setProfile(profile);
 		}
 	}
-
+	
+	// 로그아운
 	public void resign(String loginId) {
 		dao.deleteById(loginId);
 	}
 
+	// 프로필 읽어오기
 	public String getProfile(String username) {
 		return dao.findById(username).get().getProfile();
 	}
 	
+	// 권한 읽어오기
 	public Authority readAuthority(Member member) {
 		Authority authority = AuthDao.findByMember(member);
 		return authority;
 	}
+	
+	//주소 읽기
+	public List<Read> addressRead(String loginId) {
+		Member member = dao.findById(loginId).orElseThrow(MemberFail.MemberNotFoundException::new);	
+		List<AddressDto.Read> address = member.getAddress().stream().map(a->a.toDto()).collect(Collectors.toList());
+		return address;
+	}
+	//주소 추가
+	public void addressAdd(String address, String loginId) {
+		Member member = dao.findById(loginId).orElseThrow(MemberFail.MemberNotFoundException::new);
+		member.addAddressInfo(Arrays.asList(address));
+		dao.save(member);
+	}
+	
+	//펫 정보 읽기
+	public List<Pet> petRead(String loginId) {
+		Member member = dao.findById(loginId).orElseThrow(MemberFail.MemberNotFoundException::new);	
+		List<Pet> pets = member.getPets().stream().collect(Collectors.toList());
+		return pets;
+	}
+	//펫 정보 추가
+	public void petAdd(PetDto.Add dto, String loginId) {
+		Member member = dao.findById(loginId).orElseThrow(MemberFail.MemberNotFoundException::new);
+		
+		MultipartFile Petsajin = dto.getPetSajin();
+		
+		String petProfile = ZmallUtil.savePetProfile(Petsajin, member.getUsername(), dto.getPetName());
+		member.setPets(dto.getPetName(), petProfile, dto.getPetAge(), dto.getGender(), dto.getPetKind());
+		dao.save(member);
+	}
+	
 }

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="/css/address.css">
+<script type="text/javascript">
+$(document).ready(() => {
+	$("#add_address").on("click", ()=>{
+		const formData = new FormData()
+		
+		if($("#petSajin")[0].files[0]!=undefined)
+			formData.append("petSajin", $("#petSajin")[0].files[0]);
+		
+		const $petName = $("#petName").val();
+		formData.append("petName", $petName);
+		
+		const $petAge = $("#petAge").val();
+		formData.append("petAge", $petAge);
+		
+		const $gender =  $('input[name="gender"]').val();
+		formData.append("gender", $gender);
+		
+		const $petKind = $("#petKind").val();
+		formData.append("petKind", $petKind);
+		
+		console.log($("#petSajin")[0].files[0]);
+       /*
+		const param ={
+        	petName : $("#petName").val(),
+        	petSajin : $("#petSajin")[0].files[0],
+        	petAge : $("#petAge").val(),
+        	gender : $('input[name="gender"]').val(),
+        	petKind : $("#petKind").val()
+        }*/
+       
+        $.ajax({
+        		url : "/members/member/pets",
+        		method :"post",
+        		data: formData,
+				processData:  false,
+				contentType: false
+        	}).done(()=>{
+        		Swal.fire('정보 추가 성공', "반려동물 정보를 추가했습니다.",'success');
+        		
+        	})
+        	.fail(()=>Swal.fire('정보 추가 실패', "반려동물 정보를 추가하지 못했습니다.",'error'));
+        
+    	});
+})
+</script>
+<title>반려동물 신규 등록</title>
+</head>
+<body onresize="parent.resizeTo(520,400)" onload="parent.resizeTo(520,700)">
+	<main>
+		<form id="join_form">
+			<div class="address_details">
+				<div class="input-box">
+					<label>이름</label>
+					<input type="text" id="petName" name="petName" class="form-control">
+				</div>
+				<div class="input-box">
+					<label>사진</label>
+					<input type="file" id="petSajin" name="petSajin">
+				</div>
+				<div class="input-box">
+					<label>나이</label>
+					<input type="number" id="petAge" name="petAge" class="form-control">
+				</div>
+				<div class="input-box">
+					<label>성별</label><br>
+					<label><input type="radio" id="gender_fmale" name="gender" value=false>수컷</label>
+					<label><input type="radio" id="gender_male" name="gender" value=true>암컷</label>
+				</div>
+				<div class="input-box">
+					<label>품종</label>
+					<input type="text" id="petKind" name="petKind" class="form-control">
+				</div>	
+			</div>	
+		</form>
+		<hr>
+		<button type="button"  class="btn btn-info" id="add_address">반려동물 정보 추가</button>
+	</main>		
+</body>
+</html>

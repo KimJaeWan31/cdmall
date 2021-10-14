@@ -1,7 +1,6 @@
 package com.demo.cdmall1.web.controller.rest;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.net.*;
 import java.nio.file.*;
 import java.security.*;
@@ -14,7 +13,6 @@ import org.springframework.http.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.security.core.*;
 import org.springframework.security.web.authentication.logout.*;
-import org.springframework.stereotype.*;
 import org.springframework.validation.*;
 import org.springframework.validation.BindException;
 import org.springframework.validation.annotation.*;
@@ -147,6 +145,39 @@ public class MemberController {
 		return ResponseEntity.ok(null);
 	}
 	
+	// 내 주소록 보기
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping(path="/members/member/address", produces = MediaType.APPLICATION_JSON_VALUE) 
+	public ResponseEntity<?> readAddress(Principal principal) {
+		return ResponseEntity.ok(service.addressRead(principal.getName()));
+	}
+	
+	// 내 주소록 추가
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping(path="/members/member/address", produces = MediaType.APPLICATION_JSON_VALUE) 
+	public ResponseEntity<?> addAddress(String address, Principal principal) {
+		service.addressAdd(address, principal.getName());
+		return ResponseEntity.ok(null);
+	}
+	
+	// 내 펫 정보 보기
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping(path="/members/member/pets", produces = MediaType.APPLICATION_JSON_VALUE) 
+	public ResponseEntity<?> readPet(Principal principal) {
+		return ResponseEntity.ok(service.petRead(principal.getName()));
+	}
+		
+	// 내 펫 정보 추가
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping(path="/members/member/pets", produces = MediaType.APPLICATION_JSON_VALUE) 
+	public ResponseEntity<?> addPet(@ModelAttribute @Valid PetDto.Add dto, BindingResult bindingResult, Principal principal) throws BindException {
+		if(bindingResult.hasErrors())
+			throw new BindException(bindingResult);
+		service.petAdd(dto, principal.getName());
+		return ResponseEntity.ok(null);
+	}
+	
+	
 	// 회원 탈퇴 후 루트 페이지로 이동(회원 탈퇴 버튼이 내정보에 있다. 따라서 루트로 강제이동 시키자)
 	@PreAuthorize("isAuthenticated()")
 	@DeleteMapping("/members/member")
@@ -180,4 +211,8 @@ public class MemberController {
 	public ResponseEntity<?> getProfile(@Username String username) {
 		return ResponseEntity.ok(service.getProfile(username));
 	}
+	
+	
+	
+	
 }

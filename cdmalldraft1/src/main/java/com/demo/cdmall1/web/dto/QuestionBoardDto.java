@@ -2,6 +2,7 @@ package com.demo.cdmall1.web.dto;
 
 import java.time.*;
 import java.util.*;
+import java.util.List;
 
 import org.springframework.web.multipart.*;
 
