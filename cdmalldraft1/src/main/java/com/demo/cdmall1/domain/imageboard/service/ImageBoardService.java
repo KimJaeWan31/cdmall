@@ -92,14 +92,7 @@ public class ImageBoardService {
 		return imageBoard.update(dto);
 	}
 
-		/*
-		 * @Transactional public Integer updateCommentCnt(Integer ibno) { ImageBoard
-		 * imageBoard =
-		 * dao.findById(ibno).orElseThrow(BoardFail.IllegalJobException::new); return
-		 * imageBoard.updateCommentCnt(); } 
-		 */
-
-		
+	
 	public Map<String,Object> list(Integer pageno) { 
 		Pageable pageable = PageRequest.of(pageno-1, 9); 
 		Map<String,Object> map = new HashMap<>(); 
@@ -117,11 +110,26 @@ public class ImageBoardService {
 		if(state==0) {
 			imageBoard.setGoodCnt(imageBoard.getGoodCnt()+1);
 			return imageBoard.getGoodCnt();
-		} 
-		else if(state==2) {
+		} else if(state==1) {
+			imageBoard.setGoodCnt(imageBoard.getGoodCnt()-1);
 			return imageBoard.getGoodCnt();
+		} else if(state==2)
+			//return imageBoard.getGoodCnt();
+		//return null;
+			imageBoard.setGoodCnt(imageBoard.getGoodCnt());
+		return imageBoard.getGoodCnt();
+	}
+	
+	@Transactional
+	public Integer isExistCheck(Integer ibno, Integer state) {
+		ImageBoard imageBoard = dao.findById(ibno).orElseThrow(BoardFail.BoardNotFoundException::new);
+		if(state==0) {
+			imageBoard.setCheckCnt(imageBoard.getCheckCnt()+1);
+			return imageBoard.getCheckCnt();
+		}else if(state==1) {
+			return imageBoard.getCheckCnt();
 		}
-		return null;
+		return state;
 	}
 	
 	// 글 삭제

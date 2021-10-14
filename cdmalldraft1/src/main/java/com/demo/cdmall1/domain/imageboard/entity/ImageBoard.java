@@ -42,7 +42,7 @@ public class ImageBoard extends BaseCreateAndUpdateTimeEntity{
 	
 	private Integer goodCnt;
 	
-	//private Integer badCnt;
+	private Integer goodCnlCnt;
 	
 	private Integer ibcommentCnt;
 	
@@ -58,7 +58,7 @@ public class ImageBoard extends BaseCreateAndUpdateTimeEntity{
 	@PrePersist
 	public void init() {
 		this.goodCnt = 0;
-		//this.badCnt = 0;
+		this.goodCnlCnt = 0;
 	}
 	
 	public ImageBoard update(ImageBoardDto.Update dto) {
@@ -83,4 +83,6 @@ public class ImageBoard extends BaseCreateAndUpdateTimeEntity{
 		// service에서 board.getAttachments().add(new Attachment(board,.....)); -> board가 저장되지 않는다
 		ibattachments.add(ibattachment);
 	}
+	
+	public Integer checkCnt;
 }
