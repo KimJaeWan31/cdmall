@@ -19,10 +19,11 @@ public class ZmallTest {
 	MemoService service;
 	
 	//@Test
+	/*
 	public void countTest() {
 		dao.countAll(null);
 		dao.countAll("spring11");
-	}
+	}*/
 	
 	//@Test
 	/*
