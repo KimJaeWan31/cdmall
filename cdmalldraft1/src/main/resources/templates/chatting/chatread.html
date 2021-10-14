@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<!-- <style>
+	#attachment { width: 250px; }
+	.td1 { width: 30px; }
+	.td2 { width: 170px; }
+	.td3 { width: 50px; }
+</style>
+<script sec:authorize="isAuthenticated()">
+	const isLogin = true
+</script>
+<script  sec:authorize="isAnonymous()">
+	const isLogin = false;
+</script> -->
+<script>
+	let isWriter = undefined;
+	
+	
+	const printMessageHistory=(history)=>{
+		const obj = JSON.parse(history);
+		const $list = $("#list");
+		console.log(history);
+		for(c of obj.history){
+			
+			console.log(c);
+			const $tr = $("<tr>").appendTo($list);
+			$("<td>").text(c.sender).appendTo($tr);
+			$("<td>").text(c.sendTime).appendTo($tr);
+			$("<td>").text(c.message).appendTo($tr);
+		}
+		
+		// board의 필드들을 출력
+		$("#chathno").text(messageHistory.chathno);
+		$("#writeday").text(messageHistory.created_date);
+		$("#guestid").text(messageHistory.guestid);
+		$("#hostid").val(messageHistory.hostid);
+		$("#content").html(messageHistory.content);
+		
+		// 비로그인, 글쓴이, 글쓴이 아님에 따른 화면 구성
+		
+	};
+	
+	const printAttachments=(attachments)=>{
+		const $table = $("#attachment");
+		// 자식들 삭제
+		$table.empty();
+		
+		// $("어쩌구").each(function(idx, item)) -> jQuery 객체 전용
+		// $.each(집합, function(idx, item)) -> 범용
+		$.each(attachments, function(i, attachment) {
+			const $tr = $("<tr>").appendTo($table);
+			
+			const $td1 = $("<td class='td1'>").appendTo($tr)
+			if(attachment.isImage==true)
+				$('<i class="fa fa-file-image-o"></i>').appendTo($td1);
+			else
+				$('<i class="fa fa-paperclip"></i>').appendTo($td1);
+			
+			const $td2 = $("<td class='td2'>").appendTo($tr)
+			$("<a href='/attachments/" + attachment.ano + "'>" + attachment.originalFileName + "</a>").appendTo($td2);
+							
+			const $td3 = $("<td class='td3'>").appendTo($tr)
+			if(isLogin==true && isWriter==true) {
+				$("<span class='delete_attachment' data-ano='" + attachment.ano + "' data-bno='" + board.bno + "'>X</span>").appendTo($td3);
+				$(".delete_attachment").css("cursor","pointer").attr("title", attachment.originalFileName + " 삭제");
+			}
+		});
+	};
+	
+	const printComments=(comments)=>{
+		$("#comments").empty();
+		$.each(comments, function(idx, comment) {
+			const $outer_div = $("<div>").appendTo($("#comments"));
+			
+			const $upper_div = $("<div>").appendTo($outer_div);
+			$("<span>").css("color","blue").text(comment.writer).appendTo($upper_div);
+			$("<span>").text(" [" + comment.createTime+"]").appendTo($upper_div);
+			
+			const $lower_div = $("<div>").css("overflow", "hidden").appendTo($outer_div);
+			$("<img>").attr("src",comment.profile).css("width","60px").appendTo($lower_div);
+			$("<span>").text(comment.content).appendTo($lower_div);
+
+			if(isLogin==true && isWriter==true) {
+				$("<button>").attr("class","delete_comment").attr("data-cno", comment.cno).attr("data-bno", board.bno)
+					.text("삭제").css("float","right").appendTo($lower_div);
+			}
+			$("<hr>").appendTo($("#comments"));
+		});
+	};
+
+	$(document).ready(()=>{
+		// 로그인 아이디를 자바스크립트에서 접근하고 싶다. JSTL은 <c:set>을 이용해 변수 생성이 가능한데 타임리프는 안되는 것 같다
+		// 그래서 hidden div를 만들어 div에 아이디를 저장한 다음 자바스크립트로 읽었다
+		/* const $username = $("#username").text(); */
+		const chathno = location.search.substr(9);		
+		$.ajax("/chatting/readchathistory/" + chathno).done(result=> {
+			// ES5의 변수는 var로 만든다 -> 스코프는 함수
+			// ES5에서 변수를 var없이 만들 수 있다 -> 전역
+			
+			// ES6는 키워드없이 변수를 만들 수 없다. 변수의 스코프는 {}
+			messageHistory = result;
+			console.log(messageHistory);
+			console.log(messageHistory.guestid);
+			//isWriter = $username == board.writer;
+			printMessageHistory(messageHistory.history);
+			//printAttachments(board.attachments);
+			
+		});
+		
+		// 댓글 작성
+		$("#commentBtnArea").on("click", "#write", ()=> {
+			const param = {
+				bno: bno,
+				content : $("#comment_textarea").val()
+			};
+			$.ajax({url: "/comments", method:"post", data:param}).done(comments=>{
+				$("#comment_textarea").val("");
+				printComments(comments);
+			});
+		});
+		
+		// 댓글 삭제
+		// 자바의 경우 this가 고정되어 있다. 자바스크립트의 경우 this는 상황에 따라 바뀐다 => 화살표 함수는 this 고정.
+		// this를 사용해야 하는 경우는 화살표 함수를 사용하지 말자
+		$("#comments").on("click", ".delete_comment", function() {
+			const param = {cno : $(this).attr("data-cno"), bno : board.bno};
+			$.ajax({url: "/comments", method:"delete", data:param}).done(comments=>	printComments(comments));
+		});
+		
+		// 추천
+		$("#good_btn").on("click", ()=>{
+			const param = {bno: board.bno, isGood: 1}
+			$.ajax({ url: "/board_member/good_or_bad", data: param, method: "patch"})
+				.done(goodCnt=>$("#good_cnt").text(goodCnt));
+		});
+				
+		// 비추
+		$("#bad_btn").on("click", ()=>{
+			const param = {bno: board.bno, isGood: 0}
+			$.ajax({ url: "/board_member/good_or_bad", data: param, method: "patch"})
+				.done(goodCnt=>$("#bad_cnt").text(goodCnt));
+		});
+		
+		// 첨부파일 삭제
+		$("#attachment").on("click", ".delete_attachment", function() {
+			const param = {ano : $(this).attr("data-ano"), bno : board.bno};
+			$.ajax({url: "/attachments", method:"delete", data:param}).done(attachments=>printAttachments(attachments));
+		});
+		
+	
+		// 변경
+		$("#btnArea").on("click", "#update", ()=>{
+			const param = {
+				title : $("#title").val(),
+				content : CKEDITOR.instances['content'].getData(),
+			}
+			$.ajax({
+				url: "/board/" + board.bno,
+				data: param,
+				method:"put",
+			})
+			.done((result, text, response)=>{ location.reload() })
+			.fail((response, text, message)=>{})
+		});
+		
+		
+		// 삭제
+		$("#btnArea").on("click", "#delete", ()=>{
+			$.ajax({
+				url: "/board/" + board.bno,
+				method:"delete",
+			})
+			.done((result, text, response)=>{ location.href = "/" })
+			.fail((response, text, message)=>{})
+		});
+		
+		
+	});
+</script>
+
+</head>
+
+<body>
+<div id="page">
+	<header id="header" th:replace="/fragments/headerStore">
+	</header>
+	<nav id="nav" th:replace="/fragments/navStore">
+	</nav>
+	<div id="main">
+		
+		<section id="section">
+			<div id="wrap">
+				<div class="chat-history">
+					<ul id="chatlist">
+					
+					</ul>
+				
+				</div>
+			
+			
+			
+				<table class="table">
+					<tr>
+						<th>보낸이</th><th>보낸시간</th><th>내용</th>
+					</tr>
+					<tbody id="list">
+					</tbody>
+				</table>
+				<div id="pagination" style="text-align: center;">
+					<ul class="pagination">
+					</ul>
+				</div>
+			</div>
+			<div>
+				<table id="attachment">
+				</table>
+			</div>
+			<!--  본문, 갱신 버튼, 삭제 버튼 출력 영역 -->
+			
+		</section>
+	</div>
+	
+	<footer id="footer" th:replace="/fragments/footer">
+	</footer>
+</div>
+</body>
+</html>
