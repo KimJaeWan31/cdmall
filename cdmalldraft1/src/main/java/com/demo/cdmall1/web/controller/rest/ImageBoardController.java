@@ -12,7 +12,6 @@ import org.springframework.security.access.prepost.*;
 import org.springframework.validation.*;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.*;
 import org.springframework.web.util.*;
 
 import com.demo.cdmall1.domain.imageboard.entity.*;
@@ -61,6 +60,7 @@ public class ImageBoardController {
 		
 		@GetMapping(path="/imageBoard/all", produces=MediaType.APPLICATION_JSON_VALUE) 
 		public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno) {
+			System.out.println("111111111111111111111111111111");
 			return ResponseEntity.ok(imageService.list(pageno)); 
 		}
 		 
