@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+
+<script>
+	// 서버 응답을 저장할 변수
+	let page = null;
+	
+	const printUsedBoard = ()=>{
+		console.log(page);
+		const $list = $("#list");
+		// 서버가 보낸 board들은 page.content에 저장되어 있다
+		for(c of page.content) {
+			let createdTime = c.writeTime.substr(-26,10);
+			const $tr = $("<tr>").appendTo($list);
+			$("<td>").text(c.ubno).appendTo($tr);
+			const $td = $("<td>").appendTo($tr);
+			if(c.attachmentCnt>0)
+				$("<i class='fa fa-paperclip'></i>").appendTo($td);
+			$("<a>").attr("href", "/usedBoard/read?ubno=" + c.ubno).text(c.title).appendTo($td);
+			if(c.commentCnt>0)
+				$("<span>").text(" [" + c.commentCnt + "]").appendTo($td);
+			$("<td>").text(c.writer).appendTo($tr);
+			$("<td>").text(createdTime).appendTo($tr);
+			$("<td>").text(c.readCnt).appendTo($tr);
+		}
+	};
+	
+	const getPagination = () => {
+		// 한번에 다섯개의 페이지씩
+		const blockSize = 5;
+		
+		// 서버 응답에 현재 페이지가 포함되어 있지 않다....재계산하자
+		let pageno = location.search.substr(8);
+		if(pageno=="")
+			pageno=1;
+		
+		// 0번 블록 : 1~5 page, 1번 블록 : 6~10 page
+		const blockNo = Math.floor((pageno-1)/blockSize);
+		const prev = blockNo * blockSize;
+		const first = prev + 1;
+		let last = first + blockSize - 1;
+		let next = last + 1;
+		const countOfPage = Math.ceil(page.totalcount/10)
+		if(last>=countOfPage) {
+			last = countOfPage;
+			next = 0;
+		}
+		return {pageno, prev, next, first, last};
+		
+	};
+	
+	// 구조 분해 할당 : 객체를 변수로 풀어헤치는 문법
+	// const {pageno, prev, next, first, last} = getPagination();
+	const printPagination = ({pageno, prev, next, first, last}) => {
+		const $pagination = $("ul.pagination");
+		const url = "/usedBoard/list?pageno="
+				
+		// 이전으로 
+		if(prev>0) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+prev).text("이전으로").appendTo($li);
+		}
+		
+		// 시작 페이지에서 마지막 페이지....현재 페이지 번호일 경우 active 클래스 추가
+		for(let idx=first; idx<=last; idx++) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+idx).text(idx).appendTo($li);
+			if(idx==pageno)
+				$li.attr("class", "active");
+		}
+		
+		// 다음으로
+		if(next>0) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+next).text("다음으로").appendTo($li);
+		}
+	}
+	
+	$(document).ready(()=>{
+		// 주소창에서 페이지 번호를 잘라낸다. 페이지 번호가 없으면 1로
+		let pageno = location.search.substr(8);
+		if(pageno=="")
+			pageno=1;
+		
+		$.ajax("/usedBoard/all?pageno="+pageno).done(result=>{
+			page=result;
+			printUsedBoard();
+			printPagination(getPagination());
+		});
+	});
+	
+
+	
+	
+	
+	
+</script>
+</head>
+<body>
+<div id="page">
+	<header id="header" th:replace="/fragments/headerBoard"> </header>
+	<nav id="nav" th:replace="/fragments/navBoard">
+	</nav>
+	<div id="communitypic">중 고 게 시 판</div>
+	<div id="main">
+
+		<section id="section">
+			<div id="wrap">
+			<table class="table table-hover">
+				<tr>
+					<th>번호</th><th>제목</th><th>글쓴이</th><th>시간</th><th>읽기</th>
+				</tr>
+				<tbody id="list">
+				</tbody>
+			</table>
+			
+			<!-- ---------------------------- -->
+			<div id="pagination" style="text-align: center;">
+				<ul class="pagination">
+				</ul>
+			</div>
+			<a class="btn btn-info" role="button" href="/usedBoard/write">글쓰기</a>
+</div>
+		</section>
+	</div>
+	<footer id="footer" th:replace="/fragments/footer">
+	</footer>
+</div>
+</body>
+</html>

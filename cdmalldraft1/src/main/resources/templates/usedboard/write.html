@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="/script/ckeditor/ckeditor.js"></script>
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<script>
+$(document).ready(()=>{
+	const ck = CKEDITOR.replace('content', {
+		height: 600,
+		width:1270,
+		filebrowserUploadUrl : '/usedBoard/image'
+	});
+	
+	
+	$("#write").on("click", ()=>{
+		const formData = new FormData();
+		formData.append("title", $("#title").val());
+		formData.append("content", CKEDITOR.instances['content1'].getData());
+		
+		$.each($(".form-control-file"), function(idx, attachment) {
+			if($(this)[0].files[0]!=undefined)
+				formData.append("usedattachments", $(this)[0].files[0]);	
+		});
+		
+		$.ajax({
+			url: "/usedBoard/new",
+			data: formData,
+			method:"post",
+			processData: false,
+	        contentType: false
+		})
+		.done((result, text, response)=>{ location.href = response.getResponseHeader('Location'); })
+		.fail((response, text, message)=>{})
+	});
+});
+</script>
+</head>
+<body>
+<div id="page">
+	<header id="header" th:replace="/fragments/headerBoard">
+	</header>
+	<nav id="nav" th:replace="/fragments/navBoard">
+	</nav>
+	<div id="main1"  >
+		<section id="section1" >
+			<form id="write_form">
+				<div class="form-group1">
+					<label for="title" >제목:</label>
+					<input type="text" class="form-control1" id="title" name="title" style="height: 40px; font-size: 20px;" placeholder="제목">
+				</div>
+				<div class="form-group1" style="margin-top: 10px;">
+					<textarea class="form-control1" id="content1" name="content" style="min-height:600px; "></textarea>
+				</div>
+				<button type="button" class="btn btn-success" id="write">작성</button>
+			</form>
+			<hr>
+		</section>
+	</div>
+	<footer id="footer" th:replace="/fragments/footer">
+	</footer>
+</div>
+</body>
+</html>
