@@ -31,7 +31,7 @@
 <script>
 	let isWriter = undefined;
 	let imageBoard = undefined;
-
+	let currentUser = undefined;
 	
 	const init=(imageBoard)=>{
 		// board의 필드들을 출력
@@ -109,7 +109,7 @@
 			$("<img>").attr("src",ibcomment.profile).css("width","60px").appendTo($lower_div);
 			$("<span>").text(ibcomment.content).appendTo($lower_div);
 
-			if(isLogin==true && isWriter==true) {
+			if(isLogin==true && currentUser==ibcomment.writer) {
 				$("<button>").attr("class","delete_ibcomment").attr("data-ibcno", ibcomment.ibcno).attr("data-ibno", imageBoard.ibno)
 					.text("삭제").css("float","right").appendTo($lower_div);
 			}
@@ -129,6 +129,7 @@
 			// ES6는 키워드없이 변수를 만들 수 없다. 변수의 스코프는 {} , 중괄호는 스코프를 만들지 않습니다
 			imageBoard = result;
 			isWriter = $username == imageBoard.writer;
+			currentUser = $("#username").text();
 			init(imageBoard);
 			printIBAttachments(imageBoard.ibattachments);
 			printIBComments(imageBoard.ibcomments);
