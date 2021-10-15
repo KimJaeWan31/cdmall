@@ -64,16 +64,16 @@ public class CategoryTest {
 		Category c131 = Category.builder().categoryCode("131").categoryName("노즈워크").build();
 		Category c132 = Category.builder().categoryCode("132").categoryName("터그").build();
 		Category c133 = Category.builder().categoryCode("133").categoryName("공").build();
-		c21.addCategory(c131);
-		c21.addCategory(c132);
-		c21.addCategory(c133);
+		c13.addCategory(c131);
+		c13.addCategory(c132);
+		c13.addCategory(c133);
 		
-		Category c141 = Category.builder().categoryCode("c141").categoryName("대").build();
-		Category c142 = Category.builder().categoryCode("c142").categoryName("중").build();
-		Category c143 = Category.builder().categoryCode("c143").categoryName("소").build();
-		c21.addCategory(c141);
-		c21.addCategory(c142);
-		c21.addCategory(c143);
+		Category c141 = Category.builder().categoryCode("141").categoryName("대").build();
+		Category c142 = Category.builder().categoryCode("142").categoryName("중").build();
+		Category c143 = Category.builder().categoryCode("143").categoryName("소").build();
+		c14.addCategory(c141);
+		c14.addCategory(c142);
+		c14.addCategory(c143);
 		
 		
 		Category c211 = Category.builder().categoryCode("211").categoryName("사료").build();
@@ -84,12 +84,25 @@ public class CategoryTest {
 		c21.addCategory(c213);
 		
 		Category c221 = Category.builder().categoryCode("221").categoryName("캣타워").build();
-		Category c222 = Category.builder().categoryCode("221").categoryName("물통").build();
+		Category c222 = Category.builder().categoryCode("222").categoryName("물통").build();
 		Category c223 = Category.builder().categoryCode("223").categoryName("하우스").build();
 		c22.addCategory(c221);
 		c22.addCategory(c222);
 		c22.addCategory(c223);
 		
+		Category c231 = Category.builder().categoryCode("231").categoryName("낚시대").build();
+		Category c232 = Category.builder().categoryCode("232").categoryName("스크래쳐").build();
+		Category c233 = Category.builder().categoryCode("233").categoryName("하우스").build();
+		c23.addCategory(c231);
+		c23.addCategory(c232);
+		c23.addCategory(c233);
+		
+		Category c241 = Category.builder().categoryCode("241").categoryName("샴푸").build();
+		Category c242 = Category.builder().categoryCode("242").categoryName("피부 관리").build();
+		Category c243 = Category.builder().categoryCode("243").categoryName("관리용품").build();
+		c24.addCategory(c241);
+		c24.addCategory(c242);
+		c24.addCategory(c243);
 		
 		
 		dao.save(c1);
