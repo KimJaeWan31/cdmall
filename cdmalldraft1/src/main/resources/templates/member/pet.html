@@ -67,7 +67,7 @@ $(document).ready(() => {
 	$("#addPet").on("click", ()=>{
 		let url = '/member/pet_add';
 			let name = 'petOpen';
-			let option = "width=520, height=400, left=500, top=250";
+			let option = "width=600, height=800, left=500, top=250";
 			window.open(url, name, option);
 	});
 	
@@ -87,18 +87,29 @@ $(document).ready(() => {
 header, nav, aside, footer, section ,li, a,div{
 	font-family: 'Jua', sans-serif;
 } 
-
+#my_home {
+float: left;
+width: 100px;
+}
 </style>
+
+<script type="text/javascript">
+$(function() {
+	$('#my_home').click(function() {
+		location.href ='/'
+	})
+})
+</script>
 </head>
 <body>
 <div th:text="${member}"></div>
 <div id="page">
-	<header id="header" th:replace="/fragments/headerMember">
-	</header>
+
 	<hr>
 	<main>
 		<section id="section">
 		<div id="buttons" style="margin-bottom: 10px; text-align: right;" >
+		<button id="my_home" class="btn btn-primary">HOME</button>
 			<button id="my_info" class="btn btn-info">MY INFO</button>
 			<button id="my_pet" class="btn btn-info">MY PET</button>
 		</div>

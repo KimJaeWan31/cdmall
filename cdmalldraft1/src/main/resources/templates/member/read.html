@@ -21,10 +21,19 @@
 header, nav, aside, footer, section ,li, a,div{
 	font-family: 'Jua', sans-serif;
 } 
-
+#my_home {
+float: left;
+width: 100px;
+}
 </style>
 <script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
-
+<script type="text/javascript">
+$(function() {
+	$('#my_home').click(function() {
+		location.href ='/'
+	})
+})
+</script>
 </head>
 <body>
 <div th:text="${member}"></div>
@@ -34,6 +43,7 @@ header, nav, aside, footer, section ,li, a,div{
 		</aside>
 		<section id="section">
 			<div id="buttons" style="margin-bottom: 10px; text-align: right;" >
+				<button id="my_home" class="btn btn-primary">HOME</button>
 				<button id="my_info" class="btn btn-info">MY INFO</button>
 				<button id="my_pet" class="btn btn-info">MY PET</button>
 			</div>
