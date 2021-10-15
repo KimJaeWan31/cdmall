@@ -284,7 +284,7 @@
 			</div>
 			
 			<div>
-				<a href="/product/insert" class="btn btn-info">제품 추가</a>
+				<a sec:authorize="isAuthenticated()" href="/product/insert" class="btn btn-info">제품 추가</a>
 			</div>
 		</section>
 	</div>

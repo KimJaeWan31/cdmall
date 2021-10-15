@@ -17,10 +17,12 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	#left {
 		float: left;
 		width: 500px;
+		margin-left: 100px;
 	}
 	#right {
 		float: right;
 		width: 256px;
+		margin-right: 100px;
 	}
 	#section {
 		overflow: hidden;			/* float를 clear하는 방법   */
@@ -134,8 +136,31 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	}
 	
 	// 화면의 공통부분을 구성. 옵션 여부에 따라 위의 두 함수 중 하나를 호출한다
+	
+	
+	
+		const printProduct = ()=>{
+		console.log(page.content);
+		const $list = $("#list");
+		// 서버가 보낸 board들은 page.content에 저장되어 있다
+		for(c of page.content) {
+			const $li = $("<li>").appendTo($list);
+			const $figure = $("<figure>").appendTo($li);
+			$("<img>").attr("src", "/upload/productimage/" + c.imageFileName).attr("class","prodImg").appendTo($figure);
+			$('img').attr('id', c.pno+"_"+c.imageFileName);
+			const $figcaption = $("<figcaption>").attr("class","content_css").appendTo($li);
+
+		}
+	};
+	
+	
+	
+	
+	
 	function printPage() {
-		$("#image").attr("src", product.image);
+		$("#image").attr("src", "/upload/productimage/" +product.imageFileName);
+		console.log(product.imageFileName);
+		$('img').attr('id', product.pno+"_"+product.imageFileName);
 		$("#manufacturer").text(product.manufacturer);
 		$("#name").text(product.name);
 		$("#price span").text(product.price);
@@ -172,6 +197,8 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 			printPage();
 		});
 		
+		
+		
 		// 옵션을 선택한 경우
 		$("#options_select").on("change", function() {
 			const $option = $("#options_select option:selected")
@@ -207,6 +234,10 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 				.done(result=>printCartWithOptions(result));
 		})
 	});
+	
+	
+	
+	
 </script>
 </head>
 <body>
