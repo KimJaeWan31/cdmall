@@ -36,7 +36,7 @@ public class SecurityConfig {
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.inMemoryAuthentication()
-				.withUser("SYSTEM01")
+				.withUser("SYSTEM02")
 				.password(passwordEncoder.encode("12341234!"))
 				.roles("ADMIN");
 		}
@@ -51,7 +51,7 @@ public class SecurityConfig {
 			.and().exceptionHandling().accessDeniedHandler(accessDeniedHandler)
 			.and().formLogin().loginPage("/admin/login").loginProcessingUrl("/admin/login")
 			.successHandler(adminLoginSuccessHandler).failureHandler(adminLoginFailureHandler)
-			.and().logout().logoutUrl("/admin/logout").logoutSuccessUrl("/").invalidateHttpSession(true);
+			.and().logout().logoutUrl("/member/logout").logoutSuccessUrl("/").invalidateHttpSession(true);
 		}
 	}
 	

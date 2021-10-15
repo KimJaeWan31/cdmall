@@ -16,7 +16,6 @@ public class AdminLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHand
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 		// RequestCache : 사용자가 가려던 목적지를 저장하는 인터페이스
-		System.out.println("1111111111111111111111111111");
 		SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);		
 		RedirectStrategy rs = new DefaultRedirectStrategy();
 		if(savedRequest!=null)

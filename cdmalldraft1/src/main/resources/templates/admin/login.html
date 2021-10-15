@@ -16,22 +16,16 @@ header, nav, aside, footer, section ,li, a,div{
 } 
 
 </style>
-<script>
+<script th:inline="javascript">
 	$(document).ready(()=>{
+		let error_msg = [[${msg}]]
+		console.log(error_msg);
+		if(error_msg != null){
+			alert(error_msg);
+		}
 		$("#login").on("click", ()=>{
 			$("#login_form").submit();
 		});
-		/*
-		$("#login").on("click", ()=>{
-			// 아이디를 대문자로 변경해서 넘겨야한다
-			const $username = $("#username").val().toUpperCase();
-			const $password = $("#password").val();
-			
-			const $form = $("<form>").attr("method","post").attr("action","/admin/login").appendTo($("body"));
-			$("<input>").attr("type","hidden").attr("name","username").val($username).appendTo($form);
-			$("<input>").attr("type","hidden").attr("name","password").val($password).appendTo($form);
-			$form.submit();
-		});*/
 	})
 	
 	

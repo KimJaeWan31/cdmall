@@ -37,7 +37,8 @@
 				<li><a href="#" id="logout">LOGOUT</a></li>
                 <li><a href="/product/list">ORDER</a></li>
                 <li><a href="/product/read">CART</a></li>
-                <li><a href='/member/read'>MYPAGE</a></li>
+                <li sec:authorize="hasRole('ADMIN')" class="list-group-item"><a href="/admin/index">MANAGE</a></li>
+                <li sec:authorize="hasRole('USER')" class="list-group-item"><a href='/member/read'>MYPAGE</a></li>
 				<li id="nav-sub-button" style="width:120px"><a>고객센터</a>
                 	  <ul class="list-group nav-sub">
 				      <li class="list-group-item" id="oneOnOneInquiry"><a href="#" target="_blank" id="chat">1:1문의</a></li>
@@ -48,6 +49,7 @@
             	</li>
                 
     	</ul>
+    	
 		<script th:inline="javascript">
 		$("#top_menu_authenticated").on("click", "#logout", (e)=> {
 			// a태그는 클릭하면 이동(동작이 2개, 그때 두번째 동작을 막아버린다)
