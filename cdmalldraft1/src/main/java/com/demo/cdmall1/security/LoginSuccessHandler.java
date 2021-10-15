@@ -26,7 +26,6 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 		Member member = dao.findById(authentication.getName()).get();
 		member.loginSuccess();
-		
 		// 수행할 작업이 있다면 작성 : 읽지 않은 메일....전달받은 메모의 숫자 ....
 		
 		
@@ -34,6 +33,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 		SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);		
 		RedirectStrategy rs = new DefaultRedirectStrategy();
 		String password = request.getParameter("password");
+		
 		if(password.length()>=20)
 			rs.sendRedirect(request, response, "/member/change_password");
 		else {

@@ -64,9 +64,9 @@ public class SecurityConfig {
 		@Autowired
 		private PasswordEncoder passwordEncoder;
 		@Autowired
-		private MemberLoginSuccessHandler memberLoginSuccessHandler;
+		private LoginSuccessHandler memberLoginSuccessHandler;
 		@Autowired
-		private MemberLoginFailureHandler memberLoginFailureHandler;
+		private LoginFailureHandler memberLoginFailureHandler;
 		
 		// 권한이 틀리면 403 오류가 발생. 403 오류를 처리하는 핸들러
 		@Autowired

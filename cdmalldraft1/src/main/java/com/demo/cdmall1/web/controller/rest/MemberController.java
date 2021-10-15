@@ -94,10 +94,8 @@ public class MemberController {
 	// 아이디 찾기
 	@GetMapping(path="/members/member/email", produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<?> findId(@Email String email) {
-		URI uri = UriComponentsBuilder.newInstance().path("/member/login").build().toUri();
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.setLocation(uri);
-		return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+		String username = service.findId(email);
+		return ResponseEntity.ok(username);
 	}
 	
 	// 비밀번호 리셋
