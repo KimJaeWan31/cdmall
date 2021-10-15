@@ -13,19 +13,19 @@ import lombok.*;
 public class ImageBoardMemberService {
 	private final ImageBoardMemberRepository dao;
 	@Transactional
-	public GoodOrBad goodOrBad(Integer ibno, boolean isGood, String loginId) {
+	public LikeOrDislike likeOrDislike(Integer ibno, boolean isGood, String loginId) {
 		boolean isExist = dao.existsByIbnoAndUsername(ibno, loginId);
 		
 		if(isExist==true) {
 			if(isGood==true)
-				return GoodOrBad.GET_GOOD;				// 추천수를 읽어라
+				return LikeOrDislike.GET_LIKE;				// 추천수를 읽어라
 			dao.deleteByIbnoAndUsername(ibno, loginId);
-			return GoodOrBad.GET_BAD;					// 비추수를 읽어라
+			return LikeOrDislike.GET_DISLIKE;					// 비추수를 읽어라
 		} else {
 			dao.save(new ImageBoardMember(loginId, ibno));
 			if(isGood==true) 
-				return GoodOrBad.DO_GOOD;				// 추천수를 증가한 다음 읽어라
-			return GoodOrBad.DO_BAD;					// 비추수를 증가한 다음 읽어라
+				return LikeOrDislike.DO_LIKE;				// 추천수를 증가한 다음 읽어라
+			return LikeOrDislike.DO_DISLIKE;					// 비추수를 증가한 다음 읽어라
 		}
 		
 	}
