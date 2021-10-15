@@ -18,6 +18,15 @@
 	const isLogin = false;
 </script>
 <style type="text/css">
+ 	#menu > ul{
+ 		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: black;
+		font-size: 25px;
+		width: 1000px;
+	 	}
+	 	
 	.prodImg {
 			display: block;
   			width: 200px;
@@ -55,7 +64,7 @@
 					// 중분류의 경우 ul을 만들고 li에 붙여서 출력
 					const $sub_ul = $("<ul class='main2'>").appendTo($li);
 					$.each(category.categories, function(idx, sub_category) {
-						const $sub_li = $("<li>").text(sub_category.categoryName).appendTo($sub_ul);
+						const $sub_li = $("<li>").text(sub_category.categoryName).css("cursor","pointer").appendTo($sub_ul);
 						
 						// 소분류가 있다면
 						if(sub_category.categories.length>0) {
@@ -95,15 +104,12 @@
 			console.log(c.imageFileName)
 			$('img').attr('id', c.pno+"_"+c.imageFileName);
 			const $figcaption = $("<figcaption>").attr("class","content_css").appendTo($li);
-			$("<p>").text("가격 : "+ c.price +"원").css({"font-size":"15px"}).appendTo($figcaption);
-			
 			const $div = $("<div>").appendTo($figcaption);
-			$("<a>").attr("href", "/product/read?pno=" + c.pno).css({"color":"red" ,"text-decoration-line": "none","cursor":"pointer"}).text(c.name).css("margin-right","20px").appendTo($div);		
+			$("<a>").attr("href", "/product/read?pno=" + c.pno).css({"color":"red" ,"text-decoration-line": "none","cursor":"pointer"}).text(c.name).appendTo($div);		
+			$("<p>").text( c.price +"원").css({"font-size":"15px","margin-top":"5px"}).appendTo($figcaption);
+			$("<p>").text("제조사 : "+ c.manufacturer).css({"font-size":"15px"}).appendTo($figcaption);
 			
-// 			$("<p>").text("설명 :" + c.name).appendTo($figcaption);  //상품명
-			$("<p>").text("제조사 : "+ c.manufacturer).appendTo($figcaption);
-		//	$("<p>").text("이미지파일이름 : "+ c.imageFileName).appendTo($figcaption);
-			$("<p>").text("평점 :" + c.avgOfStar).appendTo($figcaption);
+// 			$("<p>").text("평점 :" + c.avgOfStar).appendTo($figcaption).css({"font-size":"15px","margin-top":"-5px"});
 		}
 	};
 	
@@ -174,6 +180,10 @@
 
 </script>
 <style>
+	a:link {color: blue; text-decoration: none;}
+	a:visited{color: purple; text-decoration: none;}
+	a:hover {color: red; text-decoration: underline;}
+	
 	/*가로메뉴형*/
 	ul, li {
 		margin: 0;
@@ -183,7 +193,7 @@
 	
 	#menu {
 		height: 50px;
-		background: #fcc;
+		background: #EBFBFF;
 	}
 	.main1 {
 		width: 600px;
@@ -200,27 +210,29 @@
 
 	.main1>li:hover .main2 {
 		left: 0;
+		font-size: 25px;
 	}
 	.main1>li a {
 		display: block;
 	}
 	.main1>li a:hover {
-		background: #B21016;
+		background-color: #BEEFFF;
 		color: #fff;
-		font-weight: bold;
+
 	}
 	.main2 {
 		position: absolute;
 		top: 50px;
 		left: -9999px;
-		background: #ccc;
-		width: 120%;
+		background: #9BC3FF;
+		width: 200px;
 	}
 	.main2>li {
 		position: relative;
 	}
 	.main2>li:hover .main3 {
 		left: 100%;
+		
 	}
 	.main2>li a, .main3>li a {
 		border-radius: 10px;
@@ -230,15 +242,16 @@
 	.main3 {
 		position: absolute;
 		top: 0;
-		background: #6BD089;
+		background: #5AD2FF;
 		width: 80%;
 		left: -9999px;
 		/*left: 100%;*/
 		/*display: none;*/
 	}
 	.main3>li a:hover {
-		background: #085820;
+		background: black;
 		color: #fff;
+		
 	}
 
 </style>
