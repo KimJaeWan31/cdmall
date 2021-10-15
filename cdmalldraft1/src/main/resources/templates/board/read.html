@@ -61,7 +61,7 @@
 			$("#bad_btn").prop("disabled", true);
 			$("#warn_btn").prop("disabled", true);
 			
-			$("#comment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
+			$("#comment_textarea").attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
 
 			const $commentBtnArea = $("#commentBtnArea");
 			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($commentBtnArea);
@@ -189,7 +189,6 @@
 			$.ajax({ url: "/board_member/good_or_bad", data: param, method: "patch"})
 				.done(goodCnt=>$("#bad_cnt").text(goodCnt));
 		});
-		
 		//신고
 		$("#warn_btn").on("click", ()=>{
 			const param = {bno: board.bno}
@@ -256,10 +255,10 @@
 						<li><span id="writeday"></span></li>
 					</ul>
 					<ul id="lower_right">
+						<li><button type="button" class="btn btn-success" id="b" disabled="disabled">조회 <span class="badge" id="read_cnt"></span></button></li> 
 						<li><button type="button" class="btn btn-primary" id="good_btn" disabled="disabled">추천<span class="badge" id="good_cnt"></span></button></li>
-						<li><button type="button" class="btn btn-success" id="b" disabled="disabled">조회 <span class="badge" id="read_cnt"></span></button></li>    
-  						<li><button type="button" class="btn btn-danger" id="bad_btn" disabled="disabled">비추<span class="badge" id="bad_cnt"></span></button></li>
-  						<li><button type="button" class="btn btn-warning" id="warn_btn" >신고<span class="badge" id="warn_cnt"></span></button></li>        
+  						<li><button type="button" class="btn btn-danger" id="bad_btn" disabled="disabled">비추<span class="badge" id="bad_cnt"></span></button></li>        
+						<li><button type="button" class="btn btn-warning" id="warn_btn" >신고<span class="badge" id="warn_cnt"></span></button></li>  
 					</ul>
 				</div>
 				<!-- 제목, 작성자 출력 영역 -->
@@ -287,10 +286,9 @@
 			<div id="btnArea">
 			</div>
 			<hr>
-			<div class="form-group1">
+			<div class="form-group">
       			<label for="comment_teaxarea">댓글을 입력하세요</label>
-      			<textarea class="form-control1" rows="5" id="comment_textarea" readonly="readonly"
-      				placeholder="댓글을 작성하려면 로그인 해주세요"></textarea>
+      			<textarea class="form-control" rows="5" id="comment_textarea" placeholder="댓글을 작성하려면 로그인 해주세요"></textarea>
     		</div>
 			<div id="commentBtnArea">
     			<!-- 로그인하면 댓글 달기 버튼을 추가 -->
