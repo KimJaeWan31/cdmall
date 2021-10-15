@@ -11,6 +11,44 @@
 <link rel="stylesheet" href="/css/admin.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+body {
+	display: flex;
+  	font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 160px;
+  z-index: 1;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  font-size: 28px; /* Increased text to enable scrolling */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+</style>
 <script>
 	// bar형 차트 출력하는 함수
 	function chart1(result) {
@@ -367,8 +405,16 @@
 
 </head>
 <body>
+	<div class="sidenav">
+  		<a href="#about">About</a>
+  		<a href="#services">Services</a>
+  		<a href="#clients">Clients</a>
+ 		<a href="#contact">Contact</a>
+	</div>
 	<div id="page">
+		
 		<div id="main">
+		
 			<section id="section">
 				<h1>관리자 페이지입니다</h1>
 				<div class="row">

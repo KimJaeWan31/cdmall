@@ -26,13 +26,12 @@
     <script src="/js/sb-admin-2.min.js"></script>
     
 	<script th:inline="javascript">
-		let ereror_msg = [[${msg}]]
+		
 		$(document).ready(()=>{
-			
-			let msg = undefined;
-			
-			console.log(ereror_msg);
-			console.log(msg);
+			let error_msg = [[${msg}]]
+			if(error_msg != null){
+				alert(error_msg);
+			}
 			
 			$("#login").on("click", ()=>{
 				
@@ -43,8 +42,6 @@
 				$("<input>").attr("type","hidden").attr("name","username").val($username).appendTo($form);
 				$("<input>").attr("type","hidden").attr("name","password").val($password).appendTo($form);
 				$form.submit();
-				msg = ereror_msg;
-				alert(msg);
 				
 			});
 			
@@ -54,7 +51,7 @@
 		})
 	</script>
 	 
-	<title>댕댕의 정석 로그인</title>
+	<title>캣독왓숑 로그인</title>
 </head>
 
 <body class="bg-gradient-primary">
