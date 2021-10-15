@@ -1,11 +1,14 @@
 package com.demo.cdmall1.domain.product;
 
+import java.util.*;
+
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.*;
 
-import com.demo.cdmall1.domain.product.entity.Product;
-import com.demo.cdmall1.domain.product.entity.ProductRepository;
+import com.demo.cdmall1.domain.product.entity.*;
 
 
 @SpringBootTest
@@ -27,4 +30,47 @@ public class ProductTest {
 	 * 
 	 * }
 	 */
+	 	//@Test
+		public void test1() {
+			pdao.readAll();
+		}
+		
+		//@Test
+		public void test2() {
+			List<Product> plist = pdao.readPriceDesc();
+			System.out.println(plist);
+		}
+		
+		//@Test
+		public void test3() {
+			List<Product> plist = pdao.readPriceAsc();
+			System.out.println(plist);
+		}
+		
+		//@Test
+		public void test5() {
+			List<Product> plist = pdao.readSalesAmountDesc();
+			System.out.println(plist);
+		}
+		
+		@Transactional
+		//@Test
+		public void test6() {
+			List<Product> plist = pdao.readCountofstarDesc();
+			System.out.println(plist);
+		}
+		
+		@Transactional
+		//@Test
+		public void test7() {
+			List<Product> plist = pdao.readReviewcountDesc();
+			System.out.println(plist);
+		}
+		
+		@Transactional
+		//@Test
+		public void test9() {
+			List<Product> plist = pdao.readCreateTimeDesc();
+			System.out.println(plist);
+		}
 }
