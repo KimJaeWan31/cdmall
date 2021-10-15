@@ -98,8 +98,8 @@ private final NoticeBoardRepository dao;
 			Pageable pageable = PageRequest.of(pageno-1, 10); 
 			Map<String,Object> map = new HashMap<>(); 
 			map.put("content", dao.readAll(pageable));
-			map.put("totalcount", pageno); 
-			map.put("pageno", dao.countByNbno());
+			map.put("totalcount", dao.countByNbno()); 
+			map.put("pageno", pageno);
 			map.put("pagesize", 10);
 			return map; 
 		 }

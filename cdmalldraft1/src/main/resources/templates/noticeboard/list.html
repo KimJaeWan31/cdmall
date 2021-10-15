@@ -124,6 +124,8 @@
 		
 		$.ajax("/noticeBoard/all?pageno="+pageno).done(result=>{
 			page=result;
+			pagenumber = page.pageno;
+			
 			printNoticeBoard();
 			printPagination(getPagination());
 		});
