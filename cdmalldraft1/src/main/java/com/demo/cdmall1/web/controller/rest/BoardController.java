@@ -69,11 +69,18 @@ private final BoardService service;
 	
 	@GetMapping(path="/board/all", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, String writer, String category) {
+		
 		return ResponseEntity.ok(service.list(pageno, writer, category));
 	}
 	
-	@GetMapping(path="board/best", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> list(@RequestParam(defaultValue = "1") Integer pageno, Integer goodCnt){
+	@GetMapping(path="/board/warnlist", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> warnlist(@RequestParam(defaultValue="1") Integer pageno, Integer warnCnt) {
+		System.out.println("sssssssssssssssssssssss");
+		return ResponseEntity.ok(service.warnList(pageno, warnCnt));
+	}
+	
+	@GetMapping(path="/board/best", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> bestlist(@RequestParam(defaultValue = "1") Integer pageno, Integer goodCnt){
 		return ResponseEntity.ok(service.bestList(pageno, goodCnt));
 	}
 	

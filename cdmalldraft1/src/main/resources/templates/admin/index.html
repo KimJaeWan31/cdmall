@@ -13,13 +13,13 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
 body {
-	display: flex;
   	font-family: "Lato", sans-serif;
 }
 
 .sidenav {
   height: 100%;
   width: 300px;
+  float: left;
   z-index: 1;
   background-color: #111;
   overflow-x: hidden;
@@ -39,6 +39,100 @@ body {
 }
 
 </style>
+<script>
+	// 서버 응답을 저장할 변수
+	let page = null;
+	
+	const printBoard = ()=>{
+		console.log(page);
+		const $list = $("#list");
+		// 서버가 보낸 board들은 page.content에 저장되어 있다
+		for(c of page.content) {
+			let createdTime = c.writeTime.substr(-26,10);
+			const $tr = $("<tr>").appendTo($list);
+			$("<td>").text(c.bno).appendTo($tr);
+			const $td = $("<td>").appendTo($tr);
+			if(c.attachmentCnt>0)
+				$("<i class='fa fa-paperclip'></i>").appendTo($td);
+			$("<a>").attr("href", "/board/read?bno=" + c.bno).text(c.title).appendTo($td);
+			if(c.commentCnt>0)
+				$("<span>").text(" [" + c.commentCnt + "]").appendTo($td);
+			$("<td>").text(c.writer).appendTo($tr);
+			$("<td>").text(createdTime).appendTo($tr);
+			$("<td>").text(c.readCnt).appendTo($tr);
+			$("<td>").text(c.goodCnt).appendTo($tr);
+			$("<td>").text(c.badCnt).appendTo($tr);
+			$("<td>").text(c.warnCnt).appendTo($tr);
+		}
+	};
+	
+	const getPagination = () => {
+		// 한번에 다섯개의 페이지씩
+		const blockSize = 5;
+		
+		// 서버 응답에 현재 페이지가 포함되어 있지 않다....재계산하자
+		let pageno = location.search.substr(8);
+		if(pageno=="")
+			pageno=1;
+		
+		// 0번 블록 : 1~5 page, 1번 블록 : 6~10 page
+		const blockNo = Math.floor((pageno-1)/blockSize);
+		const prev = blockNo * blockSize;
+		const first = prev + 1;
+		let last = first + blockSize - 1;
+		let next = last + 1;
+		const countOfPage = Math.ceil(page.totalcount/10)
+		if(last>=countOfPage) {
+			last = countOfPage;
+			next = 0;
+		}
+		return {pageno, prev, next, first, last};
+		
+	};
+	
+	// 구조 분해 할당 : 객체를 변수로 풀어헤치는 문법
+	// const {pageno, prev, next, first, last} = getPagination();
+	const printPagination = ({pageno, prev, next, first, last}) => {
+		const $pagination = $("ul.pagination");
+		const url = "/board/list?pageno="
+				
+		// 이전으로 
+		if(prev>0) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+prev).text("이전으로").appendTo($li);
+		}
+		
+		// 시작 페이지에서 마지막 페이지....현재 페이지 번호일 경우 active 클래스 추가
+		for(let idx=first; idx<=last; idx++) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+idx).text(idx).appendTo($li);
+			if(idx==pageno)
+				$li.attr("class", "active");
+		}
+		
+		// 다음으로
+		if(next>0) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+next).text("다음으로").appendTo($li);
+		}
+	}
+	
+	$(document).ready(()=>{
+		// 주소창에서 페이지 번호를 잘라낸다. 페이지 번호가 없으면 1로
+		let pageno = location.search.substr(8);
+		if(pageno=="")
+			pageno=1;
+		
+		console.log(pageno);
+		$.ajax("/board/warnlist?pageno="+pageno).done(result=>{
+			page=result;
+			printBoard();
+			printPagination(getPagination());
+		});
+		
+	});
+</script>
+<!--  
 <script>
 	// bar형 차트 출력하는 함수
 	function chart1(result) {
@@ -391,7 +485,7 @@ body {
 			chart.update();
 		}
 	});
-</script>
+</script>-->
 
 </head>
 <body>
@@ -401,12 +495,28 @@ body {
   		<a href="/">SHOP</a>
   		<a href="#" id="logout">LOGOUT</a>
 	</div>
-	<div id="page">
+	<div id="page" style="float: right; width: 80%">
 		
 		<div id="main">
 		
 			<section id="section">
 				<h1 style="text-align: center;">관리자 페이지입니다</h1>
+					<h2>자유게시판 신고글</h2>
+    				<div class="wrap" style="margin: 0 auto;">
+						<table class="table table-hover">
+							<tr>
+								<th>번호</th><th>제목</th><th>글쓴이</th><th>시간</th><th>조회수</th><th>좋아요</th><th>싫어요</th><th>신고수</th>
+							</tr>
+							<tbody id="list">
+							</tbody>
+						</table>
+						<div id="pagination" style="text-align: center;">
+							<ul class="pagination"></ul>
+						</div>
+					</div>
+  					
+				
+				<!--  
 				<div class="row">
 					<div class="col-xl-3 col-md-6">
 						<div class="card bg-primary text-white mb-4">
@@ -457,9 +567,10 @@ body {
 						</div>
 					</div>
 				</div>
-				
+				-->
 				<!-- 차트 4개를 배치할 자리 -->
 				<!-- 부트스트랩으로 div를 배치하기 : https://www.w3schools.com/bootstrap/bootstrap_grid_basic.asp -->
+				<!--  
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-sm-6 myChart">
@@ -475,7 +586,7 @@ body {
 							<canvas id="chart4"></canvas>
 						</div>
 					</div>
-				</div>
+				</div>-->
 			</section>
 		</div>
 		<nav id="footer" th:replace="/fragments/footer"></nav>

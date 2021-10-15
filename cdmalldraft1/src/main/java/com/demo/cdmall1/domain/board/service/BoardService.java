@@ -110,15 +110,22 @@ private final BoardRepository dao;
 	}
 
 	public Map<String,Object> list(Integer pageno, String writer, String category) {
-		// JPARepository의 findAll은 findById와 마찬가지로 관련 엔티티를 모두 읽어온다 -> 상관없다면 사용
-		// Pageable pageable = PageRequest.of(pageno-1, 10, Sort.by(Sort.Direction.DESC, "bno"));
-		// return dao.findAll(pageable);
-		
 		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
 		Pageable pageable = PageRequest.of(pageno-1, 10);
 		Map<String,Object> map = new HashMap<>();
 		map.put("content", dao.readAll(pageable, writer, category));
 		map.put("totalcount", dao.countAll(writer, category));
+		map.put("pageno", pageno);
+		map.put("pagesize", 10);
+		return map;
+	}
+	
+	public Map<String,Object> warnList(Integer pageno, Integer warnCnt){
+		System.out.println("aaaaaaaaaaaaaaaaaaaa");
+		Pageable pageable = PageRequest.of(pageno-1, 10);
+		Map<String,Object> map = new HashMap<>();
+		map.put("content", dao.readWarnAll(pageable, warnCnt));
+		map.put("totalcount", dao.countByWarnCnt());
 		map.put("pageno", pageno);
 		map.put("pagesize", 10);
 		return map;

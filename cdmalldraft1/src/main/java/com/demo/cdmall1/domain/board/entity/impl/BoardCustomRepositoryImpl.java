@@ -13,6 +13,7 @@ import com.demo.cdmall1.domain.board.entity.Board;
 import com.demo.cdmall1.domain.board.entity.BoardCustomRepository;
 import com.demo.cdmall1.domain.board.entity.QBoard;
 import com.demo.cdmall1.web.dto.*;
+import com.demo.cdmall1.web.dto.BoardDto.WarnList;
 import com.querydsl.core.*;
 import com.querydsl.core.types.*;
 import com.querydsl.jpa.impl.*;
@@ -73,7 +74,7 @@ public class BoardCustomRepositoryImpl extends QuerydslRepositorySupport impleme
 	public List<BoardDto.BestList> readBestAll(Pageable pageable, Integer goodCnt) {
 		QBoard board = QBoard.board;
 		return factory.from(board).select(Projections.constructor(BoardDto.BestList.class, board.bno, board.title, board.writer, 
-				board.createTime, board.readCnt, board.attachmentCnt, board.commentCnt, board.goodCnt, board.category, board.warnCnt))
+				board.createTime, board.readCnt, board.attachmentCnt, board.commentCnt, board.goodCnt, board.badCnt, board.category, board.warnCnt))
 				.where(board.bno.gt(0).and(board.goodCnt.goe(10)))
 				.orderBy(board.goodCnt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	}
@@ -115,6 +116,21 @@ public class BoardCustomRepositoryImpl extends QuerydslRepositorySupport impleme
 	public Long countByGoodCnt() {
 		QBoard board = QBoard.board;
 		return factory.from(board).select(board.bno.count()).where(board.bno.gt(0).and(board.goodCnt.goe(10))).fetchOne();
+	}
+
+	@Override
+	public List<WarnList> readWarnAll(Pageable pageable, Integer warnCnt) {
+		QBoard board = QBoard.board;
+		return factory.from(board).select(Projections.constructor(BoardDto.WarnList.class, board.bno, board.title, board.writer, 
+				board.createTime, board.readCnt, board.attachmentCnt, board.commentCnt, board.goodCnt,board.badCnt, board.category, board.warnCnt))
+				.where(board.bno.gt(0).and(board.warnCnt.goe(1)))
+				.orderBy(board.warnCnt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+	}
+
+	@Override
+	public Long countByWarnCnt() {
+		QBoard board = QBoard.board;
+		return factory.from(board).select(board.bno.count()).where(board.bno.gt(0).and(board.warnCnt.goe(10))).fetchOne();
 	}
 
 }

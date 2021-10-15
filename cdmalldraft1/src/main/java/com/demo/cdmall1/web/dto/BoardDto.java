@@ -80,6 +80,7 @@ public class BoardDto {
 		private Integer attachmentCnt;
 		private Integer commentCnt;
 		private Integer goodCnt;
+		private Integer badCnt;
 		private String category;
 		private Integer warnCnt;
 	}
@@ -92,6 +93,23 @@ public class BoardDto {
 		private String writer;
 		private Integer commentCnt;
 		private String category;
+	}
+	
+	@Data
+	@AllArgsConstructor
+	public static class WarnList {
+		private Integer bno;
+		private String title;
+		private String writer;
+		@JsonProperty("writeTime")
+		private LocalDateTime creaDateTime;
+		private Integer readCnt;
+		private Integer attachmentCnt;
+		private Integer commentCnt;
+		private Integer goodCnt;
+		private Integer badCnt;
+		private String category;
+		private Integer warnCnt;
 	}
 	
 	// querydsl에서 사용할 DTO

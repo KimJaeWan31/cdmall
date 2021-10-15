@@ -17,11 +17,15 @@ public interface BoardCustomRepository {
 		
 		List<BoardDto.BestRank> readBestRank(Pageable pageable, Integer goodCnt);
 		
+		List<BoardDto.WarnList> readWarnAll(Pageable pageable, Integer warnCnt);
+		
 		public Long countByGoodCnt2();
 		
 		public Long countByGoodCnt();
 		
 		public Long countByBno();
+		
+		public Long countByWarnCnt();
 		
 
 }
