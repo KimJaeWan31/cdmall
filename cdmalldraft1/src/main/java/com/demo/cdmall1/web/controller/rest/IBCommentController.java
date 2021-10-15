@@ -34,7 +34,7 @@ public class IBCommentController {
 		
 		// get방식으로 MemberController에게 프사이름을 요청
 		// RestTemplate 요청의 항상 절대 주소....http://~
-		URI uri = UriComponentsBuilder.fromHttpUrl("http://localhost:8089").path("/members/profile").queryParam("username", principal.getName()).build().toUri();
+		URI uri = UriComponentsBuilder.fromHttpUrl("http://localhost:8081").path("/members/profile").queryParam("username", principal.getName()).build().toUri();
 		String profile = template.getForObject(uri.toString(), String.class);
 		
 		// 댓글을 저장
@@ -43,7 +43,7 @@ public class IBCommentController {
 		// post방식으로 BoardController에게 댓글 수 업데이트를 요청
 		MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
 		params.add("ibno", dto.getIbno()+"");
-		Integer cnt = template.postForObject("http://localhost:8089/imageBoard/ibcomments", params, Integer.class);
+		Integer cnt = template.postForObject("http://localhost:8081/imageBoard/ibcomments", params, Integer.class);
 		System.out.println(cnt);
 		// 댓글들 리턴
 		return ResponseEntity.ok(ibcomments);
@@ -62,7 +62,7 @@ public class IBCommentController {
 		// post방식으로 BoardController에게 댓글 수 업데이트를 요청
 		MultiValueMap<String,String> params = new LinkedMultiValueMap<>();
 		params.add("ibno", dto.getIbno()+"");
-		Integer cnt = template.postForObject("http://localhost:8089/imageBoard/ibcomments", params, Integer.class);
+		Integer cnt = template.postForObject("http://localhost:8081/imageBoard/ibcomments", params, Integer.class);
 		System.out.println(cnt);
 		
 		// 댓글들 리턴

@@ -8,6 +8,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/main.css">
 <link rel="stylesheet" href="/css/read.css">
 <link rel="stylesheet" href="/css/nav.css">
@@ -39,7 +40,6 @@
 		$("#writer").text(imageBoard.writer);
 		$("#title").val(imageBoard.title);
 		$("#content").html(imageBoard.content);
-		$("#good_cnt").text(imageBoard.goodCnt);
 		$("#ibimage").attr("src", "/upload/ibimage/" + imageBoard.imageFileName);
 		//$("#bad_cnt").text(imageBoard.badCnt);
 		
@@ -52,16 +52,17 @@
 			$("<button>").attr("id","update").attr("class","btn btn-info").text("변 경").appendTo($btnArea);
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
 			$("<button>").attr("id","delete").attr("class","btn btn-info").text("삭 제").appendTo($btnArea);
-			} 
-			else if (isLogin==true && isWriter==false) {
+			
+			$("#ibcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
+
+			const $ibcommentBtnArea = $("#ibcommentBtnArea");
+			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($ibcommentBtnArea);
+		} else if (isLogin==true && isWriter==false) {
 			$("#content").prop("readonly",true);
 			$("#ibcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
 
 			const $ibcommentBtnArea = $("#ibcommentBtnArea");
 			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($ibcommentBtnArea);
-
-			$("#good_btn").prop("disabled", false);
-			
 		}
 		
 	}
@@ -108,7 +109,6 @@
 			$("<img>").attr("src",ibcomment.profile).css("width","60px").appendTo($lower_div);
 			$("<span>").text(ibcomment.content).appendTo($lower_div);
 
-			console.log(ibcomment);
 			if(isLogin==true && isWriter==true) {
 				$("<button>").attr("class","delete_ibcomment").attr("data-ibcno", ibcomment.ibcno).attr("data-ibno", imageBoard.ibno)
 					.text("삭제").css("float","right").appendTo($lower_div);
@@ -117,11 +117,6 @@
 		});
 	};
 	
-	const goodClicked=(goodCnt)=>{
-		$("#good_cnt").text(goodCnt);
-		$("#good_btn").prop("disabled", true);
-	}
-
 	$(document).ready(()=>{
 		// 로그인 아이디를 자바스크립트에서 접근하고 싶다. JSTL은 <c:set>을 이용해 변수 생성이 가능한데 타임리프는 안되는 것 같다
 		// 그래서 hidden div를 만들어 div에 아이디를 저장한 다음 자바스크립트로 읽었다
@@ -162,17 +157,6 @@
 			// .data 안되면 .attr 쓰면 되고 대신 .attr은 수동으로 data-를 적어줘야 한다
 			const param = {ibcno : $(this).attr("data-ibcno"), ibno : imageBoard.ibno};
 			$.ajax({url: "/ibcomments", method:"delete", data:param}).done(ibcomments=>	printIBComments(ibcomments));
-		});
-		
-		// 추천
-		$("#good_btn").on("click", ()=>{
-			const param = {
-					ibno: imageBoard.ibno,
-					isGood: 1
-			}
-			
-			$.ajax({ url: "/imageBoard_member/good_or_bad", data: param, method: "patch"})
-				.done(goodCnt=>goodClicked(goodCnt));
 		});
 		
 		// 변경
@@ -228,7 +212,6 @@
 						<li><span id="writeday"></span></li>
 					</ul>
 					<ul id="lower_right">
-						<li><button type="button" class="btn btn-primary" id="good_btn" disabled="disabled">추천<span class="badge" id="good_cnt"></span></button></li>
 					</ul>
 				</div>
 			</div>
@@ -241,17 +224,17 @@
 				</table>
 			</div>
 			<!--  본문, 갱신 버튼, 삭제 버튼 출력 영역 -->
-			<div id="content_div" style="height:20px;">
+			<div id="content_div">
 				<div class="form-group">
-					<textarea class="form-control" id="content" ><!-- <p><img></p> --></textarea>
+					<div class="form-control" id="content" ></div>
 				</div>
 			</div>
 			<div id="btnArea">
 			</div>
 			<hr>
-			<div class="form-group">
+			<div class="form-group1">
       			<label for="ibcomment_textarea">댓글을 입력하세요</label>
-      			<textarea class="form-control" rows="5" id="ibcomment_textarea" readonly="readonly"
+      			<textarea class="form-control1" rows="5" id="ibcomment_textarea" readonly="readonly"
       				placeholder="댓글을 작성하려면 로그인 해주세요"></textarea>
     		</div>
 			<div id="ibcommentBtnArea">
