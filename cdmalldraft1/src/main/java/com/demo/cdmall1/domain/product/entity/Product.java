@@ -50,12 +50,17 @@ public class Product extends BaseCreateAndUpdateTimeEntity {
 	
 	private Integer stock;
 	
+	@Column(length=50)
+	private String imageFileName;
+	
 	@OneToMany(mappedBy="product", cascade= {CascadeType.PERSIST, CascadeType.REMOVE})
 	private Set<Option> options;
 	
 	@OneToMany(mappedBy="product", cascade=CascadeType.REMOVE)
 	private Set<Review> reviews;
 	
+	@OneToMany(mappedBy="product", cascade={CascadeType.PERSIST, CascadeType.REMOVE})
+	private Set<ProductAttachment> productattachments;
 	
 	// onetomany -> board를 저장할 때 첨부파일도 함께 저장, 보드를 읽어오거나 삭제할 때 댓글도 함께.
 	// 객체를 필드로 가지면 관계를 맺어줘야 한다
@@ -80,7 +85,12 @@ public class Product extends BaseCreateAndUpdateTimeEntity {
 		option.setProduct(this);
 		options.add(option);
 	}
-	
+	public void addAttachment(ProductAttachment productattachment) {
+		if(productattachments==null)
+			this.productattachments = new HashSet<ProductAttachment>();
+		productattachment.setProduct(this);
+		productattachments.add(productattachment);
+	}
 }
 
 

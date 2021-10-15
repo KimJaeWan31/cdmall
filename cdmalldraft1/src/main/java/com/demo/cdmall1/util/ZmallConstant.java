@@ -10,6 +10,7 @@ public interface ZmallConstant {
 	public static final String IBIMAGE_FOLDER ="c:/upload/ibimage/";
 	public static final String TEMP_FOLDER = "c:/upload/temp/";
 	public static final String PRODUCT_FOLDER = "c:/upload/product/";
+	public static final String PRODIMAGE_FOLDER ="c:/upload/productimage/";
 	
 	public final static String PROFILE_URL = "/display?imagename=";
 	public static final String ATTACHMENT_URL = "/attachment/filename=";

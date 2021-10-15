@@ -41,6 +41,8 @@
 		
 		$("#add").on("click", function() {
 			const formData = new FormData(document.getElementById("add_form"));
+			
+			console.log(formData);
 			// const param = {name:"spring", age:11} -> ?name=spring&age=11				processData(자바스크립트는 객체는 자동으로 urlencoded된다)
 			$.ajax({
 				url: "/products/new",
@@ -49,6 +51,7 @@
 				processData: false,	
 				contentType: false								// contentType을 multipart/form-data로 지정하려면 $.ajax는 false로 줘야한다 
 			}).done(location.href = "/product/list");
+			//
 		});
 		//														categoryCode
 		// 대분류 요청 : /categories								null
