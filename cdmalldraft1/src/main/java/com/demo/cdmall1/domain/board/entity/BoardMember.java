@@ -1,8 +1,10 @@
 package com.demo.cdmall1.domain.board.entity;
 
-import java.io.*;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.DynamicUpdate;
+
 
 import lombok.*;
 
@@ -12,18 +14,20 @@ import lombok.*;
 @NoArgsConstructor
 @IdClass(BoardMemberId.class)
 @Entity
+@DynamicUpdate
 public class BoardMember {
-	/*
-	 	@ManyToOne
-		private Member member;
-		@ManyToOne
-		private Board board;
-		
-		관계가 걸리면 BoardClass에서 findById를 하면 {Member(username, email, password...), Board(bno, title, content.....)}
-	*/
 	@Id
 	private String username;
 	
 	@Id
 	private Integer bno;
+	
+	private String kind;
+	
+	private Boolean isWarn;
+	
+	@PrePersist
+	public void init() {
+		kind = "null";
+	}
 }

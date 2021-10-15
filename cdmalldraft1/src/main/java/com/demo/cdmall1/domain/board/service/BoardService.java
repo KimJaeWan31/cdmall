@@ -7,7 +7,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.jsoup.*;
-import org.modelmapper.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
@@ -18,13 +17,13 @@ import com.demo.cdmall1.domain.board.entity.*;
 import com.demo.cdmall1.util.*;
 import com.demo.cdmall1.web.dto.*;
 
+
 import lombok.*;
 
 @RequiredArgsConstructor
 @Service
 public class BoardService {
-	private final BoardRepository dao; 
-	private final ModelMapper modelMapper;
+private final BoardRepository dao; 
 	
 	// 추가
 	public Board write(BoardDto.Write dto, String loginId) {
@@ -66,14 +65,6 @@ public class BoardService {
 	}
 	
 	// 읽기
-	/*
-	 * @Transactional public BoardDto.Read read(Integer bno, String loginId) { Board
-	 * board = dao.findById(bno).orElseThrow(BoardFail.BoardNotFoundException::new);
-	 * board.increaseReadCnt(loginId); List<CommentDto.Read> comments =
-	 * board.getComments().stream().map(c->c.toDto()).collect(Collectors.toList());
-	 * BoardDto.Read dto = modelMapper.map(board, BoardDto.Read.class); return
-	 * dto.setComments(comments); }
-	 */
 	@Transactional
 	public Map<String,Object> read(Integer bno, String loginId) {
 		Board board = dao.findById(bno).orElseThrow(BoardFail.BoardNotFoundException::new);
@@ -103,7 +94,6 @@ public class BoardService {
 		return map;
 	}
 	
-	
 	// 글 변경
 	@Transactional
 	public Board update(BoardDto.Update dto, String loginId) {
@@ -119,21 +109,6 @@ public class BoardService {
 		return board.updateCommentCnt();
 	}
 
-	/*
-	 * public BoardDto.ListResponse list(Integer pageno, String writer) { //
-	 * JPARepository의 findAll은 findById와 마찬가지로 관련 엔티티를 모두 읽어온다 -> 상관없다면 사용 //
-	 * Pageable pageable = PageRequest.of(pageno-1, 10, Sort.by(Sort.Direction.DESC,
-	 * "bno")); // return dao.findAll(pageable);
-	 * 
-	 * // 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을
-	 * 사용하자 Pageable pageable = PageRequest.of(pageno-1, 10); BoardDto.ListResponse
-	 * dto = new BoardDto.ListResponse(dao.readAll(pageable, writer),
-	 * dao.countAll(writer), pageno, 10); //Map<String,Object> map = new
-	 * HashMap<>(); //map.put("content", dao.readAll(pageable, writer));
-	 * //map.put("totalcount", dao.countAll(writer)); //map.put("pageno", pageno);
-	 * //map.put("pagesize", 10); return dto; }
-	 */
-	
 	public Map<String,Object> list(Integer pageno, String writer, String category) {
 		// JPARepository의 findAll은 findById와 마찬가지로 관련 엔티티를 모두 읽어온다 -> 상관없다면 사용
 		// Pageable pageable = PageRequest.of(pageno-1, 10, Sort.by(Sort.Direction.DESC, "bno"));
@@ -158,15 +133,6 @@ public class BoardService {
 		map.put("pagesize", 10);
 		return map;
 	}
-
-	/*
-	 * @Transactional public Integer goodOrBad(Integer bno, Integer state) { Board
-	 * board = dao.findById(bno).orElseThrow(BoardFail.BoardNotFoundException::new);
-	 * if(state==0) { board.setGoodCnt(board.getGoodCnt()+1); return
-	 * board.getGoodCnt(); } else if(state==1) {
-	 * board.setBadCnt(board.getBadCnt()+1); return board.getBadCnt(); } else
-	 * if(state==2) return board.getGoodCnt(); return board.getBadCnt(); }
-	 */
 	
 	@Transactional
 	public Integer goodOrBad(Integer bno, Integer state) {
@@ -202,7 +168,7 @@ public class BoardService {
 		return board.getWarnCnt();
 	}
 
-	// ck 이미지 업로드
+	
 	public CKResponse ckImageUpload(MultipartFile upload) {
 		if(upload!=null && upload.isEmpty()==false && upload.getContentType().toLowerCase().startsWith("image/")) {
 			String imageName = UUID.randomUUID().toString() + ".jpg";

@@ -26,17 +26,14 @@ import lombok.*;
 @RequiredArgsConstructor
 @RestController
 public class BoardController {
-	private final BoardService service;
+private final BoardService service;
+	
 	// 이미지 첨부파일 보기
 	@GetMapping(path={"/board/image", "/temp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<?> showImage(@RequestParam String imagename, HttpServletRequest req) throws IOException {
+		File file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
 		
-		// 호출한 주소에 따라 폴더명을 계산하자
-		String command = req.getRequestURI().substring(1, req.getRequestURI().lastIndexOf("/"));
-		File file = new File(ZmallConstant.TEMP_FOLDER + imagename);
-		if(command.equals("board"))
-			file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
-		
+		System.out.println(file);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(ZmallUtil.getMediaType(imagename));
 		headers.add("Content-Disposition", "inline;filename="  + imagename);
@@ -59,7 +56,6 @@ public class BoardController {
 	public ResponseEntity<?> write(@Valid BoardDto.Write dto, BindingResult bindingResult, Principal principal) throws BindException {
 		if(bindingResult.hasErrors())
 			throw new BindException(bindingResult);
-		System.out.println(dto.getContent());
 		Board board = service.write(dto, principal.getName());
 		URI uri = UriComponentsBuilder.newInstance().path("/board/read").queryParam("bno", board.getBno()).build().toUri();
 		return ResponseEntity.created(uri).body(board);
@@ -71,11 +67,6 @@ public class BoardController {
 		return ResponseEntity.ok(service.read(bno, username));
 	}
 	
-	/*
-	 * @GetMapping(path="/board/all", produces=MediaType.APPLICATION_JSON_VALUE)
-	 * public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno,
-	 * String writer) { return ResponseEntity.ok(service.list(pageno, writer)); }
-	 */
 	@GetMapping(path="/board/all", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, String writer, String category) {
 		return ResponseEntity.ok(service.list(pageno, writer, category));
@@ -84,7 +75,8 @@ public class BoardController {
 	@GetMapping(path="board/best", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> list(@RequestParam(defaultValue = "1") Integer pageno, Integer goodCnt){
 		return ResponseEntity.ok(service.bestList(pageno, goodCnt));
-	}	
+	}
+	
 	
 	@PutMapping(path="/board/{bno}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@Valid BoardDto.Update dto, BindingResult bindingResult, Principal principal) throws BindException {

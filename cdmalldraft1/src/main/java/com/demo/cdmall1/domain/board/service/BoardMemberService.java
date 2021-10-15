@@ -1,5 +1,7 @@
 package com.demo.cdmall1.domain.board.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
@@ -13,20 +15,66 @@ import lombok.*;
 public class BoardMemberService {
 	private final BoardMemberRepository dao;
 	
+	@Transactional
 	public GoodOrBad goodOrBad(Integer bno, boolean isGood, String loginId) {
 		boolean isExist = dao.existsByBnoAndUsername(bno, loginId);
-		System.out.println();
+
 		if(isExist==true) {
-			if(isGood==true)
-				return GoodOrBad.GET_GOOD;				// 추천수를 읽어라
-			return GoodOrBad.GET_BAD;					// 비추수를 읽어라
+			BoardMember boardMember = dao.findByBnoAndUsername(bno, loginId);
+			
+			if(boardMember.getKind().equals(null)) {
+				boardMember.setKind("null");
+			}
+			String kind = boardMember.getKind();
+			if(kind.equals("good")) {
+				if(isGood) {
+					boardMember.setKind("null");	
+					return GoodOrBad.SUB_GOOD;
+				}
+				return GoodOrBad.GET_BAD;	
+			}else if(kind.equals("bad")){
+				if(isGood == false) {
+					boardMember.setKind("null");
+					return GoodOrBad.SUB_BAD;
+				}
+				return GoodOrBad.GET_GOOD;		
+			}else if(kind.equals("null")){
+				if(isGood==true) {
+					boardMember.setKind("good");
+					return GoodOrBad.DO_GOOD;		
+				}else {
+					boardMember.setKind("bad");	
+					return GoodOrBad.DO_BAD;
+				}
+			}
 		} else {
-			dao.save(new BoardMember(loginId, bno));
-			if(isGood==true) 
-				return GoodOrBad.DO_GOOD;				// 추천수를 증가한 다음 읽어라
-			return GoodOrBad.DO_BAD;					// 비추수를 증가한 다음 읽어라
+			if(isGood==true) {
+				dao.save(new BoardMember(loginId, bno, "good", false));
+				return GoodOrBad.DO_GOOD;		
+			} 
+			dao.save(new BoardMember(loginId, bno, "bad", false));	
+			return GoodOrBad.DO_BAD;				
 		}
+		return GoodOrBad.GET_GOOD;
+	}
+	
+	@Transactional
+	public WarnCheck warncheck(Integer bno, String loginId) {
+		boolean isExist = dao.existsByBnoAndUsername(bno, loginId);
+		if(isExist==true) {
+			BoardMember boardMember = dao.findByBnoAndUsername(bno, loginId);
+			Boolean isWarn = boardMember.getIsWarn();
 		
+			if(isWarn==true) {
+				boardMember.setIsWarn(false);
+				return WarnCheck.SUB_WARM;	
+			}
+			boardMember.setIsWarn(true);
+			return WarnCheck.DO_WARN;
+		} else {
+			dao.save(new BoardMember(loginId, bno, "null" ,true));
+			return WarnCheck.DO_WARN;
+		}
 	}
 
 }
