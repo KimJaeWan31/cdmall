@@ -1,32 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<title>Insert title here</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+<link href="/css/sb-admin-2.min.css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="/script/main.js"></script>
-<link rel="stylesheet" href="/css/header.css">
-<link rel="stylesheet" href="/css/main.css">
-<link rel="stylesheet" href="/css/nav.css">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-header, nav, aside, footer, section ,li, a{
-	font-family: 'Jua', sans-serif;
-} 
-
-</style>
-<script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="/js/sb-admin-2.min.js"></script>
 <script>
 	$(document).ready(()=>{
-		$("#findId").on("click", ()=>{
+		
+		$("#find_id").on("click", ()=>{
 			$.ajax("/members/member/email?email=" + $("#find_id_email").val())
-				.done((result)=>Swal.fire("성공", "아이디는 " + result, "success"))
-				.fail(()=>Swal.fire("실패", "아이디를 찾지 못했습니다", "error"))
-				.always(()=>$("#find_id_email").val(""));
+				.done((result)=>Swal.fire("성공", "아이디는 " + result + " 입니다.", "success")).fail(()=>Swal.fire("실패", "아이디를 찾지 못했습니다", "error"))
+					.always(()=>$("#find_id_email").val(""));
 		});
 		
-		$("#resetPassword").on("click", ()=>{
+		$("#reset_password").on("click", ()=>{
 			const params = {
 				username: $("#username").val().toUpperCase(),
 				email: $("#reset_password_email").val()
@@ -39,47 +38,68 @@ header, nav, aside, footer, section ,li, a{
 				.fail(()=> Swal.fire("실패", "사용자 정보를 확인하지 못했습니다", "error"))
 				.always(()=>{
 					$("#username").val("");
-					$("#find_id_email").val("");
+					$("#reset_password_email").val("");
 				});
 		});
 	});
 	
 </script>
+<title>댕댕의 정석 아이디/비밀번호 찾기</title>
 </head>
-<body>
-<div id="page">
-	<header id="header" th:replace="/fragments/headerMember">
-	</header>
-	<div id="main">
-
-		<section id="section" style="width: 400px;">
-			<div id="find_id">
-				<h1>아이디 찾기</h1>
-				<div class="form-group">
-					<label for="find_id_email">이메일</label>
-					<input id="find_id_email" type="text" class="form-control">
-					<span class="helper-text" id="find_id_email_msg"></span>
+<body class="bg-gradient-primary">
+	<div class="container">
+		<!-- Outer Row -->
+		<div class="row justify-content-center">
+			<div class="col-xl-10 col-lg-12 col-md-9">
+				<div class="card o-hidden border-0 shadow-lg my-5">
+					<div class="card-body p-0">
+						<!-- Nested Row within Card Body -->
+						<div class="row">
+							<div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
+							<div class="col-lg-6">
+								<div class="p-5">
+									<form class="user">
+										<div class="text-center">
+											<h1 class="h4 text-gray-900 mb-2">아이디 찾기</h1>
+											<p class="mb-4">아이디를 잊어버리셨나요? 가입하신 이메일 정보를 입력해주시면, 아이디를 찾아드리겠습니다.</p>
+										</div>
+										<div class="form-group">
+											<input type="text" id="find_id_email" class="form-control form-control-user" aria-describedby="emailHelp" placeholder="이메일">
+										</div>
+										<button type="button" class="btn btn-primary btn-user btn-block" id="find_id"> 
+											아이디 찾기
+										</button>
+									</form>
+									<hr>
+									<form class="user">
+										<div class="text-center">
+											<h1 class="h4 text-gray-900 mb-2">비밀번호 찾기</h1>
+											<p class="mb-4">비밀번호를 잊어버리셨나요? 가입하신 아이디와 이메일 정보를 입력해주시면, 로그인하실 수 있는
+												임시 비밀번호를 이메일로 발급해드리겠습니다.
+											</p>
+										</div>
+										<div class="form-group">
+											<input type="text" id="username" class="form-control form-control-user" aria-describedby="emailHelp"
+												placeholder="아이디">
+										</div>
+										<div class="form-group">
+											<input type="text" id="reset_password_email" class="form-control form-control-user" aria-describedby="emailHelp" placeholder="이메일">
+										</div>
+										<button id="reset_password" type="button" class="btn btn-primary btn-user btn-block"> 
+											임시 비밀번호 발급
+										</button>
+									</form>
+									<hr>
+									<div class="text-center">
+										<a class="small" href="/member/login">로그인하러 가기</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<button class="btn btn-primary" id="findId">아이디 찾기</button>
-			</div>	
-			<div id="reset_password">
-				<h1>임시비밀번호 발급</h1>
-				<div class="form-group">
-					<label for="username">아이디</label>
-					<input id="username" type="text" name="username" class="form-control">
-					<span class="helper-text" id="username_msg"></span>
-				</div>
-				<div class="form-group">
-					<label for="reset_password_email">이메일</label>
-					<input id="reset_password_email" type="text" class="form-control">
-					<span class="helper-text" id="reset_password_email_msg"></span>
-				</div>
-				<button class="btn btn-primary" id="resetPassword">임시비밀번호 발급</button>
 			</div>
-		</section>
+		</div>
 	</div>
-	<footer id="footer" th:replace="/fragments/footer">
-	</footer>
-</div>
 </body>
 </html>
