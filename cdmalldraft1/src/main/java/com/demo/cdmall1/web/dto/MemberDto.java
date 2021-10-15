@@ -99,12 +99,7 @@ public class MemberDto {
 	
 	@Data
 	public class ChangePwd {
-		@NotNull
-		@Password
 		private String password;
-		
-		@NotNull
-		@Password
 		private String newPassword;
 	}
 	

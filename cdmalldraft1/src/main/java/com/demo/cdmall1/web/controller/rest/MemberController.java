@@ -110,7 +110,7 @@ public class MemberController {
 	// 임시 비밀번호로 로그인했을 때 비밀번호 변경
 	@PreAuthorize("isAuthenticated()")
 	@PatchMapping(path="/members/member/password", produces = MediaType.TEXT_PLAIN_VALUE)
-	public ResponseEntity<?> changePassword(@Valid MemberDto.ChangePwd dto, BindingResult bindingResult, Principal principal) throws BindException {
+	public ResponseEntity<?> changePassword(@ModelAttribute @Valid MemberDto.ChangePwd dto, BindingResult bindingResult, Principal principal) throws BindException {
 		if(bindingResult.hasErrors())
 			throw new BindException(bindingResult);
 		service.changePassword(dto, principal.getName());
