@@ -49,6 +49,21 @@
 			$("#join").on("click", ()=>{
 				location.href = "/member/join";
 			});
+			
+			$("#userid").on("blur", ()=>{
+				// 아이디에 대해 필수 입력 체크, 패턴 체크
+				if(usernameCheck()==false){
+					return false;
+				}
+			});
+			
+			const usernameCheck = ()=>{
+				const $userid = $("#userid").val().toUpperCase();
+				$("#userid").val($userid);
+				const pattern = /^[0-9A-Z]{8,10}$/;
+				return check($username, pattern, "아이디는 대문자와 숫자 8~10자입니다", $("#userid"));
+			}
+			
 		})
 	</script>
 	 
@@ -75,6 +90,8 @@
                                             <input type="text" class="form-control form-control-user"
                                                 id="userid" aria-describedby="emailHelp"
                                                 placeholder="아이디" autofocus="autofocus">
+                                  				<span class="helper-text" id="userid"></span>
+                                                
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
