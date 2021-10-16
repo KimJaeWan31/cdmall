@@ -36,7 +36,7 @@ public class SecurityConfig {
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.inMemoryAuthentication()
-				.withUser("SYSTEM02")
+				.withUser("SYSTEM01")
 				.password(passwordEncoder.encode("12341234!"))
 				.roles("ADMIN");
 		}

@@ -19,20 +19,22 @@ header, nav, aside, footer, section ,li, a{
 	<div class="container-fluid">
 		
 		<ul sec:authorize="isAnonymous()" class="nav navbar-nav" id="menu_anonymous">
-        	<li><a href="/boardMain" style="font-size: 30px;">HOME</a></li>
+        	<!-- <li><a href="/boardMain" style="font-size: 30px;">HOME</a></li> -->
 			<li><a href="/noticeBoard/list" style="font-size: 30px;">공지사항</a></li>
 			<li><a onclick="loginAccess()">사진게시판</a></li>
 			<li><a onclick="loginAccess()">질문게시판</a></li>
 			<li><a onclick="loginAccess()">자유게시판</a></li>
 			<li><a onclick="loginAccess()">추천게시판</a></li>
+			<li><a onclick="loginAccess()">중고게시판</a></li>
     	</ul>
     	<ul sec:authorize="isAuthenticated()" class="nav navbar-nav" id="menu_authenticated">
-        	<li><a class="" href="/boardMain">HOME</a></li>
+        	<!-- <li><a class="" href="/boardMain">HOME</a></li> -->
 			<li><a href="/noticeBoard/list">공지사항</a></li>
 			<li><a href="/imageBoard/list">사진게시판</a></li>
 			<li><a href="/questionBoard/list">질문게시판</a></li>
 			<li><a href="/board/list">자유게시판</a></li>
-			<li><a href="/bestBoard/bestList">추천게시판</a></li>
+			<li><a href="/questionBoard/list">추천게시판</a></li>
+			<li><a href="/usedBoard/list">중고게시판</a></li>
     	</ul>
 	</div>
 	<script th:inline="javascript">
