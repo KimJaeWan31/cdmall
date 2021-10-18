@@ -122,7 +122,7 @@ public class BoardCustomRepositoryImpl extends QuerydslRepositorySupport impleme
 	public List<WarnList> readWarnAll(Pageable pageable, Integer warnCnt) {
 		QBoard board = QBoard.board;
 		return factory.from(board).select(Projections.constructor(BoardDto.WarnList.class, board.bno, board.title, board.writer, 
-				board.createTime, board.readCnt, board.attachmentCnt, board.commentCnt, board.goodCnt,board.badCnt, board.category, board.warnCnt))
+				board.createTime, board.readCnt, board.attachmentCnt, board.commentCnt, board.goodCnt,board.badCnt, board.category, board.warnCnt, board.isActive))
 				.where(board.bno.gt(0).and(board.warnCnt.goe(1)))
 				.orderBy(board.warnCnt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	}

@@ -53,20 +53,12 @@ public class Board extends BaseCreateAndUpdateTimeEntity {
 	
 	private Integer warnCnt;
 	
-	// DB에서는 외래키를 가진 쪽이 자식 테이블, JPA에서는 외래키를 가진 쪽이 관계의 주인(관계의 주인만 외래키 필드를 변경할 수 있다)
-	// 관계의 주인이 아닌 쪽은 mappedBy를 이용해 외래키를 지정한다(주인이 가진 외래키 엔티티의 이름)
+	private Boolean isActive;
+	
 	@OneToMany(mappedBy="board", cascade=CascadeType.REMOVE)
 	@OrderBy(value="cno DESC")
 	private Set<Comment> comments;
 	
-	// OneToMany는 기본 Lazy 로딩, ManyToOne은 기본 Eager 로딩
-	// Lazy는 board 따로, attachment 따로, comment 따로 읽어온다. 퀴리가 3번 나간다
-	// 	만약 comment에서 member를 참고한다고 해보자. 그러면 3번글을 읽으라고 하면
-	//		select * from board where bno=3;			
-	//		select * from comments where bno=3; -> 결과가 100개라면
-	//		각 comment에 대해서 member를 읽으러가게 된다(쿼리가 100번 발생) => N+1 문제
-	//		N+1이 발생하지 않으면 Lazy로 가자
-	// Eager는 left outer join으로 한번에 읽어온다
 	@OneToMany(mappedBy="board", cascade={CascadeType.PERSIST, CascadeType.REMOVE})
 	private Set<Attachment> attachments;
 	
@@ -78,6 +70,7 @@ public class Board extends BaseCreateAndUpdateTimeEntity {
 		this.commentCnt = 0;
 		this.attachmentCnt = 0;
 		this.warnCnt=0;
+		this.isActive=true;
 		if(this.attachments!=null)
 			this.attachmentCnt = attachments.size();
 	}
@@ -114,6 +107,14 @@ public class Board extends BaseCreateAndUpdateTimeEntity {
 	public Integer updateAttachmentCnt(Integer bno2) {
 		this.attachmentCnt = attachments.size();
 		return this.attachmentCnt;
+	}
+	
+	public Boolean updateIsActive() {
+		
+		if(this.isActive == null) {
+			this.isActive = true;
+		}this.isActive = !(this.isActive);
+		return this.isActive;
 	}
 }
 

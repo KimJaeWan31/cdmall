@@ -69,7 +69,6 @@ private final BoardService service;
 	
 	@GetMapping(path="/board/all", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, String writer, String category) {
-		
 		return ResponseEntity.ok(service.list(pageno, writer, category));
 	}
 	
@@ -101,6 +100,12 @@ private final BoardService service;
 	public ResponseEntity<?> CommentCnt(@RequestParam Integer bno) {
 		Integer cnt = service.updateCommentCnt(bno);
 		return ResponseEntity.ok(cnt);
+	}
+	
+	@PostMapping("/board/inactive")
+	public ResponseEntity<?> update_isActive(@RequestParam Integer bno) {
+		Boolean isActive = service.updateIsActive(bno);
+		return ResponseEntity.ok(isActive);
 	}
 	
 	@GetMapping("/board/good_or_bad")

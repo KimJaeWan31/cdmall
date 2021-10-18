@@ -66,6 +66,7 @@ public class BoardDto {
 		private Integer badCnt;
 		private String category;
 		private Integer warnCnt;
+		//private Boolean isActive;
 	}
 	
 	@Data
@@ -110,6 +111,8 @@ public class BoardDto {
 		private Integer badCnt;
 		private String category;
 		private Integer warnCnt;
+		private Boolean isActive;
+		
 	}
 	
 	// querydsl에서 사용할 DTO

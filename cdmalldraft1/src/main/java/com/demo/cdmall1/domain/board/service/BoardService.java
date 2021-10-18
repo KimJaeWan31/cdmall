@@ -76,7 +76,6 @@ private final BoardRepository dao;
 		map.put("bno", board.getBno());
 		map.put("title", board.getTitle());
 		map.put("content", board.getContent());
-		System.out.println(board.getContent());
 		map.put("badCnt", board.getBadCnt());
 		map.put("commentCnt", board.getCommentCnt());
 		
@@ -91,6 +90,7 @@ private final BoardRepository dao;
 		map.put("comments", comments);
 		map.put("category", board.getCategory());
 		map.put("warnCnt", board.getWarnCnt());
+		map.put("isActive", board.getIsActive());
 		return map;
 	}
 	
@@ -107,6 +107,13 @@ private final BoardRepository dao;
 	public Integer updateCommentCnt(Integer bno) {
 		Board board = dao.findById(bno).orElseThrow(BoardFail.IllegalJobException::new);
 		return board.updateCommentCnt();
+	}
+	
+	// 글 활성/비활성
+	@Transactional
+	public Boolean updateIsActive(Integer bno) {
+		Board board = dao.findById(bno).orElseThrow(BoardFail.IllegalJobException::new);
+		return board.updateIsActive();
 	}
 
 	public Map<String,Object> list(Integer pageno, String writer, String category) {

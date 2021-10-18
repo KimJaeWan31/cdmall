@@ -36,26 +36,36 @@
 		$("#writeday").text(board.createTime);
 		$("#writer").text(board.writer);
 		$("#title").val(board.title);
-		$("#content").html(board.content);
 		$("#read_cnt").text(board.readCnt);
 		$("#good_cnt").text(board.goodCnt);
 		$("#bad_cnt").text(board.badCnt);
 		$("#warn_cnt").text(board.warnCnt);
+		if(board.isActive==true){
+			$("#content").html(board.content);
+		}
+		else{
+			$("#content").html("비활성된 게시글 입니다.");
+		}
 		
 		// 비로그인, 글쓴이, 글쓴이 아님에 따른 화면 구성
 		if(isLogin==true && isWriter==true) {
 			$("#title").prop("disabled", false);
-			const ck = CKEDITOR.replace('content', {
-				/* width:1270,
-				height: 600, */
-				height: 300,
-				filebrowserUploadUrl : '/board/image'
-			});
-			
 			const $btnArea = $("#btnArea");
-			$("<button>").attr("id","update").attr("class","btn btn-info").text("변 경").appendTo($btnArea);
-			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
-			$("<button>").attr("id","delete").attr("class","btn btn-info").text("삭 제").appendTo($btnArea);
+			if(board.isActive==true){
+				const ck = CKEDITOR.replace('content', {
+					/* width:1270,
+					height: 600, */
+					height: 300,
+					filebrowserUploadUrl : '/board/image'
+				});
+				$("<button>").attr("id","update").attr("class","btn btn-success").text("변 경").appendTo($btnArea);
+				$("<span>").html("&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
+			}
+			else{
+				$("#content").prop("disabled", true);
+			}
+		
+			$("<button>").attr("id","delete").attr("class","btn btn-danger").text("삭 제").appendTo($btnArea);
 			
 			$("#good_btn").prop("disabled", true);
 			$("#bad_btn").prop("disabled", true);
@@ -151,6 +161,7 @@
 			// ES6는 키워드없이 변수를 만들 수 없다. 변수의 스코프는 {}
 			board = result;
 			isWriter = $username == board.writer;
+			console.log(board);
 			init(board);
 			printAttachments(board.attachments);
 			printComments(board.comments);
@@ -272,18 +283,14 @@
 				</table>
 			</div>
 			<!--  본문, 갱신 버튼, 삭제 버튼 출력 영역 -->
-			<!-- <div id="content_div">
-				<div class="form-group">
-					<div class="form-control" id="content"></div>
-				</div>
-			</div> -->
+			
 			<div id="content_div">
-				<div class="form-group" style="width: 100%; margin-bottom: 10px">
-					<div class="form-control" id="content" style="resize: none; height: 400px; background-color: #F4FFFF;"></div>
+				<div class="form-group" style="margin: 0">
+					<div class="form-control" id="content" style=" resize: none; background-color: #F4FFFF; padding: 13px;"></div>
 				</div>
 			</div>
 			
-			<div id="btnArea">
+			<div id="btnArea" style="margin-top: 15px;">
 			</div>
 			<hr>
 			<div class="form-group">

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
 <link rel="stylesheet" href="/css/admin.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
@@ -63,6 +64,12 @@ body {
 			$("<td>").text(c.goodCnt).appendTo($tr);
 			$("<td>").text(c.badCnt).appendTo($tr);
 			$("<td>").text(c.warnCnt).appendTo($tr);
+			if(c.isActive){
+				$("<button>").attr("data-bno", c.bno).attr("class","board_active").text("비활성").appendTo($tr);
+			}
+			else{
+				$("<button>").attr("data-bno", c.bno).attr("class","board_active").text("활성").appendTo($tr);
+			}
 		}
 	};
 	
@@ -128,6 +135,24 @@ body {
 			page=result;
 			printBoard();
 			printPagination(getPagination());
+		});
+		
+		$("#list").on("click",".board_active", function() {
+			
+			const bno = {bno :$(this).attr("data-bno")}
+			
+			$.ajax({url: "/board/inactive", method:"post", data:bno})
+			.done((result)=>{
+				if(result==true){
+					Swal.fire('작업 성공', "해당 게시물을 활성했습니다.",'success');
+					$(this).text("비활성");
+				}else{
+					Swal.fire('작업 성공', "해당 게시물을 비활성했습니다.",'success');
+					$(this).text("활성");
+				}
+			}).fail((result)=>{
+				Swal.fire('작업 실패', "해당 작업을 실패했습니다.",'error')
+			});
 		});
 		
 	});
