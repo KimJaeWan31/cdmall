@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>ICIA 관리자 자주 묻는 질문</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://use.fontawesome.com/0206006232.js"></script>
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<link rel="stylesheet" href="/css/faqList.css">
+</head>
+<body>
+	<div id="page">
+		<header id="header" th:replace="/fragments/headerBoard"> </header>
+		<nav id="nav" th:replace="/fragments/navBoard"></nav>
+		<div id="communitypic">자 주 묻 는 질 문</div>
+		<div class="layout">
+			<ul class="qna">
+				<li><input type="checkbox" id="qna-1"> <label
+					for="qna-1">강아지가 꼬리를 흔들면 무슨 뜻인가요?</label>
+					<div>
+						<p>기분이 좋다는 뜻입니다.</p>
+					</div></li>
+				<li><input type="checkbox" id="qna-2"> <label
+					for="qna-2">고양이가 불러도 쳐다도 안보고 귀만 쫑긋 해요.</label>
+					<div>
+						<p>그래도 듣고 있다고 귀를 쫑긋해서 알려주네요. 착하네요.</p>
+						<p>집사는 고양이에게 많은 것을 요구하면 안됩니다.</p>
+					</div></li>
+				<li><input type="checkbox" id="qna-3"> <label
+					for="qna-3">반품 신청 하고 싶어요.</label>
+					<div>
+						<p>상품을 아직 개봉하거나 사용하지 않은 경우, 마이페이지에서 반품 신청 하실 수 있습니다.</p>
+						<p>반품신청 후 택배사에서 상품 수거가 된 것으로 확인될 경우 해당 주문은 반품처리한 것으로 변경됩니다.</p>
+					</div></li>
+				<li><input type="checkbox" id="qna-4"> <label
+					for="qna-4">배송된 상품이 부재중으로 반송된 경우 어떻게 하나요?</label>
+					<div>
+						<p>부재 등의 사유로 반송된 상품은 "마이페이지 > 주문 조회"]"에서 택배사 영업소, 또는 배송 담당 택배원
+							연락처를 통해 재배송 요청을 할 수 있습니다. 상품이 이미 반송되어 해당 업체로 입고된 경우, 왕복 배송비를 추가
+							부담하셔야 합니다.</p>
+					</div></li>
+				<li><input type="checkbox" id="qna-5"> <label
+					for="qna-5">상품에 대해서 문의하려면 어떻게 해야 하나요?</label>
+					<div>
+						<p>상품에 관한 내용은 상품상세 화면에 자세히 안내되어 있습니다. 마이페이지 > 주문내역에서 주문한 상품을
+							선택하면 상세페이지로 이동합니다.</p>
+						<p>상품 상세 내용에 표시되어 있지 않은 내용은 판매자에게 문의해 주십시오.</p>
+						<p>> 판매자에게 문의</p>
+						<p>1. "마이페이지 > 주문내역에서 상품 선택 > 배송/교환/반품 안내"에 표기된 판매자 연락처로 문의</p>
+						<p>2. "["마이페이지 > 1:1문의하기 > 문의타입에서 판매자에게 문의하기"를 선택한 후 질의 내용 작성</p>
+					</div></li>
+					<li><input type="checkbox" id="qna-6"> <label
+					for="qna-6">림다네 강아지 이름은?</label>
+					<div>
+						<p>코코~</p>
+					</div></li>
+				<li><input type="checkbox" id="qna-7"> <label
+					for="qna-7">뽀라미네 강아지들 이름은?</label>
+					<div>
+						<p>콩이와</p>
+						<p>세리</p>
+					</div></li>
+					<li><input type="checkbox" id="qna-8"> <label
+					for="qna-8">예진아씌~ 강아지 이름은?</label>
+					<div>
+						<p>훗츄!</p>
+					</div></li>
+				<li><input type="checkbox" id="qna-9"> <label
+					for="qna-9">오늘 점심 뭐 먹지?</label>
+					<div>
+						<p>한 중 일 양식 중에 골라봥</p>
+						<p>국밥 짜장면 스시 파스타</p>
+					</div></li>
+					<li><input type="checkbox" id="qna-10"> <label
+					for="qna-10">질문 뭐 쓰지이~?</label>
+					<div>
+						<p>글쎄에</p>
+						<p>나중에 바꿔야징 희희</p>
+					</div></li>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
