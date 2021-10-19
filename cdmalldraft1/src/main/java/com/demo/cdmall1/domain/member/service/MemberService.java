@@ -12,7 +12,10 @@ import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 import org.springframework.web.multipart.*;
 
+import com.demo.cdmall1.domain.board.entity.BoardRepository;
+import com.demo.cdmall1.domain.imageboard.entity.ImageBoardRepository;
 import com.demo.cdmall1.domain.member.entity.*;
+import com.demo.cdmall1.domain.questionboard.entity.QuestionBoardRepository;
 import com.demo.cdmall1.util.*;
 import com.demo.cdmall1.web.dto.*;
 import com.demo.cdmall1.web.dto.AddressDto.Read;
@@ -26,6 +29,9 @@ public class MemberService {
 	private final MemberRepository dao;
 	private final MemberDslRepository dslDao;
 	private final AuthorityRepository AuthDao;
+	private final BoardRepository bDao;
+	private final ImageBoardRepository iDao;
+	private final QuestionBoardRepository qDao;
 
 	private final MailUtil mailUtil;
 	private final PasswordEncoder passwordEncoder;
@@ -182,17 +188,30 @@ public class MemberService {
 	
 	//전체 회원 수 읽기
 	public Map<String,Long> readMemberCount() {
-		//long member = dao.count();
+		long total = dao.count();
 		long user = dslDao.countByUser();
 		long admin = dslDao.countByAdmin();
 		Map<String,Long> map = new HashMap<>();
+		map.put("total", total);
 		map.put("user", user);
 		map.put("admin", admin);
 		return map;
 	}
+	
+	//보드 통계 읽기
+	public Object readBoardCount() {
+		long free = bDao.count();
+		long photo = iDao.count();
+		long QnA = qDao.count();
+		Map<String,Long> map = new HashMap<>();
+		map.put("free", free);
+		map.put("photo", photo);
+		map.put("QnA", QnA);
+		return map;
+	}
 
-	public Map<String,Object> getMember(Integer pageno) {
-		//Pageable pageable = PageRequest.of(pageno-1, 10);
+	//Role_user읽기
+	public Map<String,Object> listUser(Integer pageno) {
 		List<Member> member = dslDao.readByUser();
 		Map<String,Object> map = new HashMap<>();
 		map.put("content", member);
@@ -200,7 +219,27 @@ public class MemberService {
 		map.put("pageno", pageno);
 		map.put("pagesize", 10);
 		return map;
-		//System.out.println(member);
+	}
+	
+	//role_admin읽기
+	public Map<String,Object> listAdmin(Integer pageno) {
+		List<Member> member = dslDao.readByAdmin();
+		Map<String,Object> map = new HashMap<>();
+		map.put("content", member);
+		map.put("totalcount", dslDao.countByAdmin());
+		map.put("pageno", pageno);
+		map.put("pagesize", 10);
+		return map;
+	}
+
+	public Boolean block(String username) {
+		Member member = dao.findById(username).orElseThrow(MemberFail.MemberNotFoundException::new);	
+		boolean now = member.getEnabled();
+		System.out.println(now);
+		System.out.println(!now);
+		member.setEnabled(!now);
+		dao.save(member);
+		return member.getEnabled();
 	}
 	
 }

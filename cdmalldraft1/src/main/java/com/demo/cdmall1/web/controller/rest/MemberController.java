@@ -187,11 +187,20 @@ public class MemberController {
 	}
 	
 	//회원정보 보기(비 판매자)
-	@GetMapping("/members/all")
-	public ResponseEntity<?> getMember(@RequestParam(defaultValue="1") Integer pageno){
-		return ResponseEntity.ok(service.getMember(pageno));
+	@GetMapping("/members/role_user")
+	public ResponseEntity<?> listUser(@RequestParam(defaultValue="1") Integer pageno){
+		return ResponseEntity.ok(service.listUser(pageno));
 	}
 	//판매자 정보보기
+	@GetMapping("/members/role_admin")
+	public ResponseEntity<?> listAdmin(@RequestParam(defaultValue="1") Integer pageno){
+		return ResponseEntity.ok(service.listAdmin(pageno));
+	}
 	
+	//계정 블락
+	@PostMapping("/members/block")
+	public ResponseEntity<?> block(@RequestParam(defaultValue="1") String username){
+		return ResponseEntity.ok(service.block(username));
+	}
 	
 }

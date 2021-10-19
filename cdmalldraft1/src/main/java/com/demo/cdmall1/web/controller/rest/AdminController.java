@@ -21,4 +21,9 @@ public class AdminController {
 		return ResponseEntity.ok(service.readMemberCount());
 	}
 	
+	@GetMapping(path="/api/admin/data2", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getData2() {
+		return ResponseEntity.ok(service.readBoardCount());
+	}
+	
 }

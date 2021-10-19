@@ -50,7 +50,34 @@ body {
 		// 차트를 출력할 영역을 선택
 		
 		var ctx1 = document.getElementById('chart1').getContext('2d');
-
+		return new Chart(ctx1, {
+			type : 'doughnut',
+			data : {
+				labels : [ '일반회원', '판매자'],
+				datasets : [ {
+					label : '수익금',
+					data : [result.user, result.admin ],
+					backgroundColor : [ window.chartColors.yn_red, window.chartColors.yn_blue],
+					borderColor : [window.chartColors.red, window.chartColors.blue],
+					borderWidth : 1
+				}]
+			},
+			options : {
+				responsive : true,
+				legend : {
+					position : 'top',
+				},
+				title : {
+					display : true,
+					fontSize : 20,
+					text : '회원 현황'
+				},
+				animation : {
+					animateScale : true,
+					animateRotate : true
+				}
+			}
+		});/*
 		return new Chart(ctx1, {
 			type : 'bar',														// 차트 종류
 			data : {
@@ -94,7 +121,7 @@ body {
 					} ]
 				}
 			}
-		});
+		});*/
 	}
 	
 	function chart2(result) {
@@ -107,21 +134,21 @@ body {
 			data : {
 				datasets : [ {
 					label : '자유게시판',
-					data : [result.user],
+					data : [result.free],
 					fill : false,
 					backgroundColor : window.chartColors.yn_red,
 					borderColor : window.chartColors.red,
 					borderWidth : 1
 				},{
 					label : '사진게시판',
-					data : [result.admin],
+					data : [result.photo],
 					fill : false,
 					backgroundColor : window.chartColors.yn_blue,
 					borderColor : window.chartColors.blue,
 					borderWidth : 1
 				},{
 					label : '질문게시판',
-					data : [result.admin],
+					data : [result.QnA],
 					fill : false,
 					backgroundColor : window.chartColors.yn_green,
 					borderColor : window.chartColors.green,
@@ -138,8 +165,8 @@ body {
 					yAxes : [ {
 						ticks : {
 							min : 0,
-							max : 100,
-							stepSize : 20,
+							max : 30,
+							stepSize : 5,
 							fontSize : 16,
 							beginAtZero : true
 						},
@@ -171,6 +198,9 @@ body {
 		
 		$.ajax("/api/admin/data1").done(result=>{
 			chart1(result);
+			//chart2(result);
+		});
+		$.ajax("/api/admin/data2").done(result=>{
 			chart2(result);
 		});
 
@@ -179,7 +209,7 @@ body {
 </script>
 
 </head>
-<body>
+<body style="min-width: 1700px">
 	<div class="sidenav">
   		<a href="/admin/index">HOME</a>
   		<a href="/boardMain">BOARD</a>
@@ -193,7 +223,7 @@ body {
 			<section id="section">
 				<h1 style="text-align: center; margin-bottom: 60px;">관리자 페이지입니다</h1>
 				
-				<div class="row" style="margin-bottom: 80px;">
+				<div class="row" style="margin-bottom: 60px;">
 					<div class="col-xl-3 col-md-6">
 						<div class="card bg-primary text-white mb-4">
 							<div class="card-body">회원관리</div>
@@ -244,12 +274,14 @@ body {
 					</div>
 				</div>
 		
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-sm-6 myChart">
+				<div class="container-fluid" >
+					<div class="row" >
+					&nbsp; &nbsp; &nbsp; &nbsp;
+						<div class="col-sm-5 myChart" style="background-color : rgba(201, 203, 207,0.1); border: 2px solid rgb(201, 203, 207); border-radius: 15px; padding: 20px 0; ">
 							<canvas id="chart1"></canvas>
 						</div>
-						<div class="col-sm-6 myChart">
+						&nbsp; &nbsp; &nbsp; &nbsp;
+						<div class="col-sm-6 myChart" style="background-color : rgba(201, 203, 207,0.1); border: 2px solid rgb(201, 203, 207); border-radius: 15px; padding: 20px 0;">
 							<canvas id="chart2"></canvas>
 						</div>
 					</div>

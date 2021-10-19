@@ -64,9 +64,11 @@ body {
 			$("<td>").text(c.badCnt).appendTo($tr);
 			$("<td>").text(c.warnCnt).appendTo($tr);
 			if(c.isActive){
+				$("<td>").text("활성").attr("id", c.bno+"state").css("color", "blue").appendTo($tr);
 				$("<button>").attr("data-bno", c.bno).attr("class","board_active").text("비활성").appendTo($tr);
 			}
 			else{
+				$("<td>").text("비활성").attr("id", c.bno+"state").css("color", "red").appendTo($tr);
 				$("<button>").attr("data-bno", c.bno).attr("class","board_active").text("활성").appendTo($tr);
 			}
 		}
@@ -144,14 +146,17 @@ body {
 			.done((result)=>{
 				if(result==true){
 					Swal.fire('작업 성공', "해당 게시물을 활성했습니다.",'success');
+					$("#"+$(this).attr("data-bno")+"state").text("활성").css("color", "blue");
 					$(this).text("비활성");
 				}else{
-					Swal.fire('작업 성공', "해당 게시물을 비활성했습니다.",'success');
+					Swal.fire('작업 성공', "해당 게시물을 활성했습니다.",'success');
+					$("#"+$(this).attr("data-bno")+"state").text("비활성").css("color", "red");
 					$(this).text("활성");
 				}
 			}).fail((result)=>{
 				Swal.fire('작업 실패', "해당 작업을 실패했습니다.",'error')
 			});
+			//location.reload();
 		});
 		
 	});
@@ -170,11 +175,12 @@ body {
 					<th>번호</th>
 					<th>제목</th>
 					<th>글쓴이</th>
-					<th>시간</th>
+					<th>작성일</th>
 					<th>조회수</th>
 					<th>좋아요</th>
 					<th>싫어요</th>
 					<th>신고수</th>
+					<th>상태</th>
 					<th></th>
 				</tr>
 				<tbody id="list">
