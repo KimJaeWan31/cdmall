@@ -12,8 +12,16 @@ public class CustomerCenterMvcController {
 	public void faqList() {
 	}
 	
-	@PreAuthorize("isAnonymous()")
-	@GetMapping("/customerCenter/voc")
+	//@PreAuthorize("isAnonymous()")
+	@GetMapping("/customerCenter/vocList")
 	public void voc() {
+	}
+	
+	@GetMapping("/customerCenter/vocWrite")
+	public void vocWrite() {
+	}
+	
+	@GetMapping("/customerCenter/vocRead")
+	public void vocRead() {
 	}
 }

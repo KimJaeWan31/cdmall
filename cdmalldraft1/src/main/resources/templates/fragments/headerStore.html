@@ -44,7 +44,7 @@
 				      <li class="list-group-item" id="oneOnOneInquiry"><a href="#" target="_blank" id="chat">1:1문의</a></li>
    				      <li sec:authorize="hasRole('ADMIN')" class="list-group-item" id="oneOnOneInquiryChatHistory"><a href="/chatting/chatlist" id="chat_history">1:1 채팅기록</a></li>
 				      <li class="list-group-item" id="frequentlyQuestion">자주묻는질문</li>
-				      <li class="list-group-item" id="VoiceOfCustomer">고객의소리</li>
+				      <li class="list-group-item" id="VoiceOfCustomer"><a href="/customerCenter/vocList" id="VoiceOfCustomer">고객의소리</a></li>
 				    </ul>
             	</li>
                 
@@ -82,7 +82,7 @@
           }) 
           
         $('#VoiceOfCustomer').click(function(){
-        	location.href="/customerCenter/voc";
+        	location.href="/customerCenter/vocList";
           })
           
                  $(window).on('scroll',function() {

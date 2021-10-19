@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>고객의 소리</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="/script/ckeditor/ckeditor.js"></script>
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<link rel="stylesheet" href="/css/read.css">
+<style>
+	#attachment { width: 250px; }
+	.td1 { width: 30px; }
+	.td2 { width: 170px; }
+	.td3 { width: 50px; }
+</style>
+<script sec:authorize="isAuthenticated()">
+	const isLogin = true
+</script>
+<script  sec:authorize="isAnonymous()">
+	const isLogin = false;
+</script>
+<script>
+	let isWriter = undefined;
+	let vocBoard = undefined;
+	let currentUser = undefined;
+	
+	const init=(vocBoard)=>{
+		// board의 필드들을 출력
+		$("#vbno").text(vocBoard.vbno);
+		$("#writeday").text(vocBoard.createTime);
+		$("#writer").text(vocBoard.writer);
+		$("#title").val(vocBoard.title);
+		$("#content").html(vocBoard.content);
+		$("#read_cnt").text(vocBoard.readCnt);
+
+		// 비로그인, 글쓴이, 글쓴이 아님에 따른 화면 구성
+		if(isLogin==true && isWriter==true) {
+			$("#title").prop("disabled", false);
+			const ck = CKEDITOR.replace('content', {
+				/*width:1270,
+				height: 600,*/
+				height: 300,
+				filebrowserUploadUrl : '/vocBoard/image'
+			});
+			
+			const $btnArea = $("#btnArea");
+			$("<button>").attr("id","update").attr("class","btn btn-info").text("변 경").appendTo($btnArea);
+			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
+			$("<button>").attr("id","delete").attr("class","btn btn-info").text("삭 제").appendTo($btnArea);
+			
+			$("#vcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
+
+
+
+		} else if(isLogin==true && isWriter==false) {
+			const $vcommentBtnArea = $("#vcommentBtnArea");
+			$("#vcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
+			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($vcommentBtnArea);
+		}
+	};
+	
+	const printVAttachments=(vattachments)=>{
+		const $table = $("#vattachment");
+		// 자식들 삭제
+		$table.empty();
+		
+		// $("어쩌구").each(function(idx, item)) -> jQuery 객체 전용
+		// $.each(집합, function(idx, item)) -> 범용
+		$.each(attachments, function(i, vattachment) {
+			const $tr = $("<tr>").appendTo($table);
+			
+			const $td1 = $("<td class='td1'>").appendTo($tr)
+			if(attachment.isImage==true)
+				$('<i class="fa fa-file-image-o"></i>').appendTo($td1);
+			else
+				$('<i class="fa fa-paperclip"></i>').appendTo($td1);
+			
+			const $td2 = $("<td class='td2'>").appendTo($tr)
+			$("<a href='/vattachments/" + vattachment.ano + "'>" + vattachment.originalFileName + "</a>").appendTo($td2);
+							
+			const $td3 = $("<td class='td3'>").appendTo($tr)
+			if(isLogin==true && isWriter==true) {
+				$("<span class='delete_vattachment' data-ano='" + attachment.ano + "' data-vbno='" + vocBoard.vbno + "'>X</span>").appendTo($td3);
+				$(".delete_vattachment").css("cursor","pointer").attr("title", vattachment.originalFileName + " 삭제");
+			}
+		});
+	};
+
+	const printVComments=(vcomments)=>{
+
+		$("#vcomments").empty();
+		$.each(vcomments, function(idx, vcomment) {
+			const $outer_div = $("<div>").appendTo($("#vcomments"));
+			const $upper_div = $("<div>").appendTo($outer_div);
+
+			$("<span>").css("color","blue").text(vcomment.writer).appendTo($upper_div);
+			$("<span>").text(" [" + vcomment.createTime+"]").appendTo($upper_div);
+			
+			const $lower_div = $("<div>").css("overflow", "hidden").appendTo($outer_div);
+			$("<img>").attr("src",vcomment.profile).css("width","60px").appendTo($lower_div);
+			$("<span>").text(vcomment.content).appendTo($lower_div);
+
+			if(isLogin==true && currentUser==vcomment.writer) {
+				$("<button>").attr("class","delete_vcomment").attr("data-vbcno", vcomment.vbcno).attr("data-vbno", vocBoard.vbno)
+					.text("삭제").css("float","right").appendTo($lower_div);
+			}
+			$("<hr>").appendTo($("#vcomments"));
+		});
+	};
+
+	$(document).ready(()=>{
+		// 로그인 아이디를 자바스크립트에서 접근하고 싶다. JSTL은 <c:set>을 이용해 변수 생성이 가능한데 타임리프는 안되는 것 같다
+		// 그래서 hidden div를 만들어 div에 아이디를 저장한 다음 자바스크립트로 읽었다
+		const $username = $("#username").text();
+		const vbno = location.search.substr(6);			
+		$.ajax("/vocBoard/" + vbno).done(result=> {
+			// ES5의 변수는 var로 만든다 -> 스코프(=범용 범위)는 함수
+			// ES5에서 변수를 var없이 만들 수 있다 -> 전역
+			
+			// ES6는 키워드없이 변수를 만들 수 없다. 변수의 스코프는 {} , 중괄호는 스코프를 만들지 않습니다
+			vocBoard = result;
+			isWriter = $username == vocBoard.writer;
+			//currentUser = $("#username").text();
+			init(vocBoard);
+			printVAttachments(vocBoard.vattachments);
+			printVComments(vocBoard.vcomments);
+		});
+		
+		// 댓글 작성
+		$("#vcommentBtnArea").on("click", "#write", ()=> {
+			const param = {
+				vbno: vbno, // 앞에는 이름, 뒤에는 값
+				content : $("#vcomment_textarea").val()
+			};
+			$.ajax({url: "/vcomments", method:"post", data:param}).done(vcomments=>{
+				$("#vcomment_textarea").val("");
+				printVComments(vcomments);
+			});
+		});
+		
+		
+		// 댓글 삭제
+		// 자바의 경우 this가 고정되어 있다. 자바스크립트의 경우 this는 상황에 따라 바뀐다 => 화살표 함수는 this 고정.
+		// this를 사용해야 하는 경우는 화살표 함수를 사용하지 말자
+		$("#vcomments").on("click", ".delete_vcomment", function() {
+			const param = {vbcno : $(this).attr("data-vbcno"), vbno : vocBoard.vbno};
+			$.ajax({url: "/vcomments", method:"delete", data:param}).done(vcomments=>printVComments(vcomments));
+		});
+	
+		// 변경
+				$("#btnArea").on("click", "#update", ()=>{
+			const param = {
+				title : $("#title").val(),
+				content : CKEDITOR.instances['content'].getData(),
+			}
+			$.ajax({
+				url: "/vocBoard/" + vocBoard.vbno,
+				data: param,
+				method:"put",
+			})
+			.done((result, text, response)=>{ location.reload() })
+			.fail((response, text, message)=>{})
+		});
+		
+		// 삭제
+				$("#btnArea").on("click", "#delete", ()=>{
+					$.ajax({
+						url: "/vocBoard/" + vocBoard.vbno,
+						method:"delete",
+					})
+					.done((result, text, response)=>{ location.href = "/customerCenter/vocList" })
+					.fail((response, text, message)=>{})
+				});
+				
+				
+			});
+</script>
+
+</head>
+<script>
+	// 화면 구성, 댓글 출력, 댓글 작성, 댓글 삭제, 추천, 비추, 변경, 삭제
+</script>
+<body>
+<div id="page">
+		<header id="header" th:replace="/fragments/headerBoard">
+	</header>
+	<div id="username" sec:authentication="name" style="display:none;"></div>
+	<nav id="nav" th:replace="/fragments/navBoard">
+	</nav>
+	<div id="main">
+		<aside id="aside" th:replace="/fragments/aside">
+		</aside>
+		<section id="section1">
+			<div id="title_div">
+				<!-- 제목, 작성자 출력 영역 -->
+				<div id="upper">
+					<input type="text" id="title" disabled="disabled" >
+					<span id="writer"></span>
+				</div>
+				<!-- 글번호, 작성일, 아이피, 추천수, 조회수, 신고수 출력 영역 -->
+				<div id="lower">
+					<ul id="lower_left">
+						<li>글번호<span id="vbno"></span></li>
+						<li><span id="writeday"></span></li>
+					</ul>
+					<ul id="lower_right">
+						<li><button type="button" class="btn btn-success" id="b" disabled="disabled">조회 <span class="badge" id="read_cnt"></span></button></li>    
+					</ul>
+				</div>
+			</div>
+			<div>
+			</div>
+			<!--  본문, 갱신 버튼, 삭제 버튼 출력 영역 -->
+			<div id="content_div1" >
+				<div class="form-group">
+					<div class="form-control" id="content" style="background-color: #F4FFFF;"></div>
+				</div>
+			</div>
+			<div id="btnArea">
+			</div>
+			<hr>
+			<div class="form-group1">
+      			<label for="vcomment_teaxarea">댓글을 입력하세요</label>   
+      			<textarea class="form-control1" rows="5" id="vcomment_textarea" readonly="readonly"
+      				placeholder="댓글을 작성하려면 로그인 해주세요"></textarea>
+    		</div>
+			<div id="vcommentBtnArea">
+    			<!-- 로그인하면 댓글 달기 버튼을 추가 -->
+			</div>
+			<hr>
+			<div id="vcomments">
+				<div>
+					<div><span style="color:blue;"></span> </div>
+					<div style="overflow:hidden;">
+						<img style="width:60px;">
+						<span></span>
+					</div>
+				</div>
+				<hr>
+			</div>
+		</section>
+	</div>
+	
+	<footer id="footer" th:replace="/fragments/footer">
+	</footer>
+</div>
+</body>
+</html>
