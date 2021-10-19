@@ -84,9 +84,11 @@
 	}
 	
 	$(document).ready(()=>{
+
 		let pageno = location.search.substr(8);
 		if(pageno=="")
 			pageno=1;
+		
 		
 		$.ajax("/board/best?pageno="+pageno).done(result=>{
 			page=result;
