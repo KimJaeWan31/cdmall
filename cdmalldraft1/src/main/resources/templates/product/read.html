@@ -82,6 +82,46 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		background-color: #565656;
 	}
 	
+	  ul.list {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	border-bottom: 1px solid #ccc;
+  }
+  ul.list::after {
+	content: '';
+	display: block;
+	clear: both;
+  }
+  .tab-button {
+	display: block;
+	padding: 10px 20px 10px 20px;
+	float: left;
+	margin-right: -1px;
+	margin-bottom: -1px;
+	color: grey;
+	text-decoration: none;
+	cursor: pointer;
+  }
+  .active {
+	border-top: 2px solid orange;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid white;
+	border-left: 1px solid #ccc;
+	color: black;
+	margin-top: -2px;
+  }
+  .tab-content {
+	display: none;
+	padding: 10px;
+  }
+  .show {
+	display: block;
+  }
+	
+ .mt-5 {
+  height: 400px;
+ }
 </style>
 <script>
 	const pno = location.search.substr(5);
@@ -239,6 +279,8 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	
 	
 </script>
+
+
 </head>
 <body>
 	<div id="page">
@@ -291,9 +333,52 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 					</div>
 				</div>
 			</section>
+			
+        <div class="container mt-5" >
+          <ul class="list">
+            <li class="tab-button" data-id="0">Products</li>
+            <li class="tab-button active" data-id="1">Information</li>
+            <li class="tab-button" data-id="2">Shipping</li>
+          </ul>
+        
+          <div class="tab-content ">
+            <p>상품설명입니다. Product</p>
+          </div>
+          <div class="tab-content">
+            <p>상품정보입니다. Info</p>
+          </div>
+          <div class="tab-content">
+            <p>배송정보입니다. Shipping</p>
+          </div>
+        </div>
 		</div>
 		<footer id="footer" th:replace="/fragments/footer">
 		</footer>
 	</div>
+	<script type="text/javascript">
+$('.list').click(function(e){
+    // if(내가 실제 누른 요소가 버튼 0이면)
+    // 탭0번째 열어주셈
+    // if(e.target == document.querySelectorAll('.tab-button')[0]){
+    //     탭열기(0);
+    // } 
+    openTab(e.target.dataset.id ) 
+});
+
+
+//jQuery 
+$('.list').data('name','val');
+$('.list').data('name')
+
+function openTab (num) {
+    $('.tab-button').removeClass('active');
+    $('.tab-content').removeClass('show');
+    $('.tab-button').eq(num).addClass('active');
+    $('.tab-content').eq(num).addClass('show');
+}
+
+	
+
+</script>
 </body>
 </html>
