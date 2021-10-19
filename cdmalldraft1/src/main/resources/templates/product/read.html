@@ -61,7 +61,7 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		color:rgb(233,96,97);
 	}
 	
-	#order, #cart {
+	#buy, #add_to_cart {
 		width: 125px;
 		height: 50px;
 		line-height: 50px;
@@ -74,11 +74,11 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		outline: 0;
 	}
 	
-	#order {
+	#buy {
 		background-color: #3fc910;
 	}
 	
-	#cart {
+	#add_to_cart {
 		background-color: #565656;
 	}
 	
@@ -124,159 +124,122 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
  }
 </style>
 <script>
-	const pno = location.search.substr(5);
-	// ajax 실행 결과를 저장할 변수 -> 이 변수를 사용하는 함수는 모두 done 또는 success 이후 호출해야 한다
+	
 	let product = undefined;
+	let _this = undefined;
 	
-	// 상품을 선택하는 경우 -> 상품 개수와 전체 가격 출력
-	function printCartWithoutOption(cart) {
-		$(".count.number").text(cart.count);
-		$("#total_count").text(cart.count);
-		$("#total_price").text(cart.cartPrice);
-	}
+	/* const token = $("meta[name='_csrf']").attr("content");
+	const header = $("meta[name='_csrf_header']").attr("content"); */
 	
-	// 옵션을 선택하는 경우 
-	function printCartWithOptions(cart) {
-		console.log(cart);
+	// 현재 화면을 담는 장바구니 1개
+	const cart = {
+		init: function() {
+			this.pno = product.pno;
+			this.name = product.name;
+			this.manufacturer = product.manufacturer;
+			this.price = product.price;
+			this.count = 1;
+			this.image = product.imageFileName;
+			this.cartPrice = this.price * this.count;
+		},
 		
-		// 옵션들을 출력할 div를 선택한 다음 기존 내용을 비운다
-		const $optionsDiv = $("#selected_options_div");
-		$optionsDiv.empty();
-		
-		$.each(cart.cartItemList, function(idx, cartItem) {
-			// 옵션 하나를 감싸는 div
-			const $div = $("<div>").appendTo($optionsDiv);
-			
-			// 02. 맛있는 김치 볶음밥 도시락
-			// - 2 +	6000원 X
-			
-			// 105라인 
-			let optionString = cartItem.name + "_" + cartItem.info;
-			$("<div>").text(optionString).css("margin-bottom","10px").appendTo($div);
-			
-			// 106라인의 div_left, div_right 두 div를 담을 div(overflow해야 한다)
-			const $div_outer = $("<div>").css("overflow","hidden").appendTo($div);
-			
-			// 106라인. - 개수 + 름 담은 왼쪽 div
-			const $div_left = $("<div>").css("border","1px solid #eee").css("width","107px").css("float","left").appendTo($div_outer);
-			$("<div class='count minus'>").text("-").attr("data-option_no", cartItem.optionNo).appendTo($div_left);
-			$("<div class='count number'>").text(cartItem.count).appendTo($div_left);
-			$("<div class='count plus'>").text("+").attr("data-option_no", cartItem.optionNo).appendTo($div_left);
-			
-			// 106라인 오른쪽. 
-			const $div_right = $("<div>").css("width","100px").css("height","30px").css("line-height","30px").css("float","right").appendTo($div_outer);
-			$("<div>").text(cartItem.itemPrice).css("float","left").appendTo($div_right);
-			$("<div class='option_delete'>").attr("data-option_no", cartItem.optionNo).css("cursor","pointer").css("float","right").text("X").appendTo($div_right);
-			
-			$("<hr>").appendTo($div);
-		});
-		
-		$("#total_price").text(cart.cartPrice);
-		$("#total_count").text(cart.count);
-	}
-	
-	// 화면의 공통부분을 구성. 옵션 여부에 따라 위의 두 함수 중 하나를 호출한다
-	
-	
-	
-		const printProduct = ()=>{
-		console.log(page.content);
-		const $list = $("#list");
-		// 서버가 보낸 board들은 page.content에 저장되어 있다
-		for(c of page.content) {
-			const $li = $("<li>").appendTo($list);
-			const $figure = $("<figure>").appendTo($li);
-			$("<img>").attr("src", "/upload/productimage/" + c.imageFileName).attr("class","prodImg").appendTo($figure);
-			$('img').attr('id', c.pno+"_"+c.imageFileName);
-			const $figcaption = $("<figcaption>").attr("class","content_css").appendTo($li);
-
+		// 장바구니에 담은 상품 개수 증가, 감소
+		increase() {
+			this.count++;
+			this.cartPrice = this.count * product.price;
+		},
+		decrease() {
+			this.count--;
+			this.cartPrice = this.count * product.price;
 		}
 	};
 	
-	
-	
-	
-	
-	function printPage() {
-		$("#image").attr("src", "/upload/productimage/" +product.imageFileName);
-		console.log(product.imageFileName);
-		$('img').attr('id', product.pno+"_"+product.imageFileName);
-		$("#manufacturer").text(product.manufacturer);
-		$("#name").text(product.name);
-		$("#price span").text(product.price);
-		if(product.options.length==0) {
-			// 옵션이 없는 경우 서버에 임시 장바구니를 즉시 생성
-			$("#product_div").css("display", "block");
-			const param = { pno: product.pno}
-			$.ajax({url: "/temp_cart", method: "post", data: param}).done(result => printCartWithoutOption(result));
+	const main = {
+			init: function() {
+				$("#inc").on("click", this.incProduct);
+				$("#dec").on("click", this.decProduct);
+				window._this = this;
+				$("#add_to_cart").on("click", this.addToCart);
+				$("#buy").on("click", this.buy);
+				
+				const pno = location.search.substr(5);
+				$.ajax("/products/" + pno).done(result=>{
+					product = result;
+					this.printPage();
+				});
+			},
 			
-		} else {
-			$("#option_div").css("display", "block");
-			const $select = $("#options_select");
+			// 개수와 총 가격을 출력하는 일이 여러번이라 메서드로 분리
+			printTotalCountAndPrice: function() {
+				$("#total_price").text(cart.cartPrice);
+				$("#total_count").text(cart.count);
+			}, 
 			
-			// 옵션에 대한 select 출력
-			$("<option id='default'>").text("선택").prop("selected",true).prop("disabled",true).appendTo($select);
-			$.each(product.options, function(idx, option) {
-				let optionString = option.name + "_" + option.info + "(" + option.price + ")";
-				$("<option>").text(optionString).attr("data-option_no", option.optionNo).attr("data-option_price",option.price).appendTo($select);
-			});
+			printPage: function() {
+				$("#image").attr("src", "/upload/productimage/" + product.imageFileName);
+				$("#manufacturer").text(product.manufacturer);
+				$("#name").text(product.name);
+				$("#price span").text(product.price);
+				
+				// 상품 페이지로 들어오면 1개의 상품을 담은 장바구니 객체를 생성
+				cart.init();	
+				$("#count").text(cart.count);
+				this.printTotalCountAndPrice();
+			},
 			
-			// 옵션이 있는 경우 -> 화면을 reload하면 기존에 선택한 옵션을 받아와서 다시 뿌린다
-			$.ajax("/temp_cart?pno=" + product.pno).done(result=> {
-				if(result!="")
-					printCartWithOptions(result);
-			});
-		}
+			// 옵션이 있는 경우 상품 개수 증가/감소
+			incProduct: function() {
+				let number = $("#count").text();
+				const param = {pno:product.pno, count:++number};
+				$.ajax({url:"/products/stock", data:param}).done(count=>{
+					cart.increase();
+					$("#count").text(cart.count);
+					window._this.printTotalCountAndPrice()
+				}).fail(result=>alert(result.responseText));
+			},
+			decProduct: function() {
+				let number = $("#count").text();
+				if(number>1) {
+					cart.decrease();
+					$("#count").text(cart.count);
+					window._this.printTotalCountAndPrice()
+				}
+			},
+			
+			addToCart: function() {
+				$.ajax({
+					url:"/carts",
+					method:"post",
+					data: JSON.stringify(cart),
+					contentType: "application/json",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader(header, token)
+					}
+				}).done(location.href = "/cart/read");
+			},
+			
+			buy: function() {
+				const param = {
+					pno: product.pno,
+					count: $("#count").text()
+				}
+				console.log(JSON.stringify(param));
+				$.ajax({
+					url:"/orders/product",
+					method:"post",
+					data: JSON.stringify(param),
+					contentType: "application/json",
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader(header, token)
+					}
+				}).done((result, text, response)=>location.href = response.getResponseHeader('Location'));
+			}
+		};
+	
+	
+	window.onload = function(){
+		main.init();
 	}
-	
-
-	
-	$(function() {
-		$.ajax("/products/" + pno).done(result=> { 
-			product = result;
-			printPage();
-		});
-		
-		
-		
-		// 옵션을 선택한 경우
-		$("#options_select").on("change", function() {
-			const $option = $("#options_select option:selected")
-			const param = {pno: product.pno, optionNo: $option.attr("data-option_no")};
-			$.ajax({url: "/temp_cart", method: "post", data: param}).done(result=>printCartWithOptions(result)).fail(()=>alert("이미 선택한 옵션입니다"));
-			// 작업이 끝나면 다시 select의 기본 선택을 "선택"으로 바꿔놓자
-			$("#options_select #default").prop("selected", true);
-		});
-		
-		// 옵션이 없는 경우 상품 개수 증가/감소
-		$("#plus").on("click", function() {
-			$.ajax({url:"/temp_cart/increase", method: "patch", data: {pno:product.pno}})
-				.done(result=>printCartWithoutOption(result));
-		});
-		$("#minus").on("click", function() {
-			$.ajax({url:"/temp_cart/decrease", method: "patch", data: {pno:product.pno}})
-				.done(result=>printCartWithoutOption(result));
-		});
-		
-		// 옵션이 있는 경우 상품 개수 증가/감소
-		$("#selected_options_div").on("click", ".plus", function() {
-			$.ajax({url:"/temp_cart/option/increase", method: "patch", data: {pno:product.pno, optionNo: $(this).attr("data-option_no") }})
-				.done(result=>printCartWithOptions(result));
-		});
-		$("#selected_options_div").on("click", ".minus", function() {
-			$.ajax({url:"/temp_cart/option/decrease", method: "patch", data: {pno:product.pno, optionNo: $(this).attr("data-option_no") }})
-				.done(result=>printCartWithOptions(result));
-		});
-		
-		// 옵션을 삭제한 경우
-		$("#selected_options_div").on("click", ".option_delete", function() {
-			$.ajax({url:"/temp_cart/option", method: "delete", data: {pno:product.pno, optionNo: $(this).attr("data-option_no") }})
-				.done(result=>printCartWithOptions(result));
-		})
-	});
-	
-	
-	
 	
 </script>
 
@@ -301,10 +264,10 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 					
 					<!-- 옵션이 없는 경우 바로 개수 선택 div -->
 					<hr>
-					<div style="display:none;" id="product_div">
-						<div class='count' id='minus'>-</div>
-						<div class='count number'></div>
-						<div class='count' id='plus'>+</div>
+					<div id="product_div">
+						<button class='count' id='dec'>-</button>
+						<div class='count number' id='count'></div>
+						<button class='count' id='inc'>+</button>
 					</div>
 					
 					<!-- 옵션이 있는 경우 화면 -->
@@ -328,8 +291,9 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 					</div>
 					<hr>
 					<div>
-						<button id="order">구매하기</button>
-						<button id="cart">장바구니</button>
+						<button id="buy" sec:authorize="isAuthenticated()">구매하기</button>
+						<button id="add_to_cart" sec:authorize="isAuthenticated()">장바구니</button>
+						<p sec:authorize="isAnonymous()" style="color:blue; font-size: 1.25em;"> 로그인하셔야 주문가능합니다</p>
 					</div>
 				</div>
 			</section>

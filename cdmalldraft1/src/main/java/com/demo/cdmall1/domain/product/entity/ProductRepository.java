@@ -30,4 +30,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, Prod
 	// 최근등록순 CREATE_TIME
 	@Query("select p from Product p order by create_time desc")
 	public List<Product> readCreateTimeDesc();
+	
+	// 상품개수 pno로 읽어오기
+	@Query("select p.stock from Product p where pno=?1")
+	public Integer readStockByPno(Integer pno);
+
+	// 상품개수 pno로 읽어오기
+	@Query("select p.stock from Product p where pno = ?1")
+	public Integer readStock(Integer pno);
 }

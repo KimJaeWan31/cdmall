@@ -78,7 +78,6 @@ public class Product extends BaseCreateAndUpdateTimeEntity {
 	public void init() {
 		this.goodCnlCnt = 0;
 		this.goodCnt = 0;
-		
 		this.salesVolume = 0;
 		this.salesAmount = 0;
 		this.countOfStar = 0;

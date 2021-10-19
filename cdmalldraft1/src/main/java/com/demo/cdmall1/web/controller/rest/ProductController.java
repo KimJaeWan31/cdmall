@@ -72,7 +72,7 @@ public class ProductController {
 	
 	
 	
-	@GetMapping("/products/{pno}")
+	@GetMapping(path="/products/{pno}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> read(@PathVariable Integer pno) {
 		return ResponseEntity.ok(service.read(pno));
 	}
@@ -87,4 +87,10 @@ public class ProductController {
 		Integer cnt = service.goodOrBad(pno, state);
 		return ResponseEntity.ok(cnt);
 	}
+	
+	// 재고 확인
+		@GetMapping(path="/products/stock", produces=MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<Boolean> checkStock(Integer pno, Integer count) {
+			return ResponseEntity.ok(service.checkStock(pno, count));
+		}
 }

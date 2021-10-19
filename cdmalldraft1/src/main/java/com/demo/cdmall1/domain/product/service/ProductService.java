@@ -3,10 +3,10 @@ package com.demo.cdmall1.domain.product.service;
 import java.io.*;
 import java.util.*;
 
-import javax.transaction.*;
 
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.*;
 
 import com.demo.cdmall1.domain.board.entity.*;
@@ -46,8 +46,17 @@ public class ProductService {
 		return dao.save(product);
 	}
 
+	@Transactional(readOnly=true)
 	public Product read(Integer pno) {
-		return dao.findById(pno).get();
+		Product product = dao.findById(pno).orElseThrow(ProductFail.ProductNotFoundException::new);
+		//product.setImage(ZmallConstant.PRODUCT_URL + product.getImage());
+		return product;
+	}
+	
+	public Boolean checkStock(Integer pno, Integer count) {
+		if(dao.readStock(pno)<count)
+			throw new ProductFail.OutOfStockException();
+		return dao.readStock(pno)>=count;
 	}
 	
 	public Map<String,Object> readSearchAll(Integer pageno, String word){
@@ -60,6 +69,7 @@ public class ProductService {
 		return map;
 	}
 
+	@Transactional(readOnly=true)
 	public ProductDto.ProductListResponse list(Integer pageno, String manufacturer) {
 		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
 		Pageable pageable = PageRequest.of(pageno-1, 15);
@@ -81,8 +91,6 @@ public class ProductService {
 		} else if(state==2) {
 			product.setGoodCnt(product.getGoodCnt());
 		}
-		
-		
 		
 		return product.getGoodCnt();
 		

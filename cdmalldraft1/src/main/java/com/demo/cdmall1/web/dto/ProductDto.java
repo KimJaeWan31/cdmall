@@ -21,10 +21,11 @@ public class ProductDto {
 		private String info;
 		private Integer price;
 		private String categoryCode;
+		private Integer stock;
 		private List<Option> options;
 		//private List<MultipartFile> prodattachments;
 		public Product toEntity() {
-			return Product.builder().manufacturer(manufacturer).name(name).info(info).price(price).categoryCode(categoryCode).build();
+			return Product.builder().manufacturer(manufacturer).name(name).info(info).price(price).categoryCode(categoryCode).stock(stock).build();
 		}
 	}
 	
