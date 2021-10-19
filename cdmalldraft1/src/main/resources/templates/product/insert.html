@@ -91,6 +91,25 @@
 			});
 		});
 		
+		$("#image").on("change", function(){
+			const file = $("#image")[0].files[0];
+			const maxSize = 1024*1024;			
+			if(file.size>maxSize) {
+				Swal.fire('프로필 크기 오류', '프로필 사진은 1MB를 넘을 수 없습니다','error');
+				$("#image").val("");
+				$("#show_sajin").removeAttr("src");
+				return false;
+			}
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = function() {
+				$("#show_sajin").attr("src", reader.result);
+			}
+			return true;
+		});
+			
+		
+		
 		
 	});
 </script>

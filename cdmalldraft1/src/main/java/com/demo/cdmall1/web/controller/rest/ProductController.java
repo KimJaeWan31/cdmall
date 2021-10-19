@@ -45,10 +45,10 @@ public class ProductController {
 	
 	@PostMapping(path="/products/new", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> insert(@Valid ProductDto.Write dto, BindingResult bindingResult, Principal principal) throws BindException {
-		System.out.println("***************dto: "+dto);
 		
 		if(bindingResult.hasErrors())
 			throw new BindException(bindingResult);
+		
 		Product product= service.insert(dto, principal.getName());
 		URI uri = UriComponentsBuilder.newInstance().path("/product/read").queryParam("pno", product.getPno()).build().toUri();
 		return ResponseEntity.created(uri).body(product);
@@ -68,7 +68,6 @@ public class ProductController {
 	
 	@GetMapping(path="/products/all", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, String writer) {
-		System.out.println("===============================" + writer);
 		return ResponseEntity.ok(service.list(pageno, writer));
 	}
 }
