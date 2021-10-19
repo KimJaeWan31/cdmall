@@ -4,10 +4,10 @@ import java.util.*;
 
 import org.springframework.data.jpa.repository.*;
 
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Integer>, ProductCustomRepository  {
 	@Query("select p from Product p")
 	public List<Product> readAll();
-	
+
 	// 가격별 PRICE (가격높은순 desc, 가격낮은순 asc)
 	@Query("select p from Product p order by price desc")
 	public List<Product> readPriceDesc();

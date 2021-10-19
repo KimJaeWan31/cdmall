@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <title>Insert title here</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
@@ -12,7 +13,27 @@ header, nav, aside, footer, section ,li, a{
 </style>
 
 <script type="text/javascript">
-
+	document.addEventListener('keydown', function(event) {
+	  if (event.keyCode === 13) {
+	    event.preventDefault();
+	  };
+	}, true);
+	$(document).ready(()=>{
+		
+		$("#searshButton").on("click", ()=>{
+			console.log("================");
+			const words=$("#word").val();
+			const pageno=1;
+			
+			$.ajax({
+				url: "/shop/search",
+				data: {word:words},
+				method:"post",
+			})
+			.done((result, text, response)=>{ location.href = "/shop/search?pageno="+pageno})
+			//.fail((response, text, message)=>{})
+		});	
+	});
 </script>
 
 
@@ -49,8 +70,8 @@ header, nav, aside, footer, section ,li, a{
 			<nav class="navbar navbar-light bg-light">
 			  <a class="navbar-brand"></a>
 			  <form class="form-inline">
-			    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchArea">
-			    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+			    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="word">
+			    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searshButton">검색</button>
 			  </form>
 			</nav>
     	</ul>
@@ -67,8 +88,9 @@ header, nav, aside, footer, section ,li, a{
 			<nav class="navbar navbar-light bg-light">
 			  <a class="navbar-brand"></a>
 			  <form class="form-inline">
-			    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchArea">
-			    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">검색</button>
+			  
+			    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="word">
+			    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searshButton">검색</button>
 			  </form>
 			</nav>
     	</ul>

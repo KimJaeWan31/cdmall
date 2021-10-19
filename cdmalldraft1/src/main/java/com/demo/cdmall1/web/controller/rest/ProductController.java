@@ -4,7 +4,9 @@ import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 import java.security.*;
+import java.util.*;
 
+import javax.servlet.http.*;
 import javax.validation.*;
 
 import org.springframework.http.*;
@@ -57,7 +59,16 @@ public class ProductController {
 	}
 	
 	
-	
+	@PostMapping(path="/shop/searchAll", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> search(@RequestParam(defaultValue = "1") Integer pageno, HttpSession session){
+		String word = session.getAttribute("word").toString();
+		
+		System.out.println(word);
+		
+		URI uri = UriComponentsBuilder.newInstance().path("/shop/search").queryParam("word", word).build().toUri();
+		Map<String, Object> product = service.readSearchAll(pageno, word);
+		return ResponseEntity.created(uri).body(product);
+	}
 	
 	
 	

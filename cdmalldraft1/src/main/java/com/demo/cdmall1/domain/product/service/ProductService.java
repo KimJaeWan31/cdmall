@@ -46,6 +46,16 @@ public class ProductService {
 	public Product read(Integer pno) {
 		return dao.findById(pno).get();
 	}
+	
+	public Map<String,Object> readSearchAll(Integer pageno, String word){
+		Pageable pageable = PageRequest.of(pageno-1, 10);
+		Map<String,Object> map = new HashMap<>();
+		map.put("content", dao.search(pageable, word));
+		map.put("totalcount", dao.countAll(word));
+		map.put("pageno", pageno);
+		map.put("pagesize", 10);
+		return map;
+	}
 
 	public ProductDto.ProductListResponse list(Integer pageno, String manufacturer) {
 		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
