@@ -35,7 +35,7 @@ public class ProductDslRepository {
 		if(manufacturer!=null)
 			condition.and(qproduct.manufacturer.eq(manufacturer));
 		return factory.from(qproduct).select(Projections.constructor(ProductDto.ProductList.class, qproduct.pno, qproduct.manufacturer, qproduct.name, 
-				qproduct.image,qproduct.price, qproduct.avgOfStar,qproduct.reviewCount,qproduct.imageFileName)).where(qproduct.pno.gt(0))
+				qproduct.image,qproduct.price, qproduct.avgOfStar,qproduct.reviewCount,qproduct.imageFileName,qproduct.goodCnt, qproduct.goodCnlCnt)).where(qproduct.pno.gt(0))
 				.orderBy(qproduct.pno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	}
 

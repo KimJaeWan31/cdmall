@@ -3,10 +3,13 @@ package com.demo.cdmall1.domain.product.service;
 import java.io.*;
 import java.util.*;
 
+import javax.transaction.*;
+
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.multipart.*;
 
+import com.demo.cdmall1.domain.board.entity.*;
 import com.demo.cdmall1.domain.product.entity.*;
 import com.demo.cdmall1.util.*;
 import com.demo.cdmall1.web.dto.*;
@@ -62,6 +65,29 @@ public class ProductService {
 		Pageable pageable = PageRequest.of(pageno-1, 15);
 		ProductDto.ProductListResponse dto = new ProductDto.ProductListResponse(dslDao.readAll(pageable, manufacturer), dslDao.aaaaaa(manufacturer), pageno, 10);
 		return dto;
+	}
+	
+	@Transactional
+	public Integer goodOrBad(Integer pno, Integer state) {
+		Product product = dao.findById(pno).orElseThrow(BoardFail.BoardNotFoundException::new);
+		
+		
+		if(state==0) {
+			product.setGoodCnt(product.getGoodCnt()+1);
+			return product.getGoodCnt();
+		} else if(state==1) {
+			product.setGoodCnt(product.getGoodCnt()-1);
+			return product.getGoodCnt();
+		} else if(state==2) {
+			product.setGoodCnt(product.getGoodCnt());
+		}
+		
+		
+		
+		return product.getGoodCnt();
+		
+			
+		
 	}
 
 }

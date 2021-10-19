@@ -33,7 +33,14 @@ public class Product extends BaseCreateAndUpdateTimeEntity {
 	
 	@Lob
 	private String info;
-		
+	
+	@Column(length=10)
+	private String writer;
+	
+	private Integer goodCnt;
+	
+	private Integer goodCnlCnt;
+	
 	private Integer price;
 	
 	private Integer salesVolume;
@@ -69,6 +76,9 @@ public class Product extends BaseCreateAndUpdateTimeEntity {
 	
 	@PrePersist
 	public void init() {
+		this.goodCnlCnt = 0;
+		this.goodCnt = 0;
+		
 		this.salesVolume = 0;
 		this.salesAmount = 0;
 		this.countOfStar = 0;

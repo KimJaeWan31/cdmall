@@ -21,6 +21,11 @@
 		width: 90%;
 		margin-bottom: 3px;
 	}
+	.image_box {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 </style>
 <script>
 	$(function() {
@@ -139,10 +144,14 @@
 						<option class="msg" disabled selected>대분류와 중분류를 선택하세요</option>
 					</select>
 				</div>
-				<img id="show_sajin" height="240px">
+				<div class="image_box">
+				<img id="show_sajin" height="240px" >
+				</div>
+				
 				<div class="form-group">
 					<label for="image">상품 이미지</label>
 					<input type="file" name="image" id="image" class="form-control"  accept=".jpg,.jpeg,.png,.gif">
+
 				</div>
 				<div class="form-group">
 					<label for="manufacturer">제조사</label>

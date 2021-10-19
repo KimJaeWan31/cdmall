@@ -81,4 +81,10 @@ public class ProductController {
 	public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, String writer) {
 		return ResponseEntity.ok(service.list(pageno, writer));
 	}
+	
+	@GetMapping("/product/good_or_bad")
+	public ResponseEntity<?> GoodOrBadCnt(@RequestParam Integer pno, @RequestParam Integer state) {
+		Integer cnt = service.goodOrBad(pno, state);
+		return ResponseEntity.ok(cnt);
+	}
 }

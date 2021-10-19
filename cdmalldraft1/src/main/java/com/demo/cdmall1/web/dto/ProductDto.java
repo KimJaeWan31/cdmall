@@ -40,6 +40,8 @@ public class ProductDto {
 		private Double avgOfStar;
 		private Integer reviewCount;
 		private String imageFileName;
+		private Integer goodCnt;
+		private Integer goodCnlCnt;
 		public void changeImageName() {
 			this.image = ZmallConstant.PRODUCT_URL + this.image;
 			
