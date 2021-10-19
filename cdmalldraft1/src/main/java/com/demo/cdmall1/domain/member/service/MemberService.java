@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.*;
-import org.springframework.http.*;
 import org.springframework.scheduling.annotation.*;
 import org.springframework.security.crypto.password.*;
 import org.springframework.stereotype.*;
@@ -25,6 +24,7 @@ import lombok.*;
 @Service
 public class MemberService {
 	private final MemberRepository dao;
+	private final MemberDslRepository dslDao;
 	private final AuthorityRepository AuthDao;
 
 	private final MailUtil mailUtil;
@@ -178,6 +178,29 @@ public class MemberService {
 		String petProfile = ZmallUtil.savePetProfile(Petsajin, member.getUsername(), dto.getPetName());
 		member.setPets(dto.getPetName(), petProfile, dto.getPetAge(), dto.getGender(), dto.getPetKind());
 		dao.save(member);
+	}
+	
+	//전체 회원 수 읽기
+	public Map<String,Long> readMemberCount() {
+		//long member = dao.count();
+		long user = dslDao.countByUser();
+		long admin = dslDao.countByAdmin();
+		Map<String,Long> map = new HashMap<>();
+		map.put("user", user);
+		map.put("admin", admin);
+		return map;
+	}
+
+	public Map<String,Object> getMember(Integer pageno) {
+		//Pageable pageable = PageRequest.of(pageno-1, 10);
+		List<Member> member = dslDao.readByUser();
+		Map<String,Object> map = new HashMap<>();
+		map.put("content", member);
+		map.put("totalcount", dslDao.countByUser());
+		map.put("pageno", pageno);
+		map.put("pagesize", 10);
+		return map;
+		//System.out.println(member);
 	}
 	
 }

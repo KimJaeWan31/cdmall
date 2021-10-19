@@ -15,4 +15,16 @@ public class AdminMvcController {
 	@GetMapping("/admin/login")
 	public void login() {
 	}
+	
+	@GetMapping("/admin/fbwarn_report")
+	public void fbwarn_report() {
+	}
+	
+	@GetMapping("/admin/pbwarn_report")
+	public void pbwarn_report() {
+	}
+	
+	@GetMapping("/admin/member_report")
+	public void member_report() {
+	}
 }

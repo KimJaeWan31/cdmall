@@ -111,4 +111,13 @@ public class MemberDto {
 			return Member.builder().username(username).build();
 		}
 	}
+	
+	//관리자가 읽을 수 있는 멤버 정보
+	@Data
+	public class readUser{
+		private String username;
+		private String irum;
+		private String email;
+		private String tel;
+	}
 }

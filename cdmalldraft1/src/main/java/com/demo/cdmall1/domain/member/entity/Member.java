@@ -83,7 +83,7 @@ public class Member extends BaseCreateTimeEntity {
 	@JsonIgnore
 	private Integer loginFailCnt;
 	
-	@JsonIgnore
+	//@JsonIgnore
 	private Boolean enabled;
 	
 	@JsonIgnore

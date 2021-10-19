@@ -33,30 +33,6 @@ import lombok.*;
 public class MemberController {
 	private final MemberService service;
 	
-	
-	// Java Generic, Java Reflection
-	// Java Reflection : 자바 클래스를 풀어헤쳐서 필드, 메서드 등의 정보를 끄집어내거나 추가하는 기술 -> annotation은 모두 reflection 기반으로 처리 -> proxy 
-	/*
-	public void test() {
-		// 자바 클래스를 읽어 온다(2번까지 실행)
-		// 객체 초기화 순서 : 1. 인스턴스 초기화 -> 2. 정적 초기화 -> 3.생성자
-		Class clz = Class.forName("java.lang.Integer");
-		
-		// 클래스를 조작 
-		// 클래스에 들어있는 메소드의 배열을 읽어온다
-		Method[] methods = clz.getMethods();
-		for(Method m:methods) {
-			if(m.getAnnotation(Service.class)!=null) {
-				// 처리해라
-			}
-		}
-		
-		// 개조한 클래스의 객체를 생성한다
-		Integer i = (Integer)clz.newInstance();
-	}
-	*/
-	
-	
 	// 아이디 사용 여부
 	@GetMapping(path="/members/username/check", produces = MediaType.TEXT_PLAIN_VALUE)
 	public ResponseEntity<?> idAvailableCheck(@Username String username) {
@@ -210,7 +186,12 @@ public class MemberController {
 		return ResponseEntity.ok(service.getProfile(username));
 	}
 	
-	
+	//회원정보 보기(비 판매자)
+	@GetMapping("/members/all")
+	public ResponseEntity<?> getMember(@RequestParam(defaultValue="1") Integer pageno){
+		return ResponseEntity.ok(service.getMember(pageno));
+	}
+	//판매자 정보보기
 	
 	
 }

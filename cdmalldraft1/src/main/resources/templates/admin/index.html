@@ -40,156 +40,113 @@ body {
 }
 
 </style>
-<script>
-	// 서버 응답을 저장할 변수
-	let page = null;
-	
-	const printBoard = ()=>{
-		console.log(page);
-		const $list = $("#list");
-		// 서버가 보낸 board들은 page.content에 저장되어 있다
-		for(c of page.content) {
-			let createdTime = c.writeTime.substr(-26,10);
-			const $tr = $("<tr>").appendTo($list);
-			$("<td>").text(c.bno).appendTo($tr);
-			const $td = $("<td>").appendTo($tr);
-			if(c.attachmentCnt>0)
-				$("<i class='fa fa-paperclip'></i>").appendTo($td);
-			$("<a>").attr("href", "/board/read?bno=" + c.bno).text(c.title).appendTo($td);
-			if(c.commentCnt>0)
-				$("<span>").text(" [" + c.commentCnt + "]").appendTo($td);
-			$("<td>").text(c.writer).appendTo($tr);
-			$("<td>").text(createdTime).appendTo($tr);
-			$("<td>").text(c.readCnt).appendTo($tr);
-			$("<td>").text(c.goodCnt).appendTo($tr);
-			$("<td>").text(c.badCnt).appendTo($tr);
-			$("<td>").text(c.warnCnt).appendTo($tr);
-			if(c.isActive){
-				$("<button>").attr("data-bno", c.bno).attr("class","board_active").text("비활성").appendTo($tr);
-			}
-			else{
-				$("<button>").attr("data-bno", c.bno).attr("class","board_active").text("활성").appendTo($tr);
-			}
-		}
-	};
-	
-	const getPagination = () => {
-		// 한번에 다섯개의 페이지씩
-		const blockSize = 5;
-		
-		// 서버 응답에 현재 페이지가 포함되어 있지 않다....재계산하자
-		let pageno = location.search.substr(8);
-		if(pageno=="")
-			pageno=1;
-		
-		// 0번 블록 : 1~5 page, 1번 블록 : 6~10 page
-		const blockNo = Math.floor((pageno-1)/blockSize);
-		const prev = blockNo * blockSize;
-		const first = prev + 1;
-		let last = first + blockSize - 1;
-		let next = last + 1;
-		const countOfPage = Math.ceil(page.totalcount/10)
-		if(last>=countOfPage) {
-			last = countOfPage;
-			next = 0;
-		}
-		return {pageno, prev, next, first, last};
-		
-	};
-	
-	// 구조 분해 할당 : 객체를 변수로 풀어헤치는 문법
-	// const {pageno, prev, next, first, last} = getPagination();
-	const printPagination = ({pageno, prev, next, first, last}) => {
-		const $pagination = $("ul.pagination");
-		const url = "/board/list?pageno="
-				
-		// 이전으로 
-		if(prev>0) {
-			const $li = $("<li>").appendTo($pagination)
-			$("<a>").attr("href", url+prev).text("이전으로").appendTo($li);
-		}
-		
-		// 시작 페이지에서 마지막 페이지....현재 페이지 번호일 경우 active 클래스 추가
-		for(let idx=first; idx<=last; idx++) {
-			const $li = $("<li>").appendTo($pagination)
-			$("<a>").attr("href", url+idx).text(idx).appendTo($li);
-			if(idx==pageno)
-				$li.attr("class", "active");
-		}
-		
-		// 다음으로
-		if(next>0) {
-			const $li = $("<li>").appendTo($pagination)
-			$("<a>").attr("href", url+next).text("다음으로").appendTo($li);
-		}
-	}
-	
-	$(document).ready(()=>{
-		// 주소창에서 페이지 번호를 잘라낸다. 페이지 번호가 없으면 1로
-		let pageno = location.search.substr(8);
-		if(pageno=="")
-			pageno=1;
-		
-		console.log(pageno);
-		$.ajax("/board/warnlist?pageno="+pageno).done(result=>{
-			page=result;
-			printBoard();
-			printPagination(getPagination());
-		});
-		
-		$("#list").on("click",".board_active", function() {
-			
-			const bno = {bno :$(this).attr("data-bno")}
-			
-			$.ajax({url: "/board/inactive", method:"post", data:bno})
-			.done((result)=>{
-				if(result==true){
-					Swal.fire('작업 성공', "해당 게시물을 활성했습니다.",'success');
-					$(this).text("비활성");
-				}else{
-					Swal.fire('작업 성공', "해당 게시물을 비활성했습니다.",'success');
-					$(this).text("활성");
-				}
-			}).fail((result)=>{
-				Swal.fire('작업 실패', "해당 작업을 실패했습니다.",'error')
-			});
-		});
-		
-	});
-</script>
-<!--  
+
+
 <script>
 	// bar형 차트 출력하는 함수
+	let now = new Date().getDate();
+	let count = 1;
 	function chart1(result) {
 		// 차트를 출력할 영역을 선택
-		var ctx1 = document.getElementById('chart1').getContext('2d');
 		
+		var ctx1 = document.getElementById('chart1').getContext('2d');
+
 		return new Chart(ctx1, {
 			type : 'bar',														// 차트 종류
 			data : {
-				labels : [ '1월', '2월', '3월', '4월', '5월', '6월' ],				// 열제목
+							// 열제목
 				datasets : [ {
-					label : '수익금',												// 차트제목
-					data : result,												// 차트에 출력할 값
-					// 각 bar의 색상 : #fff, rgb(111,111,111), rgba(111,111,111,0.2)
-					backgroundColor : [ 'rgba(255, 99, 132, 0.2)',				
-							'rgba(54, 162, 235, 0.2)',
-							'rgba(255, 206, 86, 0.2)',
-							'rgba(75, 192, 192, 0.2)',
-						'rgba(153, 102, 255, 0.2)',
-								'rgba(255, 159, 64, 0.2)' ],
-					borderColor : [ 'rgba(255, 99, 132, 1)',
-							'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)',
-							'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)',
-							'rgba(255, 159, 64, 1)' ],
+					label : '회원',
+					data : [result.user],
+					fill : false,
+					backgroundColor : window.chartColors.yn_red,
+					borderColor : window.chartColors.red,
 					borderWidth : 1
-				} ]
+				},{
+					label : '판매자',
+					data : [result.admin],
+					fill : false,
+					backgroundColor : window.chartColors.yn_blue,
+					borderColor : window.chartColors.blue,
+					borderWidth : 1
+				}]
 			},
 			options : {
+				title : {
+					display : true,
+					fontSize : 20,
+					text : '회원 통계'
+				},
 				scales : {
 					yAxes : [ {
 						ticks : {
+							min : 0,
+							max : 10,
+							stepSize : 1,
+							fontSize : 16,
 							beginAtZero : true
+						},
+						scaleLabel : {
+							display : true,
+							labelString : '(명)',
+							fontSize : 13
+						}
+					} ]
+				}
+			}
+		});
+	}
+	
+	function chart2(result) {
+		// 차트를 출력할 영역을 선택
+		
+		var ctx2 = document.getElementById('chart2').getContext('2d');
+
+		return new Chart(ctx2, {
+			type : 'bar',														// 차트 종류
+			data : {
+				datasets : [ {
+					label : '자유게시판',
+					data : [result.user],
+					fill : false,
+					backgroundColor : window.chartColors.yn_red,
+					borderColor : window.chartColors.red,
+					borderWidth : 1
+				},{
+					label : '사진게시판',
+					data : [result.admin],
+					fill : false,
+					backgroundColor : window.chartColors.yn_blue,
+					borderColor : window.chartColors.blue,
+					borderWidth : 1
+				},{
+					label : '질문게시판',
+					data : [result.admin],
+					fill : false,
+					backgroundColor : window.chartColors.yn_green,
+					borderColor : window.chartColors.green,
+					borderWidth : 1
+				}]
+			},
+			options : {
+				title : {
+					display : true,
+					fontSize : 20,
+					text : '게시글 통계'
+				},
+				scales : {
+					yAxes : [ {
+						ticks : {
+							min : 0,
+							max : 100,
+							stepSize : 20,
+							fontSize : 16,
+							beginAtZero : true
+						},
+						scaleLabel : {
+							display : true,
+							//labelString : '(명)',
+							fontSize : 13
 						}
 					} ]
 				}
@@ -198,319 +155,28 @@ body {
 	}
 
 	$(function() {
-		const saram1 = {
-			irum: "홍길동",
-			nai: 20
-		};
-		console.log(saram1.irum);
-		
-		const saram2 = {};
-		saram2.irum="전우치";
-		saram2.nai=30;
-		console.log(saram2.irum);
-		
 		// 사용할 컬러 지정. window 객체에 전역 객체로 저장
 		window.chartColors = {
 			red : 'rgb(255, 99, 132)',
-			orange : 'rgb(255, 159, 64)',
-			yellow : 'rgb(255, 205, 86)',
+			yn_red : 'rgba(255, 99, 132, 0.7)',
+			//orange : 'rgb(255, 159, 64)',
+			//yellow : 'rgb(255, 205, 86)',
 			green : 'rgb(75, 192, 192)',
+			yn_green : 'rgb(75, 192, 192, 0.7)',
 			blue : 'rgb(54, 162, 235)',
-			purple : 'rgb(153, 102, 255)',
-			grey : 'rgb(201, 203, 207)'
+			yn_blue : 'rgba(54, 162, 235, 0.7)',
+			//purple : 'rgb(153, 102, 255)',
+			//grey : 'rgb(201, 203, 207)'
 		};
 		
-		// chart1에 출력할 데이터를 서버에서 받아오자. get방식 요청에는 csrf가 없다
 		$.ajax("/api/admin/data1").done(result=>{
 			chart1(result);
-		});
-		
-		
-		var ctx2 = document.getElementById('chart2').getContext('2d');
-		var ctx3 = document.getElementById('chart3').getContext('2d');
-		var ctx4 = document.getElementById('chart4').getContext('2d');
-
-		var myChart2 = new Chart(ctx2, {
-			type : 'line',
-			data : {
-				labels : [ '1/4', '2/4', '3/4', '4/4' ],
-				datasets : [ {
-					label : '작년 매출액',
-					data : [ 323, 411, 384, 377 ],
-					fill : false,
-					backgroundColor : window.chartColors.red,
-					borderColor : window.chartColors.red
-				}, {
-					label : '금년 매출액',
-					data : [ 342, 378, 384, 335 ],
-					fill : false,
-					backgroundColor : window.chartColors.blue,
-					borderColor : window.chartColors.blue
-				} ]
-			},
-			options : {
-				responsive : true,
-				title : {
-					display : true,
-					fontSize : 20,
-					text : '작년/금년 분기별 매출액 비교'
-				},
-				tooltips : {
-					mode : 'index',
-					intersect : false,
-				},
-				hover : {
-					mode : 'nearest',
-					intersect : true
-				},
-				scales : {
-					xAxes : [ {
-						display : true,
-						ticks : {
-							fontSize : 16
-						},
-						scaleLabel : {
-							display : true,
-							labelString : '분기',
-							fontSize : 16
-						}
-					} ],
-					yAxes : [ {
-						display : true,
-						ticks : {
-							min : 250,
-							max : 450,
-							stepSize : 50,
-							fontSize : 16
-						},
-						scaleLabel : {
-							display : true,
-							labelString : '매출액',
-							fontSize : 16
-						}
-					} ]
-				}
-			}
+			chart2(result);
 		});
 
-		console.log(ctx3)
 
-		var myChart3 = new Chart(ctx3, {
-			type : 'doughnut',
-			data : {
-				labels : [ '서울', '경기', '인천', '충남', '부산' ],
-				datasets : [ {
-					label : '수익금',
-					data : [ 70, 60, 50, 100, 30 ],
-					backgroundColor : [ window.chartColors.red,	window.chartColors.orange, window.chartColors.yellow, window.chartColors.green, window.chartColors.blue]
-				}]
-			},
-			options : {
-				responsive : true,
-				legend : {
-					position : 'top',
-				},
-				title : {
-					display : true,
-					text : '지역별 지점 현황'
-				},
-				animation : {
-					animateScale : true,
-					animateRotate : true
-				}
-			}
-		});
-		
-		
-		// 여기서부터 모두 네번째 차트를 위한 값과 함수들
-
-		var DATA_COUNT = 16;
-		var MIN_XY = -150;
-		var MAX_XY = 100;
-
-		var utils = utils = {
-			srand : function(seed) {
-				this._seed = seed;
-			},
-
-			rand : function(min, max) {
-				var seed = this._seed;
-				min = min === undefined ? 0 : min;
-				max = max === undefined ? 1 : max;
-				this._seed = (seed * 9301 + 49297) % 233280;
-				return min + (this._seed / 233280) * (max - min);
-			},
-
-			numbers : function(config) {
-				var cfg = config || {};
-				var min = cfg.min || 0;
-				var max = cfg.max || 1;
-				var from = cfg.from || [];
-				var count = cfg.count || 8;
-				var decimals = cfg.decimals || 8;
-				var continuity = cfg.continuity || 1;
-				var dfactor = Math.pow(10, decimals) || 0;
-				var data = [];
-				var i, value;
-
-				for (i = 0; i < count; ++i) {
-					value = (from[i] || 0) + this.rand(min, max);
-					if (this.rand() <= continuity) {
-						data.push(Math.round(dfactor * value) / dfactor);
-					} else {
-						data.push(null);
-					}
-				}
-
-				return data;
-			},
-
-			labels : function(config) {
-				var cfg = config || {};
-				var min = cfg.min || 0;
-				var max = cfg.max || 100;
-				var count = cfg.count || 8;
-				var step = (max - min) / count;
-				var decimals = cfg.decimals || 8;
-				var dfactor = Math.pow(10, decimals) || 0;
-				var prefix = cfg.prefix || '';
-				var values = [];
-				var i;
-
-				for (i = min; i < max; i += step) {
-					values.push(prefix + Math.round(dfactor * i) / dfactor);
-				}
-
-				return values;
-			},
-
-			months : function(config) {
-				var cfg = config || {};
-				var count = cfg.count || 12;
-				var section = cfg.section;
-				var values = [];
-				var i, value;
-
-				for (i = 0; i < count; ++i) {
-					value = MONTHS[Math.ceil(i) % 12];
-					values.push(value.substring(0, section));
-				}
-
-				return values;
-			},
-
-			color : function(index) {
-				var COLORS = [ '#4dc9f6', '#f67019', '#f53794', '#537bc4',
-						'#acc236', '#166a8f', '#00a950', '#58595b', '#8549ba' ];
-				return COLORS[index % COLORS.length];
-			},
-
-			transparentize : function(color, opacity) {
-				var alpha = opacity === undefined ? 0.5 : 1 - opacity;
-				return Color(color).alpha(alpha).rgbString();
-			}
-		};
-
-		utils.srand(110);
-
-		function colorize(opaque, context) {
-			var value = context.dataset.data[context.dataIndex];
-			var x = value.x / 100;
-			var y = value.y / 100;
-			var r = x < 0 && y < 0 ? 250 : x < 0 ? 150 : y < 0 ? 50 : 0;
-			var g = x < 0 && y < 0 ? 0 : x < 0 ? 50 : y < 0 ? 150 : 250;
-			var b = x < 0 && y < 0 ? 0 : x > 0 && y > 0 ? 250 : 150;
-			var a = opaque ? 1 : 0.5 * value.v / 1000;
-
-			return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
-		}
-
-		function generateData() {
-			var data = [];
-			var i;
-
-			for (i = 0; i < DATA_COUNT; ++i) {
-				data.push({
-					x : utils.rand(MIN_XY, MAX_XY),
-					y : utils.rand(MIN_XY, MAX_XY),
-					v : utils.rand(0, 1000)
-				});
-			}
-
-			return data;
-		}
-
-		var data = {
-			datasets : [ {
-				data : generateData()
-			}, {
-				data : generateData()
-			} ]
-		};
-
-		var options = {
-			aspectRatio : 1,
-			legend : false,
-			tooltips : false,
-
-			elements : {
-				point : {
-					backgroundColor : colorize.bind(null, false),
-
-					borderColor : colorize.bind(null, true),
-
-					borderWidth : function(context) {
-						return Math.min(Math.max(1, context.datasetIndex + 1),
-								8);
-					},
-
-					hoverBackgroundColor : 'transparent',
-
-					hoverBorderColor : function(context) {
-						return utils.color(context.datasetIndex);
-					},
-
-					hoverBorderWidth : function(context) {
-						var value = context.dataset.data[context.dataIndex];
-						return Math.round(8 * value.v / 1000);
-					},
-
-					radius : function(context) {
-						var value = context.dataset.data[context.dataIndex];
-						var size = context.chart.width;
-						var base = Math.abs(value.v) / 1000;
-						return (size / 24) * base;
-					}
-				}
-			}
-		};
-
-		var myChart4 = new Chart(ctx4, {
-			type : 'bubble',
-			data : data,
-			options : options
-		});
-
-		function randomize() {
-			chart.data.datasets.forEach(function(dataset) {
-				dataset.data = generateData();
-			});
-			chart.update();
-		}
-
-		function addDataset() {
-			chart.data.datasets.push({
-				data : generateData()
-			});
-			chart.update();
-		}
-
-		function removeDataset() {
-			chart.data.datasets.shift();
-			chart.update();
-		}
 	});
-</script>-->
+</script>
 
 </head>
 <body>
@@ -520,35 +186,20 @@ body {
   		<a href="/">SHOP</a>
   		<a href="#" id="logout">LOGOUT</a>
 	</div>
-	<div id="page" style="float: right; width: 80%">
+	<div id="page" style="float: right; width: 1388px; padding: 20px; ">
 		
-		<div id="main">
-		
+		<div id="main" >
+			
 			<section id="section">
-				<h1 style="text-align: center;">관리자 페이지입니다</h1>
-					<h2>자유게시판 신고글</h2>
-    				<div class="wrap" style="margin: 0 auto;">
-						<table class="table table-hover">
-							<tr>
-								<th>번호</th><th>제목</th><th>글쓴이</th><th>시간</th><th>조회수</th><th>좋아요</th><th>싫어요</th><th>신고수</th>
-							</tr>
-							<tbody id="list">
-							</tbody>
-						</table>
-						<div id="pagination" style="text-align: center;">
-							<ul class="pagination"></ul>
-						</div>
-					</div>
-  					
+				<h1 style="text-align: center; margin-bottom: 60px;">관리자 페이지입니다</h1>
 				
-				<!--  
-				<div class="row">
+				<div class="row" style="margin-bottom: 80px;">
 					<div class="col-xl-3 col-md-6">
 						<div class="card bg-primary text-white mb-4">
-							<div class="card-body">신고글</div>
+							<div class="card-body">회원관리</div>
 							<div
 								class="card-footer d-flex align-items-center justify-content-between">
-								<a class="small text-white stretched-link" href="/admin/report">View Details</a>
+								<a class="small text-white stretched-link" href="/admin/member_report">View Details</a>
 								<div class="small text-white">
 									<i class="fas fa-angle-right"></i>
 								</div>
@@ -557,10 +208,10 @@ body {
 					</div>
 					<div class="col-xl-3 col-md-6">
 						<div class="card bg-warning text-white mb-4">
-							<div class="card-body">Warning Card</div>
+							<div class="card-body">자유게시판 신고글</div>
 							<div
 								class="card-footer d-flex align-items-center justify-content-between">
-								<a class="small text-white stretched-link" href="#">View Details</a>
+								<a class="small text-white stretched-link" href="/admin/fbwarn_report">View Details</a>
 								<div class="small text-white">
 									<i class="fas fa-angle-right"></i>
 								</div>
@@ -569,7 +220,7 @@ body {
 					</div>
 					<div class="col-xl-3 col-md-6">
 						<div class="card bg-success text-white mb-4">
-							<div class="card-body">Success Card</div>
+							<div class="card-body">사진게시판 신고글</div>
 							<div
 								class="card-footer d-flex align-items-center justify-content-between">
 								<a class="small text-white stretched-link" href="#">View Details</a>
@@ -581,10 +232,10 @@ body {
 					</div>
 					<div class="col-xl-3 col-md-6">
 						<div class="card bg-danger text-white mb-4">
-							<div class="card-body">Danger Card</div>
+							<div class="card-body">공지사항 관리</div>
 							<div
 								class="card-footer d-flex align-items-center justify-content-between">
-								<a class="small text-white stretched-link" href="#">View Details</a>
+								<a class="small text-white stretched-link" href="/noticeBoard/list">View Details</a>
 								<div class="small text-white">
 									<i class="fas fa-angle-right"></i>
 								</div>
@@ -592,10 +243,7 @@ body {
 						</div>
 					</div>
 				</div>
-				-->
-				<!-- 차트 4개를 배치할 자리 -->
-				<!-- 부트스트랩으로 div를 배치하기 : https://www.w3schools.com/bootstrap/bootstrap_grid_basic.asp -->
-				<!--  
+		
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-sm-6 myChart">
@@ -604,17 +252,12 @@ body {
 						<div class="col-sm-6 myChart">
 							<canvas id="chart2"></canvas>
 						</div>
-						<div class="col-sm-6 myChart">
-							<canvas id="chart3"></canvas>
-						</div>
-						<div class="col-sm-6 myChart">
-							<canvas id="chart4"></canvas>
-						</div>
 					</div>
-				</div>-->
+				</div>
 			</section>
 		</div>
-		<nav id="footer" th:replace="/fragments/footer"></nav>
+		<hr style="margin-top: 70px;">
+		<nav id="footer" th:replace="/fragments/footer" ></nav>
 	</div>
 	
 	<script th:inline="javascript">

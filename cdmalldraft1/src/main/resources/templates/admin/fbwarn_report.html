@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>관리자 페이지</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+<link rel="stylesheet" href="/css/admin.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+body {
+  	font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  height: 100%;
+  width: 300px;
+  float: left;
+  z-index: 1;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidenav a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #f1f1f1;
+}
+
+</style>
+<script>
+	// 서버 응답을 저장할 변수
+	let page = null;
+	
+	const printBoard = ()=>{
+		const $list = $("#list");
+		// 서버가 보낸 board들은 page.content에 저장되어 있다
+		for(c of page.content) {
+			let createdTime = c.writeTime.substr(-26,10);
+			const $tr = $("<tr>").appendTo($list);
+			$("<td>").text(c.bno).appendTo($tr);
+			const $td = $("<td>").appendTo($tr);
+			if(c.attachmentCnt>0)
+				$("<i class='fa fa-paperclip'></i>").appendTo($td);
+			$("<a>").attr("href", "/board/read?bno=" + c.bno).text(c.title).appendTo($td);
+			if(c.commentCnt>0)
+				$("<span>").text(" [" + c.commentCnt + "]").appendTo($td);
+			$("<td>").text(c.writer).appendTo($tr);
+			$("<td>").text(createdTime).appendTo($tr);
+			$("<td>").text(c.readCnt).appendTo($tr);
+			$("<td>").text(c.goodCnt).appendTo($tr);
+			$("<td>").text(c.badCnt).appendTo($tr);
+			$("<td>").text(c.warnCnt).appendTo($tr);
+			if(c.isActive){
+				$("<button>").attr("data-bno", c.bno).attr("class","board_active").text("비활성").appendTo($tr);
+			}
+			else{
+				$("<button>").attr("data-bno", c.bno).attr("class","board_active").text("활성").appendTo($tr);
+			}
+		}
+	};
+	
+	const getPagination = () => {
+		// 한번에 다섯개의 페이지씩
+		const blockSize = 5;
+		
+		// 서버 응답에 현재 페이지가 포함되어 있지 않다....재계산하자
+		let pageno = location.search.substr(8);
+		if(pageno=="")
+			pageno=1;
+		
+		// 0번 블록 : 1~5 page, 1번 블록 : 6~10 page
+		const blockNo = Math.floor((pageno-1)/blockSize);
+		const prev = blockNo * blockSize;
+		const first = prev + 1;
+		let last = first + blockSize - 1;
+		let next = last + 1;
+		const countOfPage = Math.ceil(page.totalcount/10)
+		if(last>=countOfPage) {
+			last = countOfPage;
+			next = 0;
+		}
+		return {pageno, prev, next, first, last};
+		
+	};
+	
+	// 구조 분해 할당 : 객체를 변수로 풀어헤치는 문법
+	// const {pageno, prev, next, first, last} = getPagination();
+	const printPagination = ({pageno, prev, next, first, last}) => {
+		const $pagination = $("ul.pagination");
+		const url = "/board/list?pageno="
+				
+		// 이전으로 
+		if(prev>0) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+prev).text("이전으로").appendTo($li);
+		}
+		
+		// 시작 페이지에서 마지막 페이지....현재 페이지 번호일 경우 active 클래스 추가
+		for(let idx=first; idx<=last; idx++) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+idx).text(idx).appendTo($li);
+			if(idx==pageno)
+				$li.attr("class", "active");
+		}
+		
+		// 다음으로
+		if(next>0) {
+			const $li = $("<li>").appendTo($pagination)
+			$("<a>").attr("href", url+next).text("다음으로").appendTo($li);
+		}
+	}
+	
+	$(document).ready(()=>{
+		// 주소창에서 페이지 번호를 잘라낸다. 페이지 번호가 없으면 1로
+		let pageno = location.search.substr(8);
+		if(pageno=="")
+			pageno=1;
+		
+		console.log(pageno);
+		$.ajax("/board/warnlist?pageno="+pageno).done(result=>{
+			page=result;
+			printBoard();
+			printPagination(getPagination());
+		});
+		
+		$("#list").on("click",".board_active", function() {
+			
+			const bno = {bno :$(this).attr("data-bno")}
+			
+			$.ajax({url: "/board/inactive", method:"post", data:bno})
+			.done((result)=>{
+				if(result==true){
+					Swal.fire('작업 성공', "해당 게시물을 활성했습니다.",'success');
+					$(this).text("비활성");
+				}else{
+					Swal.fire('작업 성공', "해당 게시물을 비활성했습니다.",'success');
+					$(this).text("활성");
+				}
+			}).fail((result)=>{
+				Swal.fire('작업 실패', "해당 작업을 실패했습니다.",'error')
+			});
+		});
+		
+	});
+</script>
+</head>
+<body>
+	<div class="sidenav">
+		<a href="/admin/index">HOME</a> <a href="/boardMain">BOARD</a> <a
+			href="/">SHOP</a> <a href="#" id="logout">LOGOUT</a>
+	</div>
+	<div id="page" style="float: right; width: 80%">
+		<h3>자유게시판 시고글</h3>
+		<div class="wrap" style="margin: 0 auto;">
+			<table class="table table-hover">
+				<tr>
+					<th>번호</th>
+					<th>제목</th>
+					<th>글쓴이</th>
+					<th>시간</th>
+					<th>조회수</th>
+					<th>좋아요</th>
+					<th>싫어요</th>
+					<th>신고수</th>
+					<th></th>
+				</tr>
+				<tbody id="list">
+				</tbody>
+			</table>
+			<div id="pagination" style="text-align: center;">
+				<ul class="pagination"></ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
