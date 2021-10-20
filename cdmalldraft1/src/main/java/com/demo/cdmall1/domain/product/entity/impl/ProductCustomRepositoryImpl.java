@@ -23,6 +23,7 @@ public class ProductCustomRepositoryImpl extends QuerydslRepositorySupport imple
 	private JPAQueryFactory factory;
 	private QProduct qproduct;
 	
+	
 	public ProductCustomRepositoryImpl() {
 		super(Product.class);
 	}
@@ -38,10 +39,10 @@ public class ProductCustomRepositoryImpl extends QuerydslRepositorySupport imple
 		BooleanBuilder condition = new BooleanBuilder();
 		condition.and(qproduct.pno.gt(0));
 		if(word!=null)
-			condition.and(qproduct.name.contains(word));
+			condition.and(qproduct.name.contains(word).or(qproduct.manufacturer.contains(word)));
 		return factory.from(qproduct).select(Projections.constructor(ProductDto.ProductList.class, 
 				qproduct.pno, qproduct.manufacturer, qproduct.name, qproduct.image, qproduct.price, qproduct.avgOfStar, qproduct.reviewCount, qproduct.imageFileName))
-				.where(condition).orderBy(qproduct.reviewCount.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+				.where(condition).orderBy(qproduct.pno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 		
 	}
 	
@@ -50,7 +51,7 @@ public class ProductCustomRepositoryImpl extends QuerydslRepositorySupport imple
 		BooleanBuilder condition = new BooleanBuilder();
 		condition.and(qproduct.pno.gt(0));
 		if(word!=null)
-			condition.and(qproduct.name.contains(word));
+			condition.and(qproduct.name.contains(word).or(qproduct.manufacturer.contains(word)));
 		
 		return factory.from(qproduct).select(qproduct.pno.count()).where(condition).fetchOne();
 	}
