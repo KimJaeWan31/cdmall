@@ -126,6 +126,16 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
 	width:120px;
 	text-align: center
 }
+
+#nav-sub-button2 {
+	width:120px;
+	text-align: center
+}
+.nav-sub2 {
+    display: none;
+    cursor: pointer;
+	width:120px;
+}
 	
 .nav-sub {
     display: none;

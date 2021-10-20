@@ -36,7 +36,12 @@
          <ul sec:authorize="isAuthenticated()" class="nav navbar-nav" id="top_menu_authenticated" style="font-size: 1.1em;">
 				<li><a href="#" id="logout">LOGOUT</a></li>
                 <li><a href="/product/list">ORDER</a></li>
-                <li><a href="/product/read">CART</a></li>
+				<li id="nav-sub-button2" style="width:100px"><a>CART</a>
+                	  <ul class="list-group nav-sub2">
+				      <li class="list-group-item" id="">장바구니</li>
+				      <li class="list-group-item" id="">찜목록</li>
+				    </ul>
+            	</li>
                 <li sec:authorize="hasRole('ADMIN')" class=""><a href="/admin/index">MANAGE</a></li>
                 <li sec:authorize="hasRole('USER')" class=""><a href='/member/read'>MYPAGE</a></li>
 				<li id="nav-sub-button" style="width:120px"><a>고객센터</a>
@@ -73,6 +78,14 @@
             $('.nav-sub').slideToggle();
           })
          
+          
+        $('#nav-sub-button2').click(function(){
+            $('.nav-sub2').slideToggle();
+          })
+          
+          
+          
+          
         $('#oneOnOneInquiry').click(function(){
         	location.href="/member/login";
           })
