@@ -53,7 +53,9 @@
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
 			$("<button>").attr("id","delete").attr("class","btn btn-info").text("삭 제").appendTo($btnArea);
 			
-			$("#qscomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
+			const $usedcommentBtnArea = $("#usedcommentBtnArea");
+			$("#usedcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
+			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($usedcommentBtnArea);
 
 
 
@@ -61,7 +63,7 @@
 			$("#good_btn").prop("disabled", false);
 			$("#bad_btn").prop("disabled", false);
 			
-			const $qscommentBtnArea = $("#usedcommentBtnArea");
+			const $usedcommentBtnArea = $("#usedcommentBtnArea");
 			$("#usedcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
 			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($usedcommentBtnArea);
 		}
@@ -115,7 +117,7 @@
 		// 댓글 작성
 		$("#usedcommentBtnArea").on("click", "#write", ()=> {
 			const param = {
-				qbno: ubno, // 앞에는 이름, 뒤에는 값
+				ubno: ubno, // 앞에는 이름, 뒤에는 값
 				content : $("#usedcomment_textarea").val()
 			};
 			$.ajax({url: "/usedcomments", method:"post", data:param}).done(usedcomments=>{
@@ -139,21 +141,21 @@
 		
 		
 		// 추천
-				$("#good_btn").on("click", ()=>{
-			const param = {qbno: usedBoard.ubno, isGood: 1}
+			$("#good_btn").on("click", ()=>{
+			const param = {ubno: usedBoard.ubno, isGood: 1}
 			$.ajax({ url: "/usedBoard_member/good_or_bad", data: param, method: "patch"})
 				.done(goodCnt=>$("#good_cnt").text(goodCnt));
 		});
 		
 		// 비추
-				$("#bad_btn").on("click", ()=>{
+			$("#bad_btn").on("click", ()=>{
 			const param = {ubno: usedBoard.ubno, isGood: 0}
 			$.ajax({ url: "/usedBoard_member/good_or_bad", data: param, method: "patch"})
 				.done(goodCnt=>$("#bad_cnt").text(goodCnt));
 		});
 
 		// 변경
-				$("#btnArea").on("click", "#update", ()=>{
+			$("#btnArea").on("click", "#update", ()=>{
 			const param = {
 				title : $("#title").val(),
 				content : CKEDITOR.instances['content'].getData(),
@@ -205,7 +207,7 @@
 				<!-- 글번호, 작성일, 아이피, 추천수, 조회수, 신고수 출력 영역 -->
 				<div id="lower">
 					<ul id="lower_left">
-						<li>글번호<span id="qbno"></span></li>
+						<li>글번호<span id="ubno"></span></li>
 						<li><span id="writeday"></span></li>
 					</ul>
 					<ul id="lower_right">
