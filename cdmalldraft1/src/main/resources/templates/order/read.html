@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<link rel="stylesheet" href="/css/main.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/script/main.js"></script>
+<script>  
+	const token = $("meta[name='_csrf']").attr("content");
+	const header = $("meta[name='_csrf_header']").attr("content");
+	
+	let orders = undefined;
+	let addresses = undefined;
+	
+	let _this = undefined;
+	
+	const main = {
+		select : location.search.substr(8),
+
+		init: function() {
+			$.ajax("/orders?select=" + this.select).done((result)=>{
+				// 주문할 목록이 없으면 이전 페이지로 되돌아간다
+				if(result=="")
+					history.back();
+				orders = result;
+				this.printOrders();
+			});
+			this.getAddresses();
+			
+			window._this = this;
+			
+			$("#add_new_address").on("click", this.addNewAddress);
+			$("#address_area").on("click", ".address", this.changeAddress);
+			$("#payment").on("click", this.payment);
+		},
+		
+		// 주문 정보 출력
+		printOrders: function() {
+			const $list = $("#list");
+			let totalPrice = 0;
+			$.each(orders, function(idx, orderItem) {
+				const $tr = $("<tr>").appendTo($list);
+				const $td1 = $("<td>").appendTo($tr);
+				$("<img>").attr("src", orderItem.image).attr("width", "100px").appendTo($td1);
+					
+				const $td2 = $("<td>").appendTo($tr);
+				$("<div>").text(orderItem.name).appendTo($td2);
+				
+				const $td3 = $("<td>").appendTo($tr);
+				$("<div>").text(orderItem.manufacturer).appendTo($td3);
+				
+				const $td4 = $("<td>").appendTo($tr);
+				$("<div>").text("상품 주문 수량 : " + orderItem.count + "개").appendTo($td4);
+				
+				const $td5 = $("<td>").appendTo($tr);
+				$("<div>").text(orderItem.orderItemPrice).appendTo($td5);
+				
+				totalPrice += orderItem.orderItemPrice;		
+			});
+			$("#total_price").text("전체 가격 : " + totalPrice + "원").css("text-align","right");
+		},
+		
+		// 주소들을 가져와 출력
+		getAddresses:function() {
+			$.ajax("/addresses").done(result=>{
+				if(result=="") {
+					$("#address").prop("disabled","true");
+					$("#payment").prop("disabled","true");
+					$("#forwardingAddress").text("등록된 배송지가 없습니다. 배송지를 추가하세요");
+				} else {
+					addresses = result;
+					const $address_area = $("#address_area"); 
+					$address_area.empty();
+					$.each(addresses, function(idx, address) {
+						const $radio = $("<input type='radio' name='address' class='address'>").attr("data-address", address.addressNo).appendTo($address_area);
+						$("<span>").text(address.nickname).appendTo($address_area);
+						if(address.default==true) {
+							$radio.prop("checked", true);
+							const info = "(" + address.zipcode + ") " + address.address1 + " " + address.address2; 
+							$("#forwardingAddress").text(info);
+						}
+					});
+				}
+			});
+		},
+		
+		addNewAddress:function() {
+			// popup 창을 열고 변수에 저장한 다음 이벤트 핸들러를 등록
+			const popup = window.open("/order/new_address", "_blank", "toolbar=yes, menubar=yes, width=700, height=500");
+			$(popup).on("beforeunload", ()=> window._this.getAddresses());
+		},
+		
+		changeAddress:function() {
+			// 여기서 $(this)는 checkbox
+			const $addressNo = $(this).data("address");
+			$.each(addresses, function(idx, address) {
+				// 여기서 $(this)는 address
+				if($addressNo==address.addressNo) {
+					const info = "(" + address.zipcode + ") " + address.address1 + " " + address.address2; 
+					$("#forwardingAddress").text(info);
+				}
+			});	
+		},
+		
+		// 결제 메서드
+		payment: function() {
+			const param = {
+				select: window._this.select
+			};
+			
+			// 선택한 주소 라디오에 저장된 주소 번호를 가져온다
+			$.each($(".address"), function(idx, address) {
+				if($(address).is(":checked")==true)
+					param.addressNo = $(address).data("address");
+			});
+			
+			$.ajax({url:"/orders/payment", method:"post", data: param, beforeSend: function(xhr) { xhr.setRequestHeader(header, token)}})
+				.done(location.href="/order/list");
+		}
+	};
+	
+	window.onload=function() {
+		main.init();
+	}
+</script>
+</head>
+<body>
+<div id="page">
+	<header id="header" th:replace="/fragments/header">
+	</header>
+	<nav id="nav" th:replace="/fragments/nav">
+	</nav>
+	<div id="main">
+		<aside th:replace="/fragments/aside">
+		</aside>
+		<section id="section">
+			<table class="table">
+				<thead>
+					<tr><th>사진</th><th>상품정보</th><th>판매자</th><th>수량</th><th>상품금액</th></tr>
+				</thead>
+				<tbody id="list">
+				</tbody>
+				<tfoot>
+					<tr><td colspan="5" id="total_price"></td></tr>
+				</tfoot>
+			</table>
+			<div>
+				<div>
+					<button id="add_new_address">새 배송지</button>
+					<div id="address_area">
+					</div>
+					<hr>
+					<div id="address_info">
+						<span>배송지 : </span>
+						<span></span>
+						<span id="forwardingAddress"></span>
+					</div>
+					<hr>
+				</div>
+			</div>
+			<div>
+				<button sec:authorize="isAuthenticated()" id="payment">결제하기</button>
+			</div>
+		</section>
+	</div>
+	<footer id="footer" th:replace="/fragments/footer">
+	</footer>
+</div>
+</body>
+</html>

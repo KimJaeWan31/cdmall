@@ -2,7 +2,13 @@ package com.demo.cdmall1.util;
 
 import java.io.*;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.http.*;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.*;
 
 
@@ -53,4 +59,15 @@ public class ZmallUtil {
 		return ZmallConstant.DEFAULT_PROFILE_NAME;
 	}
 	
+	
+	// @Valid 예외 처리가 자주 필요해서 함수로 분리 
+	public static void bindingResultCheck(BindingResult bindingResult) throws BindException {
+		if(bindingResult.hasErrors())
+			throw new BindException(bindingResult);
+	}
+	
+	public static HttpSession getSession() {
+		ServletRequestAttributes sra = (ServletRequestAttributes)RequestContextHolder.currentRequestAttributes();
+		return sra.getRequest().getSession();
+	}
 }

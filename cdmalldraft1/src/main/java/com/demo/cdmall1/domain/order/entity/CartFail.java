@@ -1,4 +1,4 @@
-package com.demo.cdmall1.domain.cart;
+package com.demo.cdmall1.domain.order.entity;
 
 import lombok.*;
 

@@ -212,10 +212,10 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 					method:"post",
 					data: JSON.stringify(cart),
 					contentType: "application/json",
-					beforeSend: function(xhr) {
+					/* beforeSend: function(xhr) {
 						xhr.setRequestHeader(header, token)
-					}
-				}).done(location.href = "/cart/read");
+					} */
+				}).done(location.href = "/cart/cart_read");
 			},
 			
 			buy: function() {
@@ -229,9 +229,9 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 					method:"post",
 					data: JSON.stringify(param),
 					contentType: "application/json",
-					beforeSend: function(xhr) {
+					/* beforeSend: function(xhr) {
 						xhr.setRequestHeader(header, token)
-					}
+					} */
 				}).done((result, text, response)=>location.href = response.getResponseHeader('Location'));
 			}
 		};

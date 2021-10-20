@@ -1,20 +1,11 @@
 package com.demo.cdmall1.advice;
 
-import java.net.*;
-import java.util.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import org.springframework.http.*;
-import org.springframework.validation.*;
-import org.springframework.validation.BindException;
-import org.springframework.web.bind.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.*;
-import org.springframework.web.util.*;
-
-import com.demo.cdmall1.domain.member.entity.*;
-import com.demo.cdmall1.domain.member.entity.MemberFail.*;
 import com.demo.cdmall1.domain.product.entity.ProductFail;
-import com.demo.cdmall1.web.dto.*;
 
 @ControllerAdvice
 public class ProductControllerAdvice {
