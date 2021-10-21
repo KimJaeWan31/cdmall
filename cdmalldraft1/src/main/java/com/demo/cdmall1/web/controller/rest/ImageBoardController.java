@@ -60,7 +60,6 @@ public class ImageBoardController {
 		
 		@GetMapping(path="/imageBoard/all", produces=MediaType.APPLICATION_JSON_VALUE) 
 		public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno) {
-			System.out.println("111111111111111111111111111111");
 			return ResponseEntity.ok(imageService.list(pageno)); 
 		}
 		 
@@ -80,6 +79,12 @@ public class ImageBoardController {
 		@GetMapping("/imageBoard/good_or_bad")
 		public ResponseEntity<?> GoodOrBadCnt(@RequestParam Integer ibno, @RequestParam Integer state) {
 			Integer cnt = imageService.goodOrBad(ibno, state);
+			return ResponseEntity.ok(cnt);
+		}
+		
+		@GetMapping("/imageBoard/report")
+		public ResponseEntity<?> ReportCnt(@RequestParam Integer ibno, @RequestParam Integer state){
+			Integer cnt = imageService.reportCheck(ibno, state);
 			return ResponseEntity.ok(cnt);
 		}
 		

@@ -10,4 +10,8 @@ public interface ImageBoardCustomRepository {
 	List<ImageBoardDto.List> readAll(Pageable pageable);
 	
 	public Long countByIbno();
+	
+	List<ImageBoardDto.ReportList> readReportAll(Pageable pageable, Integer reportCnt);
+	
+	public Long countByReportCnt();
 }

@@ -1,6 +1,6 @@
 package com.demo.cdmall1.domain.imageboard.entity.impl;
 
-import java.util.*;
+import java.util.List;
 
 import javax.annotation.*;
 import javax.persistence.*;
@@ -13,6 +13,7 @@ import com.demo.cdmall1.domain.imageboard.entity.ImageBoard;
 import com.demo.cdmall1.domain.imageboard.entity.ImageBoardCustomRepository;
 import com.demo.cdmall1.domain.imageboard.entity.QImageBoard;
 import com.demo.cdmall1.web.dto.ImageBoardDto;
+import com.demo.cdmall1.web.dto.ImageBoardDto.*;
 import com.querydsl.core.types.*;
 import com.querydsl.jpa.impl.*;
 
@@ -46,4 +47,18 @@ public class ImageBoardCustomRepositoryImpl extends QuerydslRepositorySupport im
 		return factory.from(imageBoard).select(imageBoard.ibno.count()).where(imageBoard.ibno.gt(0)).fetchOne();
 	}
 
+	@Override
+	public List<ReportList> readReportAll(Pageable pageable, Integer reportCnt) {
+		QImageBoard imageBoard = QImageBoard.imageBoard;
+		return factory.from(imageBoard).select(Projections.constructor(ImageBoardDto.ReportList.class, imageBoard.ibno, imageBoard.title, imageBoard.writer, 
+				imageBoard.createTime, imageBoard.goodCnt, imageBoard.reportCnt))
+				.where(imageBoard.ibno.gt(0).and(imageBoard.reportCnt.goe(1)))
+				.orderBy(imageBoard.reportCnt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+	}
+
+	@Override
+	public Long countByReportCnt() {
+		QImageBoard imageBoard = QImageBoard.imageBoard;
+		return factory.from(imageBoard).select(imageBoard.ibno.count()).where(imageBoard.ibno.gt(0).and(imageBoard.reportCnt.goe(10))).fetchOne();
+	}
 }

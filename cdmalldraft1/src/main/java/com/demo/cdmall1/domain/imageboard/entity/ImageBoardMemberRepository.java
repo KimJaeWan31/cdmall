@@ -8,4 +8,5 @@ public interface ImageBoardMemberRepository extends CrudRepository<ImageBoardMem
 	
 	void deleteByIbnoAndUsername(Integer ibno, String loginId);
 
+	ImageBoardMember findByIbnoAndUsername(Integer ibno, String loginId);
 }

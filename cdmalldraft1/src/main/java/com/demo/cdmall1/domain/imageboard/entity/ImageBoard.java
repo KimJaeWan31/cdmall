@@ -44,6 +44,8 @@ public class ImageBoard extends BaseCreateAndUpdateTimeEntity{
 	
 	private Integer goodCnlCnt;
 	
+	private Integer reportCnt;
+	
 	private Integer ibcommentCnt;
 	
 	@Column(length=50)
@@ -59,6 +61,7 @@ public class ImageBoard extends BaseCreateAndUpdateTimeEntity{
 	public void init() {
 		this.goodCnt = 0;
 		this.goodCnlCnt = 0;
+		this.reportCnt=0;
 	}
 	
 	public ImageBoard update(ImageBoardDto.Update dto) {

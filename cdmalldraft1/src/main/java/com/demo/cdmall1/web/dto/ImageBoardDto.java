@@ -41,6 +41,13 @@ public class ImageBoardDto {
 	
 	@Data
 	@AllArgsConstructor
+	public static class ReportCheck{
+		private Integer ibno;
+		private Boolean isReport;
+	}
+	
+	@Data
+	@AllArgsConstructor
 	public static class List {
 		private Integer ibno;
 		private String title;
@@ -49,5 +56,19 @@ public class ImageBoardDto {
 		@JsonProperty("writeTime")
 		private LocalDateTime createDateTime;
 		private Integer goodCnt;
+		private Integer reportCnt;
+	}
+	
+	@Data
+	@AllArgsConstructor
+	public static class ReportList {
+		private Integer ibno;
+		private String title;
+		private String writer;
+		@JsonProperty("writeTime")
+		private LocalDateTime createDateTime;
+		private Integer goodCnt;
+		private Integer reportCnt;
+		
 	}
 }

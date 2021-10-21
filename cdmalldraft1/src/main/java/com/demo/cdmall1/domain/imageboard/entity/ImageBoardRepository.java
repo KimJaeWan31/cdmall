@@ -4,5 +4,4 @@ import org.springframework.data.jpa.repository.*;
 
 public interface ImageBoardRepository extends JpaRepository<ImageBoard, Integer>, ImageBoardCustomRepository{
 
-
 }

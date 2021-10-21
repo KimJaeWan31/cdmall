@@ -47,6 +47,7 @@
 		$("#writeday").text(imageBoard.createTime);
 		$("#writer").text(imageBoard.writer);
 		$("#title").val(imageBoard.title);
+		$("#report_cnt").text(imageBoard.reportCnt);
 		$("#content").html(imageBoard.content);
 		$("#ibimage").attr("src", "/upload/ibimage/" + imageBoard.imageFileName);
 		//$("#bad_cnt").text(imageBoard.badCnt);
@@ -54,6 +55,7 @@
 		// 비로그인, 글쓴이, 글쓴이 아님에 따른 화면 구성
 		if(isLogin==true && isWriter==true) {
 			$("#title").prop("disabled", false);
+			$("#report_btn").prop("disabled", true);
 			//filebrowserUploadUrl : '/imageBoard/ibimage'
 			
 			const $btnArea = $("#btnArea");
@@ -68,6 +70,7 @@
 			const $ibcommentBtnArea = $("#ibcommentBtnArea");
 			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($ibcommentBtnArea);
 		} else if (isLogin==true && isWriter==false) {
+			$("#report_btn").prop("disabled", false);
 			$("#content").prop("readonly",true);
 			$("#ibcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
 
@@ -195,6 +198,13 @@
 			.fail((response, text, message)=>{})
 		});
 		
+		// 신고
+		$("#report_btn").on("click", ()=>{
+			const param = {ibno: imageBoard.ibno}
+			$.ajax({ url: "/imageBoard_member/report", data: param, method: "patch"})
+				.done(reportCnt=>$("#report_cnt").text(reportCnt));
+		});
+		
 		// 뒤로가기
 		$("#btnArea").on("click", "#back", ()=>{
 			$.ajax({
@@ -233,6 +243,7 @@
 						<li><span id="writeday"></span></li>
 					</ul>
 					<ul id="lower_right">
+					<li><button type="button" class="btn btn-warning" id="report_btn" >신고<span class="badge" id="report_cnt"></span></button></li>
 					</ul>
 				</div>
 			</div>

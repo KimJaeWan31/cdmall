@@ -13,6 +13,11 @@ import lombok.*;
 @IdClass(ImageBoardMemberId.class)
 @Entity
 public class ImageBoardMember {
+	public ImageBoardMember(String loginId, Integer ibno) {
+		this.username =  loginId;
+		this.ibno = ibno;
+	}
+
 	/*
 	 	@ManyToOne
 		private Member member;
@@ -26,4 +31,11 @@ public class ImageBoardMember {
 	
 	@Id
 	private Integer ibno;
+	
+	private Boolean isReport;
+	/*
+	@PrePersist
+	public void init() {
+		kind = "null";
+	}*/
 }

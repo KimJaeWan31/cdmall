@@ -1,5 +1,8 @@
 package com.demo.cdmall1.domain.imageboard.service;
 
+import javax.transaction.Transactional;
+
+
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
@@ -30,10 +33,28 @@ public class ImageBoardMemberService {
 		
 	}
 	
-	 @Transactional(readOnly=true) 
+	@Transactional
 	 public boolean isExist(Integer ibno, String loginId) { 
 		boolean isTrue = dao.existsByIbnoAndUsername(ibno, loginId);
-		System.out.println(isTrue);
 		return isTrue;
 	 }
+	 
+	 @Transactional
+		public ReportCheck reportcheck(Integer ibno, String loginId) {
+			boolean isExist = dao.existsByIbnoAndUsername(ibno, loginId);
+			if(isExist==true) {
+				ImageBoardMember imageBoardMember = dao.findByIbnoAndUsername(ibno, loginId);
+				Boolean isReport = imageBoardMember.getIsReport();
+			
+				if(isReport==true) {
+					imageBoardMember.setIsReport(false);
+					return ReportCheck.SUB_REPORT;	
+				}
+				imageBoardMember.setIsReport(true);
+				return ReportCheck.DO_REPORT;
+			} else {
+				dao.save(new ImageBoardMember(loginId, ibno,true));
+				return ReportCheck.DO_REPORT;
+			}
+		}
 }

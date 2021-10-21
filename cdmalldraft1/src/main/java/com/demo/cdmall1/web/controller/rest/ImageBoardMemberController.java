@@ -10,6 +10,7 @@ import org.springframework.web.client.*;
 import org.springframework.web.util.*;
 
 import com.demo.cdmall1.domain.board.service.*;
+import com.demo.cdmall1.domain.imageboard.entity.*;
 import com.demo.cdmall1.domain.imageboard.service.*;
 import com.demo.cdmall1.domain.member.service.*;
 
@@ -38,4 +39,13 @@ public class ImageBoardMemberController {
 		return ResponseEntity.ok(check);                                                                                                                                                                                                                                                                                                     
 	}
 	
+	@PreAuthorize("isAuthenticated()")
+	@PatchMapping("/imageBoard_member/report")
+	public ResponseEntity<?> report(Integer ibno, Principal principal){
+		ReportCheck state = imageMemberService.reportcheck(ibno, principal.getName());
+		URI uri = UriComponentsBuilder.fromHttpUrl("http://localhost:8081").path("/imageBoard/report")
+				.queryParam("ibno", ibno+"").queryParam("state", state.ordinal()+"").build().toUri();
+		Integer cnt = restTemplate.getForObject(uri.toString(), Integer.class);
+		return ResponseEntity.ok(cnt);
+	}
 }

@@ -1,6 +1,7 @@
 package com.demo.cdmall1.domain.imageboard.service;
 
 import java.io.File;
+
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -15,14 +16,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.demo.cdmall1.domain.board.entity.BoardFail;
-import com.demo.cdmall1.domain.imageboard.entity.IBAttachment;
-import com.demo.cdmall1.domain.imageboard.entity.ImageBoard;
-import com.demo.cdmall1.domain.imageboard.entity.ImageBoardRepository;
+import com.demo.cdmall1.domain.imageboard.entity.*;
 import com.demo.cdmall1.util.ZmallConstant;
 import com.demo.cdmall1.web.dto.IBCommentDto;
 import com.demo.cdmall1.web.dto.ImageBoardDto;
 
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @RequiredArgsConstructor
 @Service
@@ -104,6 +103,16 @@ public class ImageBoardService {
 		return map; 
 	 }
 	
+	public Map<String,Object> reportList(Integer pageno, Integer reportCnt){
+		Pageable pageable = PageRequest.of(pageno-1, 10);
+		Map<String,Object> map = new HashMap<>();
+		map.put("content", dao.readReportAll(pageable, reportCnt));
+		map.put("totalcount", dao.countByReportCnt());
+		map.put("pageno", pageno);
+		map.put("pagesize", 10);
+		return map;
+	}
+	
 	@Transactional
 	public Integer goodOrBad(Integer ibno, Integer state) {
 		ImageBoard imageBoard = dao.findById(ibno).orElseThrow(BoardFail.BoardNotFoundException::new);
@@ -118,6 +127,19 @@ public class ImageBoardService {
 		//return null;
 			imageBoard.setGoodCnt(imageBoard.getGoodCnt());
 		return imageBoard.getGoodCnt();
+	}
+	
+	@Transactional
+	public Integer reportCheck(Integer ibno, Integer state) {
+		ImageBoard imageBoard = dao.findById(ibno).orElseThrow(BoardFail.BoardNotFoundException::new);
+		if(state==0) {
+			imageBoard.setReportCnt(imageBoard.getReportCnt()+1);
+			return imageBoard.getReportCnt();
+		}else if(state==1) {
+			return imageBoard.getReportCnt();
+		}
+		imageBoard.setReportCnt(imageBoard.getReportCnt()-1);
+		return imageBoard.getReportCnt();
 	}
 	
 	@Transactional
