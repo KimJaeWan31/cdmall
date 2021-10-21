@@ -21,7 +21,7 @@ import com.demo.cdmall1.util.*;
 import com.demo.cdmall1.web.dto.*;
 
 import lombok.*;
-
+ 
 @RequiredArgsConstructor
 @RestController
 public class ProductController {
@@ -94,7 +94,7 @@ public class ProductController {
 		return ResponseEntity.ok(service.checkStock(pno, count));
 	}
 		
-	@GetMapping("/product/continueShopping")
+	@PostMapping("/product/save_url")
 	public ResponseEntity<?> Continue(@RequestParam String url){
 		service.continueShopping(url);
 		return ResponseEntity.ok(null);

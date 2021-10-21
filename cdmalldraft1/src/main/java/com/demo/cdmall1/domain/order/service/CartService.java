@@ -5,7 +5,7 @@ import java.util.stream.*;
 
 import javax.servlet.http.*;
 
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Service;
 
 import com.demo.cdmall1.domain.order.entity.Cart;
 import com.demo.cdmall1.domain.product.entity.ProductFail;
@@ -81,6 +81,12 @@ public class CartService {
 		List<Cart> newCarts = carts.stream().filter(cart->pnos.contains(cart.getPno())==false).collect(Collectors.toList());
 		saveCarts(newCarts);
 		return newCarts;
+	}
+
+	public String getUrl() {
+		HttpSession session = ZmallUtil.getSession();
+		
+		return  ((String)session.getAttribute("saved_url"));
 	}
 }
 

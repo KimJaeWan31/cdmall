@@ -44,6 +44,14 @@ public class CartController {
 		return ResponseEntity.ok(service.delete(dtos));
 	}
 	
+	@GetMapping("/carts/get_url")
+	public ResponseEntity<?> getUrl(){
+		
+		return ResponseEntity.ok(service.getUrl()); 
+	}
+	
+	
+	
 	
 	// 카트정보를 읽어온다
 	// 상품만 선택하는 경우는 페이지를 로딩할 때 임시장바구니를 생성. 옵션을 선택하는 경우는 페이지를 로딩할 때 임시 장바구니를 읽어오겠다

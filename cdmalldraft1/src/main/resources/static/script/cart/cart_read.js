@@ -19,8 +19,19 @@ const main = {
 		$("#cart_div").on("click", ".dec", this.decProduct);
 		$("#delete_product").on("click", this.deleteProduct);
 		$("#order").on("click", this.order);
+		$("#continueShopping").on("click", this.continueShopping);
 		
 		window._this = this;
+	},
+	
+	continueShopping: function(){
+		$.ajax({
+			url: "/carts/get_url",
+			method: "get"
+		}).done(result=>{
+			savedUrl = result;
+			location.href = savedUrl;
+		});
 	},
 	
 	printPage: function() {

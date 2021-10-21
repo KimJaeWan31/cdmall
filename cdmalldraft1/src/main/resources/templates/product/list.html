@@ -271,9 +271,9 @@
 			 url: window.location.href
 		}
 		$.ajax({
-			 url: "/product/continueShopping",
+			 url: "/product/save_url",
 			data: param, 
-			method: "get"
+			method: "post"
 		}).done(location.href = "/product/read?pno="+pno);
 	 }
 	 
