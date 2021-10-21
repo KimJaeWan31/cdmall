@@ -3,11 +3,10 @@ package com.demo.cdmall1.domain.imageboard.service;
 import javax.transaction.Transactional;
 
 
+
 import org.springframework.stereotype.*;
-import org.springframework.transaction.annotation.*;
 
 import com.demo.cdmall1.domain.imageboard.entity.*;
-import com.demo.cdmall1.domain.member.service.*;
 
 import lombok.*;
 
@@ -53,7 +52,7 @@ public class ImageBoardMemberService {
 				imageBoardMember.setIsReport(true);
 				return ReportCheck.DO_REPORT;
 			} else {
-				dao.save(new ImageBoardMember(loginId, ibno,true));
+				dao.save(new ImageBoardMember(loginId, ibno, true));
 				return ReportCheck.DO_REPORT;
 			}
 		}

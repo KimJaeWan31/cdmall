@@ -4,6 +4,8 @@ import java.io.*;
 
 import javax.persistence.*;
 
+import org.springframework.beans.factory.annotation.*;
+
 import lombok.*;
 
 // 사용자가 추천/비추한 글
@@ -13,10 +15,20 @@ import lombok.*;
 @IdClass(ImageBoardMemberId.class)
 @Entity
 public class ImageBoardMember {
+	@Autowired
 	public ImageBoardMember(String loginId, Integer ibno) {
-		this.username =  loginId;
+		//this.username =  this.getUsername();
+		//this.ibno = this.getIbno();
+		this.username = loginId;
 		this.ibno = ibno;
+		return;
 	}
+	/*@Autowired
+	public boolean ImageBoardMember2(String loginId, Integer ibno, boolean isReport) {
+		this.username = loginId;
+		this.ibno = ibno;
+		return isReport;
+	}*/
 
 	/*
 	 	@ManyToOne

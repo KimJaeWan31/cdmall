@@ -36,7 +36,7 @@ public class ImageBoardCustomRepositoryImpl extends QuerydslRepositorySupport im
 	public List<ImageBoardDto.List> readAll(Pageable pageable) {
 		QImageBoard imageBoard = QImageBoard.imageBoard;
 		return factory.from(imageBoard).select(Projections.constructor(ImageBoardDto.List.class, imageBoard.ibno, imageBoard.title, imageBoard.writer,
-				imageBoard.imageFileName, imageBoard.createTime, imageBoard.goodCnt)).where(imageBoard.ibno.gt(0))
+				imageBoard.imageFileName, imageBoard.createTime, imageBoard.goodCnt, imageBoard.reportCnt)).where(imageBoard.ibno.gt(0))
 				.orderBy(imageBoard.ibno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	}
 
