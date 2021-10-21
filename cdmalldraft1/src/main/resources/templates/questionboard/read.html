@@ -18,6 +18,10 @@
 	.td1 { width: 30px; }
 	.td2 { width: 170px; }
 	.td3 { width: 50px; }
+	
+		#btnArea {
+	margin-top: 20px;
+	}
 </style>
 <script sec:authorize="isAuthenticated()">
 	const isLogin = true
@@ -243,7 +247,7 @@
 			<div class="form-group1">
       			<label for="qscomment_teaxarea">댓글을 입력하세요</label>   
       			<textarea class="form-control1" rows="5" id="qscomment_textarea" readonly="readonly"
-      				placeholder="댓글을 작성하려면 로그인 해주세요"></textarea>
+      				placeholder="댓글을 작성하려면 로그인 해주세요" style="width: 1270px;"></textarea>
     		</div>
 			<div id="qscommentBtnArea">
     			<!-- 로그인하면 댓글 달기 버튼을 추가 -->

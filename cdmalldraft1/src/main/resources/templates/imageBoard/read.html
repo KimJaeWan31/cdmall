@@ -21,6 +21,14 @@
 	#ibimage {
 	width: 600px;
 	display: block; margin: 0px auto; size: cover;}
+	
+	#btnArea {
+	margin-top: 20px;
+	}
+	
+	.form-control1 {
+	width: 1238px;
+	}
 </style>
 <script sec:authorize="isAuthenticated()">
 	const isLogin = true
@@ -245,10 +253,10 @@
 			<div id="btnArea">
 			</div>
 			<hr>
-			<div class="form-group1">
-      			<label for="ibcomment_textarea">댓글을 입력하세요</label>
+			<div class="form-group1" style="width: 1270px;">
+      			<label for="ibcomment_textarea" >댓글을 입력하세요</label>
       			<textarea class="form-control1" rows="5" id="ibcomment_textarea" readonly="readonly"
-      				placeholder="댓글을 작성하려면 로그인 해주세요"></textarea>
+      				placeholder="댓글을 작성하려면 로그인 해주세요"  ></textarea>
     		</div>
 			<div id="ibcommentBtnArea">
     			<!-- 로그인하면 댓글 달기 버튼을 추가 -->
