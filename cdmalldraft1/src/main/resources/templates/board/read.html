@@ -66,6 +66,9 @@
 			}
 		
 			$("<button>").attr("id","delete").attr("class","btn btn-danger").text("삭 제").appendTo($btnArea);
+			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
+			$("<button>").attr("id","back").attr("class","btn btn-light").css({"float":"right", "color":"black"}).text("뒤로가기").appendTo($btnArea);
+			
 			
 			$("#good_btn").prop("disabled", true);
 			$("#bad_btn").prop("disabled", true);
@@ -237,6 +240,16 @@
 				method:"delete",
 			})
 			.done((result, text, response)=>{ location.href = "/" })
+			.fail((response, text, message)=>{})
+		});
+		
+		// 뒤로가기
+		$("#btnArea").on("click", "#back", ()=>{
+			$.ajax({
+				url: "/board/" + board.bno,
+				method:"get",
+			})
+			.done((result, text, response)=>{ location.href = "/board/list" })
 			.fail((response, text, message)=>{})
 		});
 		

@@ -52,7 +52,8 @@
 			$("<button>").attr("id","update").attr("class","btn btn-info").text("변 경").appendTo($btnArea);
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
 			$("<button>").attr("id","delete").attr("class","btn btn-info").text("삭 제").appendTo($btnArea);
-			
+			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
+			$("<button>").attr("id","back").attr("class","btn btn-light").css({"float":"right", "color":"black"}).text("뒤로가기").appendTo($btnArea);
 			$("#qscomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
 
 
@@ -97,7 +98,8 @@
 		// 로그인 아이디를 자바스크립트에서 접근하고 싶다. JSTL은 <c:set>을 이용해 변수 생성이 가능한데 타임리프는 안되는 것 같다
 		// 그래서 hidden div를 만들어 div에 아이디를 저장한 다음 자바스크립트로 읽었다
 		const $username = $("#username").text();
-		const qbno = location.search.substr(6);			
+		const qbno = location.search.substr(6);
+		
 		$.ajax("/questionBoard/" + qbno).done(result=> {
 			// ES5의 변수는 var로 만든다 -> 스코프(=범용 범위)는 함수
 			// ES5에서 변수를 var없이 만들 수 있다 -> 전역
@@ -110,6 +112,8 @@
 // 			console.log(questionBoard)
 // 			console.log(questionBoard.qscomments);
 			printQSComments(questionBoard.qscomments);
+			
+			
 		});
 		
 		// 댓글 작성
@@ -176,9 +180,21 @@
 					.done((result, text, response)=>{ location.href = "/questionBoard/list" })
 					.fail((response, text, message)=>{})
 				});
-				
+		
+		// 뒤로가기
+				$("#btnArea").on("click", "#back", ()=>{
+					$.ajax({
+						url: "/questionBoard/" + questionBoard.qbno,
+						method:"get",
+					})
+					.done((result, text, response)=>{ location.href = "/questionBoard/list" })
+					.fail((response, text, message)=>{})
+				});
 				
 			});
+	
+	
+	
 </script>
 
 </head>
