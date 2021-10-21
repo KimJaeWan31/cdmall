@@ -41,7 +41,7 @@ public class ProductCustomRepositoryImpl extends QuerydslRepositorySupport imple
 		if(word!=null)
 			condition.and(qproduct.name.contains(word).or(qproduct.manufacturer.contains(word)));
 		return factory.from(qproduct).select(Projections.constructor(ProductDto.ProductList.class, 
-				qproduct.pno, qproduct.manufacturer, qproduct.name, qproduct.image, qproduct.price, qproduct.avgOfStar, qproduct.reviewCount, qproduct.imageFileName))
+				qproduct.pno, qproduct.manufacturer, qproduct.name, qproduct.image, qproduct.price, qproduct.avgOfStar, qproduct.reviewCount, qproduct.imageFileName, qproduct.goodCnt, qproduct.goodCnlCnt))
 				.where(condition).orderBy(qproduct.pno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 		
 	}
