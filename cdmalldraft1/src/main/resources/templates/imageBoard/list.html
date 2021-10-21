@@ -60,7 +60,14 @@
 			
 			const $div = $("<div>").css({"border-bottom" :"1px solid black", "width":"350px"}).appendTo($figcaption);
 			$("<a>").attr("href", "/imageBoard/read?ibno=" + c.ibno).text(c.title).text(c.title).css("margin-right","20px").appendTo($div);		
-			
+
+			    $('.myPetImg').hover(function() {
+			$(this).css({'width':'310px','height':'280px','overflow':'hidden'});
+			    }, function(){
+			        $(".myPetImg").css('width','300px');
+			    });
+		
+
 			//  ajax 실행 결과값 isHearted true/false		
 			const param = {
 				ibno : c.ibno,
@@ -85,7 +92,7 @@
 							const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ c.ibno).attr("type", "button").attr("class","fa fa-heart-o").css({"color": "black", "font-size": "20px","cursor":"pointer"})
 							.attr("onclick","like("+c.ibno+",'"+c.writer+"')").text("").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
 							
-							const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + c.ibno).attr("type", "button").attr("class","fa fa-heart-o").css({"color": "red", "font-size": "20px", "cursor":"pointer", "display":"none"})
+							const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + c.ibno).attr("type", "button").attr("class","fa fa-heart").css({"color": "red", "font-size": "20px", "cursor":"pointer", "display":"none"})
 							.attr("onclick","likeCancel("+c.ibno+",'"+c.writer+"')").text("").appendTo($div);
 							
 							$("<span>").attr("id", "good_cnt_"+c.ibno).text(c.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
@@ -105,7 +112,7 @@
 							const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ c.ibno).attr("type", "button").attr("class","fa fa-heart-o").css({"color": "black", "font-size": "20px","cursor":"pointer"})
 							.attr("onclick","like("+c.ibno+",'"+c.writer+"')").text("").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
 							
-							const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + c.ibno).attr("type", "button").attr("class","fa fa-heart-o").css({"color": "red", "font-size": "20px", "cursor":"pointer", "display":"none"})
+							const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + c.ibno).attr("type", "button").attr("class","fa fa-heart").css({"color": "red", "font-size": "20px", "cursor":"pointer", "display":"none"})
 							.attr("onclick","likeCancel("+c.ibno+",'"+c.writer+"')").text("").appendTo($div);
 							
 							$("<span>").attr("id", "good_cnt_"+c.ibno).text(c.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
@@ -232,6 +239,7 @@
 		} 
 	 }
 	 
+	 //이미지 클릭스 이동 
 	 const imageClicked=(ibno)=>{
 			const param = {
 				 url: window.location.href
@@ -265,6 +273,7 @@
 	
 	
 </script>
+
 </head>
 <body>
 <div id="page">

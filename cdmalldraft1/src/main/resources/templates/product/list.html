@@ -120,6 +120,12 @@
 			$("<p>").text("제조사 : "+ c.manufacturer).css({"font-size":"15px"}).appendTo($div);
 			if(isLogin==true ) {$("<span>").text("찜하기 : ").css({"font-size":"15px","margin-bottom":"30px"}).appendTo($div)};
 			
+		    $('.myPetImg').hover(function() {
+				$(this).css({'width':'310px','height':'280px','overflow':'hidden'});
+				    }, function(){
+				        $(".myPetImg").css('width','300px');
+				    });
+			
 			
 			 const param = {
 						
