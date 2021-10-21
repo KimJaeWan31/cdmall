@@ -3,6 +3,7 @@ package com.demo.cdmall1.domain.product.service;
 import java.io.*;
 import java.util.*;
 
+import javax.servlet.http.HttpSession;
 
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
@@ -29,7 +30,7 @@ public class ProductService {
 		MultipartFile uploadFile = dto.getImage();
 		product.setImage(uploadFile.getOriginalFilename());
 		
-			// 저장할 파일 이름을 지정(현재시간을 1/1000초 단위로 계산)
+		// 저장할 파일 이름을 지정(현재시간을 1/1000초 단위로 계산)
 			
 		String saveFileName = System.currentTimeMillis() + "-" + uploadFile.getOriginalFilename();
 		File saveFile = new File(ZmallConstant.PRODIMAGE_FOLDER, saveFileName);
@@ -81,7 +82,6 @@ public class ProductService {
 	public Integer goodOrBad(Integer pno, Integer state) {
 		Product product = dao.findById(pno).orElseThrow(BoardFail.BoardNotFoundException::new);
 		
-		
 		if(state==0) {
 			product.setGoodCnt(product.getGoodCnt()+1);
 			return product.getGoodCnt();
@@ -93,8 +93,11 @@ public class ProductService {
 		}
 		
 		return product.getGoodCnt();
-		
-			
+	}
+
+	public void continueShopping(String currentUrl) {
+		HttpSession session = ZmallUtil.getSession();
+		session.setAttribute("currentUrl", currentUrl);
 		
 	}
 

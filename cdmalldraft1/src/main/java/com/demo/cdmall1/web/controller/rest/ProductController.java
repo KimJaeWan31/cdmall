@@ -89,8 +89,14 @@ public class ProductController {
 	}
 	
 	// 재고 확인
-		@GetMapping(path="/products/stock", produces=MediaType.APPLICATION_JSON_VALUE)
-		public ResponseEntity<Boolean> checkStock(Integer pno, Integer count) {
-			return ResponseEntity.ok(service.checkStock(pno, count));
-		}
+	@GetMapping(path="/products/stock", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Boolean> checkStock(Integer pno, Integer count) {
+		return ResponseEntity.ok(service.checkStock(pno, count));
+	}
+		
+	@GetMapping("/product/continueShopping")
+	public ResponseEntity<?> Continue(@RequestParam String url){
+		service.continueShopping(url);
+		return ResponseEntity.ok(null);
+	}
 }
