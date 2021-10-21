@@ -2,6 +2,8 @@ package com.demo.cdmall1.domain.member.entity;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import lombok.*;
 
 @Getter
@@ -13,6 +15,7 @@ import lombok.*;
 @Builder
 @Entity
 @IdClass(AuthorityId.class)
+@DynamicUpdate
 public class Authority {
 	@Id
 	@ManyToOne

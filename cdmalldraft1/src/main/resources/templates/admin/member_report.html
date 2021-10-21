@@ -286,5 +286,18 @@ body {
 			</div>
 		</div>
 	</div>
+	<script th:inline="javascript">
+		$("#logout").on("click", (e)=> {
+			e.preventDefault();
+			let choice = confirm('로그아웃하시겠습니까?');
+			if(choice==false)
+				return;
+			$.ajax({
+				url:"http://localhost:8081/member/logout",
+				method: "post",
+			}).done(()=>location.href="/");
+			
+		});	
+	</script>
 </body>
 </html>

@@ -12,6 +12,9 @@ public class MemberFail {
 		
 	public static class MemberNotFoundException extends RuntimeException {
 	}
+	
+	public static class SellerNotFoundException extends RuntimeException {
+	}
 
 	public static class PasswordCheckException extends RuntimeException {
 	}

@@ -32,6 +32,7 @@ public class MemberService {
 	private final BoardRepository bDao;
 	private final ImageBoardRepository iDao;
 	private final QuestionBoardRepository qDao;
+	private final SellerRepository sDao;
 
 	private final MailUtil mailUtil;
 	private final PasswordEncoder passwordEncoder;
@@ -124,15 +125,18 @@ public class MemberService {
 	public void update(MemberDto.Update dto, String loginId) {
 		Member member = dao.findById(loginId).orElseThrow(MemberFail.MemberNotFoundException::new);
 		
+		if(dto.getIrum()!=null)
+			member.setIrum(dto.getIrum());
+		
+		if(dto.getTel()!=null)
+			member.setTel(dto.getTel());
+		
 		if(dto.getEmail()!=null)
 			member.setEmail(dto.getEmail());
 		
-		if(dto.getPassword()!=null && dto.getNewPassword()!=null) {
-			if(passwordEncoder.matches(dto.getPassword(), member.getPassword())==false)
-				throw new MemberFail.PasswordCheckException();
-			member.setPassword(passwordEncoder.encode(dto.getPassword()));
-		}
-		
+		if(dto.getBirthday()!=null)
+			member.setBirthday(dto.getBirthday());
+
 		MultipartFile sajin = dto.getSajin();
 		if(sajin!=null && sajin.isEmpty()==false) {
 			String profile = ZmallUtil.saveProfile(sajin, member.getUsername());
@@ -235,11 +239,60 @@ public class MemberService {
 	public Boolean block(String username) {
 		Member member = dao.findById(username).orElseThrow(MemberFail.MemberNotFoundException::new);	
 		boolean now = member.getEnabled();
-		System.out.println(now);
-		System.out.println(!now);
 		member.setEnabled(!now);
 		dao.save(member);
 		return member.getEnabled();
+	}
+
+	public void addSeller(String busniess_no, String state, String loginId) {
+		System.out.println(loginId);
+		Seller seller = new Seller();
+		seller.setUsername(loginId);
+		seller.setState(state);
+		seller.setBusniessNo(busniess_no);
+		seller.setIsActive(false);
+		
+		sDao.save(seller);
+	}
+
+	public Map<String,Object>  listSeller(Integer pageno) {
+		List<Seller> seller = (List<Seller>) sDao.findAll();
+		Map<String,Object> map = new HashMap<>();
+		map.put("content", seller);
+		map.put("totalcount", sDao.countAll());
+		map.put("pageno", pageno);
+		map.put("pagesize", 10);
+		return map;
+	}
+
+	public Boolean activeSeller(String username) {
+		Seller seller = sDao.findById(username).orElseThrow(MemberFail.SellerNotFoundException::new);	
+		seller.setIsActive(true);
+		sDao.save(seller);		
+		
+		Member member = dao.findById(username).orElseThrow(MemberFail.MemberNotFoundException::new);
+		Authority authority = new Authority();
+		authority.setMember(member);
+		authority.setAuthorityName("ROLE_SELLER");
+		AuthDao.save(authority);
+		return seller.getIsActive();
+	}
+
+	public Object inactiveSeller(String username) {
+		Seller seller = sDao.findById(username).orElseThrow(MemberFail.SellerNotFoundException::new);	
+		
+		Member member = dao.findById(username).orElseThrow(MemberFail.MemberNotFoundException::new);
+		Boolean isAlreadySeller = AuthDao.existsById(new AuthorityId(username, "ROLE_SELLER"));
+		System.out.println(isAlreadySeller);
+		if(isAlreadySeller==true) {
+			AuthDao.deleteById(new AuthorityId(username, "ROLE_SELLER"));
+			sDao.delete(seller);
+		}else {
+			sDao.delete(seller);
+		}
+	
+		mailUtil.sendSellerMail("admin@zmall.com", member.getEmail());
+		return null;
 	}
 	
 }

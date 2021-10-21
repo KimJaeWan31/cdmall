@@ -26,6 +26,16 @@ public class MailUtil {
 		sendMail(mail);
 	}
 	
+	public void sendSellerMail(String from, String to) {
+		Mail mail = Mail.builder().from(from).to(to).subject("캣독왓숑 판매자 계정 신청 결과 안내").build();
+		StringBuffer buf = new StringBuffer("<p>캣독왓숑 판매자 계정 신청이 거부됬습니다.</p>");
+		buf.append("<p>자세한 신청 거부 사유가 궁금하시다면 </p>");
+		buf.append("<p>캣독왓숑 홈페이지 고객센터의 1:1문의나 고객의 소리에서 문의해주세요</p>");
+		buf.append("<a href='http://localhost:8081'>캣독왓숑 바로가기</a>");
+		mail.setText(buf.toString());
+		sendMail(mail);
+	}
+	
 	private void sendMail(Mail mail) {
 		MimeMessage message = javaMailSender.createMimeMessage();
 		MimeMessageHelper helper;

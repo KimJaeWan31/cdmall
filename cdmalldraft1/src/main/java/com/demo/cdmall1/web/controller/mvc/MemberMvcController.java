@@ -99,5 +99,9 @@ public class MemberMvcController {
 	public void address() {
 	}
 	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/member/transform")
+	public void transform() {
+	}
 	
 }

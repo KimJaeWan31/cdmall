@@ -59,7 +59,6 @@ public class MemberDto {
 	public class Update {
 		private String irum;
 		
-		@NotNull
 		@Email
 		private String email;
 		

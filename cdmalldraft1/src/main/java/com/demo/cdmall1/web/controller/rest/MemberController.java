@@ -191,7 +191,8 @@ public class MemberController {
 	public ResponseEntity<?> listUser(@RequestParam(defaultValue="1") Integer pageno){
 		return ResponseEntity.ok(service.listUser(pageno));
 	}
-	//판매자 정보보기
+	
+	//관리자 정보보기
 	@GetMapping("/members/role_admin")
 	public ResponseEntity<?> listAdmin(@RequestParam(defaultValue="1") Integer pageno){
 		return ResponseEntity.ok(service.listAdmin(pageno));
@@ -203,4 +204,27 @@ public class MemberController {
 		return ResponseEntity.ok(service.block(username));
 	}
 	
+	@PostMapping(path="/members/addSeller", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> addSeller(String busniess_no, String state, Principal principal) {
+		
+		service.addSeller(busniess_no, state, principal.getName());
+		return ResponseEntity.ok(null);
+	}
+	
+	//판매자 보기
+	@GetMapping("/members/seller")
+	public ResponseEntity<?> listSeller(@RequestParam(defaultValue="1") Integer pageno){
+		return ResponseEntity.ok(service.listSeller(pageno));
+	}
+	
+	@PostMapping("/members/seller/active")
+	public ResponseEntity<?> activeSeller(String username){
+		return ResponseEntity.ok(service.activeSeller(username));
+	}
+	
+	@PostMapping("/members/seller/inactive")
+	public ResponseEntity<?> inactiveSeller(String username){
+		return ResponseEntity.ok(service.inactiveSeller(username));
+	}
+
 }

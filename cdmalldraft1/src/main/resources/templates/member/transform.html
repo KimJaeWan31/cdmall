@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+$(document).ready(() => {
+	 let obj = new Object();
+	 obj.b_no = [$("#busniess_no").val()];   // ["0000000000"];
+	 let jsonData = JSON.stringify(obj);
+
+	 let state = undefined;
+	 
+	console.log(jsonData);
+	$("#sumit").on("click", ()=>{
+		
+		$.ajax({
+			url : "https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=lZ48hZlWfVrdED4jazLCMT6zusL9qPqqhcR6k0pWXBCYeE8PGpueVYBMBPKMY2uD%2F16sl10bMravdv%2BVlogkTQ%3D%3D",
+			method : "post",
+			dataType:"json",
+			data :  jsonData,
+			success : function(data) {
+				state = data.data[0].tax_type;
+			},
+			contentType : "application/json; charset=utf-8"
+		}).done(()=>{
+			
+			const param = {
+				busniess_no  : $("#busniess_no").val(),
+				state : state
+			}
+			console.log(busniess_no);
+			
+			$.ajax({
+				url : "/members/addSeller",
+				method : "post",
+				data : param ,
+			}).done(()=> {Swal.fire('신청 완료', '관리자가 승인 후 판매자 계정이 활성됩니다.(최대 2~3일 소요)','success')});
+		/**/
+		});
+	});
+	
+})
+</script>
+</head>
+<body>
+	<label for="busniess_no">사업자등록번호 : </label>
+	<input type="text" id="busniess_no">
+	<button type="button" id="sumit">확인</button>
+	<button type="button" id="sumit2">확인2</button>
+</body>
+</html>

@@ -27,4 +27,8 @@ public class AdminMvcController {
 	@GetMapping("/admin/member_report")
 	public void member_report() {
 	}
+	
+	@GetMapping("/admin/seller_report")
+	public void seller_report() {
+	}
 }
