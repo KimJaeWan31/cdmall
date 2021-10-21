@@ -98,7 +98,5 @@ public class ProductService {
 	public void continueShopping(String currentUrl) {
 		HttpSession session = ZmallUtil.getSession();
 		session.setAttribute("currentUrl", currentUrl);
-		
 	}
-
 }
