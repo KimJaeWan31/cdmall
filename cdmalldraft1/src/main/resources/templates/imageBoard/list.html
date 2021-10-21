@@ -53,7 +53,7 @@
 			// 사진게시판 화면 구성
 			 const $li = $("<li>").appendTo($list);
 			const $figure = $("<figure>").appendTo($li);
-			$("<img>").attr("src", "/upload/ibimage/" + c.imageFileName).attr("class","myPetImg").attr("id", c.ibno+"_"+c.imageFileName).appendTo($figure);
+			$("<img>").attr("src", "/upload/ibimage/" + c.imageFileName).css("cursor","pointer").attr("onclick","imageClicked("+ c.ibno +")").attr("class","myPetImg").attr("id", c.ibno+"_"+c.imageFileName).appendTo($figure);
 			const $figcaption = $("<figcaption>").appendTo($li);
 			$("<p>").text(c.writer).appendTo($figcaption);  //글쓴이 출력
 			
@@ -231,6 +231,17 @@
 			$("#goodCancelBtn_"+ibno).hide();
 		} 
 	 }
+	 
+	 const imageClicked=(ibno)=>{
+			const param = {
+				 url: window.location.href
+			}
+			$.ajax({
+				 url: "/product/continueShopping",
+				data: param, 
+				method: "get"
+			}).done(location.href = "/imageBoard/read?ibno="+ibno);
+		 }
 	
 	
 	 

@@ -224,6 +224,8 @@
 </script>
 <body>
 <div id="page">
+	<header id="header" th:replace="/fragments/headerBoard">
+	</header>
 	<div id="username" sec:authentication="name" style="display:none;"></div>
 	<nav id="nav" th:replace="/fragments/navBoard">
 	</nav>
