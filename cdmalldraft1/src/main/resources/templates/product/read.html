@@ -215,7 +215,22 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 					/* beforeSend: function(xhr) {
 						xhr.setRequestHeader(header, token)
 					} */
-				}).done(location.href = "/cart/cart_read");
+				}).done(
+					Swal.fire({ 
+						title: '장바구니 추가 완료!', 
+						text: "장바구니 화면으로 이동 하시겠습니까?", 
+						icon: 'success', 
+						showCancelButton: true, 
+						confirmButtonColor: '#3085d6', 
+						cancelButtonColor: '#d33', 
+						confirmButtonText: '승인', 
+						cancelButtonText: '취소' 
+					}).then((result) => {
+						if (result.isConfirmed) { // 승인버튼 누르면
+							location.href = "/cart/cart_read";
+						}
+					}),
+				);
 			},
 			
 			buy: function() {
