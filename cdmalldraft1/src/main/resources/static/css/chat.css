@@ -5,7 +5,7 @@
 }
 
 body {
-    background: #44475382;
+    background: #c5e7f2;
     font: 14px/20px "Lato", Arial, sans-serif;
     padding: 40px 0;
     color: white;
@@ -183,21 +183,21 @@ ul {
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-bottom-color: #B5B3B3;
+    border-bottom-color: #c5e7f2;
     border-width: 10px;
     margin-left: -10px;
 }
 
 .chat .chat-history .my-message {
-    background: #B5B3B3 ;
+    background: #c5e7f2 ;
 }
 
 .chat .chat-history .other-message {
-    background: #C5DDEB ;
+    background:  #7fc9f4;
 }
 
 .chat .chat-history .other-message:after {
-    border-bottom-color: #C5DDEB ;
+    border-bottom-color: #7fc9f4 ;
     left: 97%;
 }
 
