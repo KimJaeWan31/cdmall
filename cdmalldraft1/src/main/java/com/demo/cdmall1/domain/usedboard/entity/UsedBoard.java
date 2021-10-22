@@ -63,6 +63,8 @@ public class UsedBoard extends BaseCreateAndUpdateTimeEntity {
 	
 	private Integer attachmentCnt;
 	
+	private Integer warnCnt;
+	
 	@OneToMany(mappedBy="usedBoard", cascade=CascadeType.REMOVE)
 	@OrderBy(value="ubcno DESC")
 	private Set<UsedComment> comments;
@@ -77,6 +79,7 @@ public class UsedBoard extends BaseCreateAndUpdateTimeEntity {
 		this.badCnt = 0;
 		this.commentCnt = 0;
 		this.attachmentCnt = 0;
+		this.warnCnt=0;
 		if(this.usedattachments!=null)
 			this.attachmentCnt = usedattachments.size();
 	}

@@ -150,6 +150,30 @@ private final ModelMapper modelMapper;
 		return null;
 	}
 	
+	public Map<String,Object> warnList(Integer pageno, Integer warnCnt){
+		System.out.println("aaaaaaaaaaaaaaaaaaaa");
+		Pageable pageable = PageRequest.of(pageno-1, 10);
+		Map<String,Object> map = new HashMap<>();
+		map.put("content", dao.readWarnAll(pageable, warnCnt));
+		map.put("totalcount", dao.countByWarnCnt());
+		map.put("pageno", pageno);
+		map.put("pagesize", 10);
+		return map;
+	}
+	
+	@Transactional
+	public Integer warnCheck(Integer ubno, Integer state) {
+		UsedBoard usedBoard = dao.findById(ubno).orElseThrow(BoardFail.BoardNotFoundException::new);
+		if(state==0) {
+			usedBoard.setWarnCnt(usedBoard.getWarnCnt()+1);
+			return usedBoard.getWarnCnt();
+		}else if(state==1) {
+			return usedBoard.getWarnCnt();
+		}
+		usedBoard.setWarnCnt(usedBoard.getWarnCnt()-1);
+		return usedBoard.getWarnCnt();
+	}
+	
 	@Transactional
 	public Integer goodOrBad(Integer ubno, Integer state) {
 		UsedBoard usedBoard = dao.findById(ubno).orElseThrow(BoardFail.IllegalJobException::new);

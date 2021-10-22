@@ -109,6 +109,18 @@ public class UsedBoardController {
 			return ResponseEntity.ok(cnt);
 		}
 		
+		@GetMapping(path="/usedBoard/warnlist", produces=MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<?> warnlist(@RequestParam(defaultValue="1") Integer pageno, Integer warnCnt) {
+			System.out.println("sssssssssssssssssssssss");
+			return ResponseEntity.ok(usedService.warnList(pageno, warnCnt));
+		}
+		
+		@GetMapping("/usedBoard/warn")
+		public ResponseEntity<?> WarnCnt(@RequestParam Integer ubno, @RequestParam Integer state){
+			Integer cnt = usedService.warnCheck(ubno, state);
+			return ResponseEntity.ok(cnt);
+		}
+		
 		
 		@DeleteMapping("/usedBoard/{ubno}")
 		public ResponseEntity<?> delete(@PathVariable Integer ubno, Principal principal) {

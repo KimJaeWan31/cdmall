@@ -6,9 +6,6 @@ import java.util.List;
 
 import org.springframework.web.multipart.*;
 
-import com.demo.cdmall1.domain.board.entity.*;
-import com.demo.cdmall1.domain.questionboard.entity.*;
-import com.demo.cdmall1.web.dto.BoardDto.*;
 import com.fasterxml.jackson.annotation.*;
 
 import lombok.*;
@@ -44,6 +41,12 @@ public class UsedBoardDto {
 		private Integer ubno;
 		private Boolean isGood;
 	}
+	@Data
+	@AllArgsConstructor
+	public static class WarnCheck{
+		private Integer ubno;
+		private Boolean isWarn;
+	}
 	
 	@Data
 	@AllArgsConstructor
@@ -56,6 +59,7 @@ public class UsedBoardDto {
 		private Integer readCnt;
 		private Integer attachmentCnt;
 		private Integer commentCnt;
+		private Integer warnCnt;
 	}
 	
 
@@ -84,6 +88,25 @@ public class UsedBoardDto {
 		private String writer;
 		@Accessors(chain=true)
 		private List<UsedCommentDto.Read> usedcomments;
-		private Set<Attachment> attachments;
+		private Integer warnCnt;
+	}
+	
+	@Data
+	@AllArgsConstructor
+	public static class WarnList {
+		private Integer ubno;
+		private String title;
+		private String writer;
+		@JsonProperty("writeTime")
+		private LocalDateTime creaDateTime;
+		private Integer readCnt;
+		private Integer attachmentCnt;
+		private Integer commentCnt;
+		private Integer goodCnt;
+		private Integer badCnt;
+		private String category;
+		private Integer warnCnt;
+		private Boolean isActive;
+		
 	}
 }
