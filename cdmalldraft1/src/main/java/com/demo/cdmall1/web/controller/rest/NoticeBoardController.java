@@ -68,15 +68,8 @@ public class NoticeBoardController {
 			return ResponseEntity.ok(noticeService.list(pageno));
 		}
 		
-		@PostMapping("/noticeBoard/nbcomments")
-		public ResponseEntity<?> CommentCnt(@RequestParam Integer nbno) {
-			Integer cnt = noticeService.updateCommentCnt(nbno);
-			return ResponseEntity.ok(cnt);
-		}
-		
 		@PutMapping(path="/noticeBoard/{nbno}", produces=MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<?> update(@Valid NoticeBoardDto.Update dto, BindingResult bindingResult, Principal principal) throws BindException {
-			System.out.println("88888888888888888888888888888888888888");
 			System.out.println(dto);
 			if(bindingResult.hasErrors())
 				throw new BindException(bindingResult);

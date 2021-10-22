@@ -71,12 +71,10 @@ private final NoticeBoardRepository dao;
 		public Map<String,Object> read(Integer nbno, String loginId) {
 			NoticeBoard noticeBoard = dao.findById(nbno).orElseThrow(BoardFail.BoardNotFoundException::new);
 			noticeBoard.increaseReadCnt(loginId);	
-			List<NBCommentDto.Read> nbcomments = noticeBoard.getNbcomments().stream().map(c->c.toDto()).collect(Collectors.toList());
 			Map<String,Object> map = new HashMap<>();
 			map.put("nbno", noticeBoard.getNbno());
 			map.put("title", noticeBoard.getTitle());
 			map.put("content", noticeBoard.getContent());
-			map.put("commentCnt", noticeBoard.getCommentCnt());
 			// map에는 @JsonFormat을 걸수가 없으므로 직접 변환해서 map에 저장하자
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 			map.put("createTime", dtf.format(noticeBoard.getCreateTime()));
@@ -84,16 +82,9 @@ private final NoticeBoardRepository dao;
 			map.put("updateTime", noticeBoard.getUpdateTime());
 			map.put("writer", noticeBoard.getWriter());
 			map.put("nbattachments", noticeBoard.getNbattachments());
-			map.put("nbcomments", nbcomments);
 			return map;
 		}
 		
-		@Transactional
-		public Integer updateCommentCnt(Integer nbno) {
-			NoticeBoard noticeBoard = dao.findById(nbno).orElseThrow(BoardFail.IllegalJobException::new);
-			return noticeBoard.updateCommentCnt();
-		}
-
 		public Map<String,Object> list(Integer pageno) { 
 			Pageable pageable = PageRequest.of(pageno-1, 10); 
 			Map<String,Object> map = new HashMap<>(); 
@@ -123,8 +114,6 @@ private final NoticeBoardRepository dao;
 	// 글 변경
 			@Transactional
 			public NoticeBoard update(NoticeBoardDto.Update dto, String loginId) {
-				System.out.println("777777777777777777777");
-				System.out.println(dto.getContent());
 				NoticeBoard noticeBoard = dao.findById(dto.getNbno()).orElseThrow(BoardFail.BoardNotFoundException::new);
 				if(noticeBoard.getWriter().equals(loginId)==false)
 					throw new BoardFail.IllegalJobException();

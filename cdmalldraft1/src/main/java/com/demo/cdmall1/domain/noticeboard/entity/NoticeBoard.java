@@ -39,15 +39,7 @@ public class NoticeBoard extends BaseCreateAndUpdateTimeEntity {
 	@Column(length=10)
 	private String writer;
 	
-	//@JsonView(NoticeBoardDto.List.class)
-	//private LocalDateTime writeday;
-	
 	private Integer readCnt;
-	
-	private Integer commentCnt;
-	
-	@OneToMany(mappedBy="noticeBoard", cascade=CascadeType.REMOVE)
-	private Set<NBComment> nbcomments;
 	
 	@OneToMany(mappedBy="noticeBoard", cascade={CascadeType.PERSIST, CascadeType.REMOVE})
 	private Set<NBAttachment> nbattachments;
@@ -55,18 +47,12 @@ public class NoticeBoard extends BaseCreateAndUpdateTimeEntity {
 	@PrePersist
 	public void init() {
 		this.readCnt = 0;
-		this.commentCnt = 0;
 	}
 	
 	public NoticeBoard increaseReadCnt(String loginId) {
 		if(loginId!=null && loginId.equals(this.writer)==false)
 			this.readCnt++;
 		return this;
-	}
-
-	public Integer updateCommentCnt() {
-		this.commentCnt = this.getNbcomments().size();
-		return this.commentCnt;
 	}
 	
 	public void addAttachment(NBAttachment nbattachment) {

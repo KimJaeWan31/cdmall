@@ -42,6 +42,5 @@ public class NoticeBoardDto {
 		@JsonProperty("writeTime")
 		private LocalDateTime createDateTime;
 		private Integer readCnt;
-		private Integer commentCnt;
 	}
 }

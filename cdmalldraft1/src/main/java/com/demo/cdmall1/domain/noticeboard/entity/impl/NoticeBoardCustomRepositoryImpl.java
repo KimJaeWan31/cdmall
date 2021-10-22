@@ -34,7 +34,7 @@ public class NoticeBoardCustomRepositoryImpl extends QuerydslRepositorySupport i
 	public List<com.demo.cdmall1.web.dto.NoticeBoardDto.List> readAll(Pageable pageable) {
 		QNoticeBoard noticeBoard = QNoticeBoard.noticeBoard;
 		return factory.from(noticeBoard).select(Projections.constructor(NoticeBoardDto.List.class, noticeBoard.nbno, noticeBoard.title, noticeBoard.writer, 
-				noticeBoard.createTime,noticeBoard.readCnt, noticeBoard.commentCnt)).where(noticeBoard.nbno.gt(0))
+				noticeBoard.createTime,noticeBoard.readCnt)).where(noticeBoard.nbno.gt(0))
 				.orderBy(noticeBoard.nbno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	}
 
