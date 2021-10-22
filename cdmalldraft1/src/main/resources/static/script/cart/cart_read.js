@@ -13,6 +13,7 @@ const main = {
 			carts = result;
 			this.printPage();
 			console.log(carts);
+			
 		});
 		
 		$("#check_all").on("change", this.checkAll);

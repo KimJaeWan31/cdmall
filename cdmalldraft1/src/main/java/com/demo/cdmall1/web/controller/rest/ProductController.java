@@ -99,4 +99,9 @@ public class ProductController {
 		service.continueShopping(url);
 		return ResponseEntity.ok(null);
 	}
+	
+	@GetMapping(path="/products/wishList", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> withList(@RequestParam(defaultValue="1") Integer pageno, String username){
+		return ResponseEntity.ok(service.wishList(pageno, username));
+	}
 }

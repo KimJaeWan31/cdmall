@@ -39,6 +39,8 @@ public class ProductMemberService {
 		System.out.println(isTrue);
 		return isTrue;
 	 }
+	 
+	 
 	 public List<ProductMember> getWishListByUsername(String username) {
 		 return  dao.findAllByUsername(username);
 	 }

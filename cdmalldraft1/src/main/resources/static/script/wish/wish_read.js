@@ -9,9 +9,16 @@ const header = $("meta[name='_csrf_header']").attr("content"); */
 	
 const main = {
 	init : function() {
-		$.ajax({ url: "/product_wish/wish", method: "get"}).done(result=>{
+		/*$.ajax({ url: "/product_wish/wish", method: "get"}).done(result=>{
 			wishList = result;
 			console.log(wishList)
+			this.printPage();
+		});*/
+		
+		$.ajax({ url: "/products/wishList", method: "get"}).done(result=>{
+			wishList = result;
+			console.log(wishList);
+			console.log(wishList.content);
 			this.printPage();
 		});
 		
@@ -43,30 +50,29 @@ const main = {
 		} else {
 			$("#wish_div").show();
 			$("#empty_wish_div").hide();
-			this.printwish();
+			this.printwishList();
 		}
 	},
 	
 
-	printwish: function() {
+	printwishList: function() {
 		// 장바구니 전체 가격을 계산할 변수
 		let totalPrice = 0;
 		const $list = $("#list");
 		$list.empty();
-		$.each(wishList, function(idx, wishList) {
-			totalPrice += cart.cartPrice;
+		$.each(wishList.content, function(idx, wish) {
 			const $tr = $("<tr>").appendTo($list);
 			const $td1 = $("<td>").appendTo($tr);
-			$("<input>").attr("type","checkbox").attr("class","check").data("pno", wishList.pno).appendTo($td1);
+			$("<input>").attr("type","checkbox").attr("class","check").data("pno", wish.pno).appendTo($td1);
 			
-			const $td2 = $("<td>").css("width","300px").appendTo($tr);
-			$("<img>").attr("src", "/upload/productimage/"+cart.image).attr("class","cart_image").appendTo($td2);
+			const $td2 = $("<td>").css({"width":"300px"}).appendTo($tr);
+			$("<img>").attr("src", "/upload/productimage/"+wish.imageFileName).css("height","150px").attr("class","cart_image").appendTo($td2);
 			
 			const $td3 = $("<td>").css("width","800px").appendTo($tr);
 			
-			$("<span>").text("pno: " + wishList.pno).css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
+			$("<div>").text("상품명: " + wish.name).css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($td3);
-			$("<span>").text("username: " + wishList.username).css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
+			$("<div>").text("제조사: " + wish.manufacturer).css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($td3);
 
 			
@@ -111,7 +117,7 @@ const main = {
 			} */
 		}).done(result=>{
 			wishList = result;
-			window._this.wishList();
+			window._this.printwishList();
 		}).fail(result=>alert(result.responseText));
 	},
 		

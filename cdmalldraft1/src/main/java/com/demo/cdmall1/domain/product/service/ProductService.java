@@ -78,6 +78,16 @@ public class ProductService {
 		return dto;
 	}
 	
+	@Transactional(readOnly=true)
+	public ProductDto.ProductListResponse wishList(Integer pageno, String username) {
+		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
+		Pageable pageable = PageRequest.of(pageno-1, 15);
+		ProductDto.ProductListResponse dto = new ProductDto.ProductListResponse(dslDao.readAll(pageable, username), dslDao.wishTotalCount(username), pageno, 10);
+		return dto;
+	}
+	
+	
+	
 	@Transactional
 	public Integer goodOrBad(Integer pno, Integer state) {
 		Product product = dao.findById(pno).orElseThrow(BoardFail.BoardNotFoundException::new);
@@ -96,7 +106,7 @@ public class ProductService {
 	}
 
 	public void continueShopping(String currentUrl) {
-		HttpSession session = ZmallUtil.getSession();
+		HttpSession session = ZmallUtil.getSession();	
 		session.setAttribute("saved_url", currentUrl);
 	}
 }

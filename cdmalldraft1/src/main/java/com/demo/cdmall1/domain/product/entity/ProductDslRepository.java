@@ -21,11 +21,13 @@ public class ProductDslRepository {
 	private EntityManager em;
 	private JPAQueryFactory factory;
 	private QProduct qproduct;
+	private QProductMember qProductMember;
 	
 	@PostConstruct
 	public void init() {
 		this.factory = new JPAQueryFactory(em);
 		qproduct  = QProduct.product;
+		qProductMember = QProductMember.productMember;
 	}
 
 	// select * from board where bno>0;
@@ -38,7 +40,33 @@ public class ProductDslRepository {
 				qproduct.image,qproduct.price, qproduct.avgOfStar,qproduct.reviewCount,qproduct.imageFileName,qproduct.goodCnt, qproduct.goodCnlCnt)).where(qproduct.pno.gt(0))
 				.orderBy(qproduct.pno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	}
-
+	
+	
+	//product & product_member join 
+	public List<ProductList> readByUsername(Pageable pageable, String username){
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(qproduct.pno.gt(0));
+		return factory.from(qproduct).join(qProductMember).on(qproduct.pno.eq(qProductMember.pno)) //join하는 코드 
+				.select(Projections.constructor(ProductDto.ProductList.class, 
+						qproduct.pno, qproduct.name, qproduct.price, qproduct.manufacturer, qproduct.imageFileName))
+				.where(qproduct.pno.eq(qProductMember.pno).and(qProductMember.username.eq(username)))
+				.orderBy(qproduct.pno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+	}
+	
+	//찜하기 CountAll
+	public Long wishTotalCount(String username) {
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(qProductMember.pno.gt(0)); 
+		if(username!=null) {
+			condition.and(qProductMember.username.eq(username));
+		}
+  
+		return factory.from(qProductMember).select(qProductMember.pno.count())
+				.where(condition).fetchOne();
+	}
+	
+	
+	//productList countAll
 	public Long aaaaaa(String manufacturer) {
 		BooleanBuilder condition = new BooleanBuilder();
 		condition.and(qproduct.pno.gt(0));
