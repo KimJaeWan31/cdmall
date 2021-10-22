@@ -13,6 +13,8 @@ import lombok.*;
 @Service
 public class ProductMemberService {
 	private final ProductMemberRepository dao;
+	
+	
 	@Transactional
 	public WishorNot wishOrNot(Integer pno, boolean isGood, String loginId) {
 		boolean isExist = dao.existsByPnoAndUsername(pno, loginId);
@@ -40,4 +42,8 @@ public class ProductMemberService {
 	 public List<ProductMember> getWishListByUsername(String username) {
 		 return  dao.findAllByUsername(username);
 	 }
+	 
+	 
+	 
+	 
 }

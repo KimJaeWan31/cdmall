@@ -14,6 +14,5 @@ public class ProductMember {
 	private Integer pno;
 	@Id
 	private String username;
-	
 
 }

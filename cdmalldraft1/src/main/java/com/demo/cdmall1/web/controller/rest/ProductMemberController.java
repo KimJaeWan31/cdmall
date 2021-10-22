@@ -6,6 +6,7 @@ import java.util.*;
 
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.*;
+import org.springframework.transaction.annotation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.*;
 import org.springframework.web.util.*;
@@ -45,4 +46,6 @@ public class ProductMemberController {
 		List<ProductMember> wishList = productMemberService.getWishListByUsername(username);
 		return ResponseEntity.ok(wishList);
 	}
+	
+	
 }

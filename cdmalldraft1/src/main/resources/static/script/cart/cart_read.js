@@ -12,6 +12,7 @@ const main = {
 		$.ajax({ url: "/carts", method: "get"}).done(result=>{
 			carts = result;
 			this.printPage();
+			console.log(carts);
 		});
 		
 		$("#check_all").on("change", this.checkAll);
@@ -20,6 +21,7 @@ const main = {
 		$("#delete_product").on("click", this.deleteProduct);
 		$("#order").on("click", this.order);
 		$("#continueShopping").on("click", this.continueShopping);
+		
 		
 		window._this = this;
 	},

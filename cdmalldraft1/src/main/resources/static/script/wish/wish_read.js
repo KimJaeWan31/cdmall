@@ -16,8 +16,8 @@ const main = {
 		});
 		
 		$("#check_all").on("change", this.checkAll);
-		$("#cart_div").on("click", ".inc", this.incProduct);
-		$("#cart_div").on("click", ".dec", this.decProduct);
+		$("#wish_div").on("click", ".inc", this.incProduct);
+		$("#wish_div").on("click", ".dec", this.decProduct);
 		$("#delete_product").on("click", this.deleteProduct);
 		$("#order").on("click", this.order);
 		$("#continueShopping").on("click", this.continueShopping);
@@ -37,36 +37,38 @@ const main = {
 	
 	printPage: function() {
 		// 장바구니가 비어있으면 emtpy_cart 이미지를, 아니면 출력 div를 
-		if(carts.length==0) {
-			$("#cart_div").hide();
-			$("#empty_cart_div").css("text-align","center").css("height","400px").show();
+		if(wishList.length==0) {
+			$("#wish_div").hide();
+			$("#empty_wish_div").css({"text-align":"center","height":"400px"}).show();
 		} else {
-			$("#cart_div").show();
-			$("#empty_cart_div").hide();
-			this.printCarts();
+			$("#wish_div").show();
+			$("#empty_wish_div").hide();
+			this.printwish();
 		}
 	},
 	
-	printCarts: function() {
+
+	printwish: function() {
 		// 장바구니 전체 가격을 계산할 변수
 		let totalPrice = 0;
 		const $list = $("#list");
 		$list.empty();
-		$.each(carts, function(idx, cart) {
+		$.each(wishList, function(idx, wishList) {
 			totalPrice += cart.cartPrice;
 			const $tr = $("<tr>").appendTo($list);
 			const $td1 = $("<td>").appendTo($tr);
-			$("<input>").attr("type","checkbox").attr("class","check").data("pno", cart.pno).appendTo($td1);
+			$("<input>").attr("type","checkbox").attr("class","check").data("pno", wishList.pno).appendTo($td1);
 			
 			const $td2 = $("<td>").css("width","300px").appendTo($tr);
 			$("<img>").attr("src", "/upload/productimage/"+cart.image).attr("class","cart_image").appendTo($td2);
 			
 			const $td3 = $("<td>").css("width","800px").appendTo($tr);
 			
-			$("<div>").text("제조사 : " + cart.manufacturer).css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
-			$("<div>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($td3);
-			$("<span>").text("상품명 : " + cart.name).appendTo($td3);
-			$("<div>").text(cart.price +"원").css("margin-top","20px").appendTo($td3);
+			$("<span>").text("pno: " + wishList.pno).css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
+			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($td3);
+			$("<span>").text("username: " + wishList.username).css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
+			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($td3);
+
 			
 			
 //			const $td4 = $("<td>").appendTo($tr);
@@ -108,8 +110,8 @@ const main = {
 				xhr.setRequestHeader(header, token) 
 			} */
 		}).done(result=>{
-			carts = result;
-			window._this.printCarts();
+			wishList = result;
+			window._this.wishList();
 		}).fail(result=>alert(result.responseText));
 	},
 		
@@ -125,8 +127,8 @@ const main = {
 				xhr.setRequestHeader(header, token)
 			} */
 		}).done(result=>{
-			carts = result;
-			window._this.printCarts();
+			wishList = result;
+			window._this.printwishList();
 		});
 	},
 		
