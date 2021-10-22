@@ -2,6 +2,7 @@ package com.demo.cdmall1.web.controller.rest;
 
 import java.net.*;
 import java.security.*;
+import java.util.*;
 
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.*;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.*;
 import org.springframework.web.util.*;
 
+import com.demo.cdmall1.domain.product.entity.*;
 import com.demo.cdmall1.domain.product.service.*;
 
 import lombok.*;
@@ -34,5 +36,13 @@ public class ProductMemberController {
 	public ResponseEntity<?> isExist(Integer pno, String loginId) {
 		boolean check = productMemberService.isExist(pno, loginId); 
 		return ResponseEntity.ok(check);                                                                                                                                                                                                                                                                                                     
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/product_wish/wish")
+	public ResponseEntity<?> findAllByUsername(Principal principal) {
+		String username = principal.getName();
+		List<ProductMember> wishList = productMemberService.getWishListByUsername(username);
+		return ResponseEntity.ok(wishList);
 	}
 }

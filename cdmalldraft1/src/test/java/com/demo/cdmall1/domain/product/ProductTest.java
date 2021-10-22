@@ -30,7 +30,7 @@ public class ProductTest {
 	 * 
 	 * }
 	 */
-	 	//@Test
+	 	@Test
 		public void test1() {
 			pdao.readAll();
 		}

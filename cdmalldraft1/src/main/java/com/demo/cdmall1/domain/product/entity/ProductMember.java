@@ -10,10 +10,10 @@ import lombok.*;
 @IdClass(ProductMemberId.class)
 @Entity
 public class ProductMember {
-	
+	@Id
+	private Integer pno;
 	@Id
 	private String username;
 	
-	@Id
-	private Integer pno;
+
 }

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- <meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/> -->
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="/script/main.js"></script>
+<script src="/script/wish/wish_read.js"></script>
+
+<style>
+.item_amount span{
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+	line-height: 28px;
+	text-align: center;
+	border: 1px solid gray;
+	cursor: pointer;
+}
+
+.cart_image{
+	width: 150px;
+	border : 1px solid black;
+}
+
+
+</style>
+<script>
+	
+</script>
+</head>
+<body>
+	<div id="page">
+		<header id="header" th:replace="/fragments/headerStore"></header>
+		<nav id="nav" th:replace="/fragments/navStore"></nav>
+		<div id="main">
+			<section id="section">
+				<form action="" enctype="multipart/form-data"></form>
+				<div id="cart_div" style="display: none;">
+					<table class="table">
+						<thead>
+							<tr>
+								<th colspan="4">주 문 목 록 <br />
+							<input type="checkbox" id="check_all">
+							<button id="delete_product" class="btn btn-light" style="color:#0064FF;">선택상품 삭제</button>
+								</th>
+							</tr>
+							<tr>
+							
+							</tr>
+						</thead>
+						<tbody id="list">
+						</tbody>
+					</table>
+					<hr>
+
+					<div>
+						<input type="checkbox" id="check_all">
+						<button id="delete_product" class="btn btn-light" style="color:#0064FF;">선택상품 삭제</button>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<button id='continueShopping' class="btn btn-primary">쇼핑계속 하기</button>
+						<button id='addOrder' class="btn btn-primary">장바구니에 담기 </button>
+					</div>
+				</div>
+				<div id="empty_cart_div" style="display: none;">
+					<h1>장바구니가 비어있습니다</h1>
+				</div>
+				<hr>
+			</section>
+		</div>
+
+		<footer id="footer" th:replace="/fragments/footer"> </footer>
+	</div>
+</body>
+</html>
