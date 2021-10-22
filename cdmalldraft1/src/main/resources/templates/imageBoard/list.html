@@ -42,14 +42,6 @@
 		
 		  for(c of page.content) {
 			
-			/* const $li = $("<li>").appendTo($list);
-			const $figure = $("<figure>").appendTo($li);
-			$("<img>").attr("src", "/upload/image/" + c.imageFileName).appendTo($figure);
-			$('img').attr('id', 'img');
-			const $figcaption = $("<figcaption>").appendTo($li);
-			$("<p>").text(c.writer).appendTo($figcaption);
-			$("<a>").attr("href", "/imageBoard/read?ibno=" + c.ibno).text(c.title).appendTo($figcaption); */
-			
 			// 사진게시판 화면 구성
 			 const $li = $("<li>").appendTo($list);
 			const $figure = $("<figure>").appendTo($li);
@@ -75,64 +67,36 @@
 			};
 			$.ajax({ async: false, url: "/imageBoard_member/is_exist", data: param, method: "get"})
 				.done(heartCheck=>{
-		 
+					
 		 			isHearted = heartCheck;
 		 			
-		 			if(isLogin==true && currentUser!=c.writer){
-						if(isHearted == true){
-							const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ c.ibno).attr("type", "button").attr("class","fa fa-heart-o").css({"color": "black", "font-size": "20px","cursor":"pointer", "display":"none"})
-							.attr("onclick","like("+c.ibno+",'"+c.writer+"')").text("").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
-							
-							const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + c.ibno).attr("type", "button").attr("class","fa fa-heart").css({"color": "red", "font-size": "20px", "cursor":"pointer"})
-							.attr("onclick","likeCancel("+c.ibno+",'"+c.writer+"')").text("").appendTo($div);
-							
-							$("<span>").attr("id", "good_cnt_"+c.ibno).text(c.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
-				 			$("<span>").attr("id", "likeCheck").text("").css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
-						}else{
-							const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ c.ibno).attr("type", "button").attr("class","fa fa-heart-o").css({"color": "black", "font-size": "20px","cursor":"pointer"})
-							.attr("onclick","like("+c.ibno+",'"+c.writer+"')").text("").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
-							
-							const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + c.ibno).attr("type", "button").attr("class","fa fa-heart").css({"color": "red", "font-size": "20px", "cursor":"pointer", "display":"none"})
-							.attr("onclick","likeCancel("+c.ibno+",'"+c.writer+"')").text("").appendTo($div);
-							
-							$("<span>").attr("id", "good_cnt_"+c.ibno).text(c.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
-				 			$("<span>").attr("id", "likeCheck").text("").css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
-						}
-					} else if(isLogin==true && currentUser==c.writer){
-						if(isHearted == true){
-							const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ c.ibno).attr("type", "button").attr("class","fa fa-heart-o").css({"color": "black", "font-size": "20px","cursor":"pointer", "display":"none"})
-							.attr("onclick","like("+c.ibno+",'"+c.writer+"')").text("").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
-							
-							const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + c.ibno).attr("type", "button").attr("class","fa fa-heart").css({"color": "red", "font-size": "20px", "cursor":"pointer"})
-							.attr("onclick","likeCancel("+c.ibno+",'"+c.writer+"')").text("").appendTo($div);
-							
-							$("<span>").attr("id", "good_cnt_"+c.ibno).text(c.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
-				 			$("<span>").attr("id", "likeCheck").text("").css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
-						}else {
-							const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ c.ibno).attr("type", "button").attr("class","fa fa-heart-o").css({"color": "black", "font-size": "20px","cursor":"pointer"})
-							.attr("onclick","like("+c.ibno+",'"+c.writer+"')").text("").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
-							
-							const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + c.ibno).attr("type", "button").attr("class","fa fa-heart").css({"color": "red", "font-size": "20px", "cursor":"pointer", "display":"none"})
-							.attr("onclick","likeCancel("+c.ibno+",'"+c.writer+"')").text("").appendTo($div);
-							
-							$("<span>").attr("id", "good_cnt_"+c.ibno).text(c.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
-				 			$("<span>").attr("id", "likeCheck").text("").css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
-						}
-					} else if(isLogin==false) {
+		 			const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ c.ibno).attr("type", "button").attr("class","fa fa-heart-o").css({"color": "black", "font-size": "20px","cursor":"pointer"})
+					.attr("onclick","like("+c.ibno+")").text("").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
+					
+					const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + c.ibno).attr("type", "button").attr("class","fa fa-heart").css({"color": "red", "font-size": "20px", "cursor":"pointer"})
+					.attr("onclick","likeCancel("+c.ibno+")").text("").appendTo($div);
+					
+					$("#goodCancelBtn_"+c.ibno).hide();
+					
+					$("<span>").attr("id", "good_cnt_"+c.ibno).text(c.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
+		 			$("<span>").attr("id", "likeCheck").text("").css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($div);
+		 			
+					if(isHearted == true){
+						$("#goodBtn_"+c.ibno).hide();
+						$("#goodCancelBtn_"+c.ibno).show();
+					}
+				
+		 			if(isLogin==false) {
 						$("#goodOn_btn").prop("disabled", true);
 						$("#goodOff_btn").prop("disabled", true);
 					}
-					 
 				});
-			
-			
-			
-		}  
 		
-	};
+			}  
+		
+		};
 	
 	const getPagination = () => {
-		// console.log(page.totalPages);
 		// 한번에 다섯개의 페이지씩
 		const blockSize = 5;
 		
@@ -153,16 +117,6 @@
 			next = 0;
 		}
 	
-		/*
-			자바스크립트 객체 필드의 이름과 값을 저장한 변수명을 같은 경우 59라인과 같이 줄여서 쓸 수 있다
-			return { 
-				pageno: pageno, 
-				prev : prev, 
-				next : next, 
-				first : first, 
-				last : last
-			}
-		*/
 		return {pageno, prev, next, first, last};
 		
 	};
@@ -194,36 +148,31 @@
 		}
 	}
 	
-	const like = (ibno, cWriter)=>{
+	const like = (ibno)=>{
 		// 추천
+		const param = {
+				ibno: ibno,
+				isGood: 1
+		}
 		
-		if(isLogin==true){
-			const param = {
-					ibno: ibno,
-					isGood: 1
-			}
-			
-			$.ajax({ url: "/imageBoard_member/good_or_bad", data: param, method: "patch"})
-				.done(goodCnt=>goodClicked(goodCnt, ibno));
-		}	
+		$.ajax({ url: "/imageBoard_member/good_or_bad", data: param, method: "patch"})
+			.done(goodCnt=>goodClicked(goodCnt, ibno));
+	
 	}
 	
-	const likeCancel = (ibno, cWriter)=>{
+	const likeCancel = (ibno)=>{
 		// 추천 취소
-		if(isLogin==true){
-			const param = {
-					ibno: ibno,
-					isGood: 0
-			}
-			
-			$.ajax({ url: "/imageBoard_member/good_or_bad", data: param, method: "patch"})
-				.done(goodCnt=>goodCnlClicked(goodCnt, ibno));
-		}	
+		const param = {
+				ibno: ibno,
+				isGood: 0
+		}
+		
+		$.ajax({ url: "/imageBoard_member/good_or_bad", data: param, method: "patch"})
+			.done(goodCnt=>goodCnlClicked(goodCnt, ibno));
+	
 	}
 	
 	const goodClicked=(goodCnt, ibno)=>{
-		//$("#good_cnt_"+ibno).text()
-		//$("#good_cnt_"+ibno).text(goodCnt);
 		if($("#good_cnt_"+ibno).text()!=goodCnt){
 			$("#good_cnt_"+ibno).text(goodCnt);
 			$("#goodBtn_"+ibno).hide();
@@ -239,7 +188,7 @@
 		} 
 	 }
 	 
-	 //이미지 클릭스 이동 
+	 //이미지 클릭시 이동 
 	 const imageClicked=(ibno)=>{
 			const param = {
 				 url: window.location.href
@@ -261,7 +210,6 @@
 		let pageno = location.search.substr(8);
 		if(pageno=="")
 			pageno=1;
-		console.log("2222222222222222222222");
 		$.ajax("/imageBoard/all?pageno="+pageno).done(result=>{
 			page=result;
 			

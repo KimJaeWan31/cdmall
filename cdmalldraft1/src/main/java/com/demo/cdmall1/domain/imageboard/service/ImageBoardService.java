@@ -64,6 +64,7 @@ public class ImageBoardService {
 		map.put("title", imageBoard.getTitle());
 		map.put("content", imageBoard.getContent());
 		map.put("goodCnt", imageBoard.getGoodCnt());
+		map.put("reportCnt", imageBoard.getReportCnt());
 		//map.put("badCnt", imageBoard.getBadCnt());
 		// map에는 @JsonFormat을 걸수가 없으므로 직접 변환해서 map에 저장하자
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
@@ -119,18 +120,15 @@ public class ImageBoardService {
 		if(state==0) {
 			imageBoard.setGoodCnt(imageBoard.getGoodCnt()+1);
 			return imageBoard.getGoodCnt();
-		} else if(state==1) {
+		} else if(state==2) {
 			imageBoard.setGoodCnt(imageBoard.getGoodCnt()-1);
-			return imageBoard.getGoodCnt();
-		} else if(state==2)
-			//return imageBoard.getGoodCnt();
-		//return null;
-			imageBoard.setGoodCnt(imageBoard.getGoodCnt());
+		}
+		
 		return imageBoard.getGoodCnt();
 	}
 	
 	@Transactional
-	public Integer reportCheck(Integer ibno, Integer state) {
+	public Integer isreportCheck(Integer ibno, Integer state) {
 		ImageBoard imageBoard = dao.findById(ibno).orElseThrow(BoardFail.BoardNotFoundException::new);
 		if(state==0) {
 			imageBoard.setReportCnt(imageBoard.getReportCnt()+1);
@@ -155,10 +153,10 @@ public class ImageBoardService {
 	}
 	
 	// 글 삭제
-			public void delete(Integer ibno, String loginId) {
-				ImageBoard imageBoard = dao.findById(ibno).orElseThrow(BoardFail.BoardNotFoundException::new);
-				if(imageBoard.getWriter().equals(loginId)==false)
-					throw new BoardFail.IllegalJobException();
-				dao.delete(imageBoard);
-			}
+		public void delete(Integer ibno, String loginId) {
+			ImageBoard imageBoard = dao.findById(ibno).orElseThrow(BoardFail.BoardNotFoundException::new);
+			if(imageBoard.getWriter().equals(loginId)==false)
+				throw new BoardFail.IllegalJobException();
+			dao.delete(imageBoard);
+		}
 }

@@ -17,18 +17,9 @@ import lombok.*;
 public class ImageBoardMember {
 	@Autowired
 	public ImageBoardMember(String loginId, Integer ibno) {
-		//this.username =  this.getUsername();
-		//this.ibno = this.getIbno();
 		this.username = loginId;
 		this.ibno = ibno;
-		return;
 	}
-	/*@Autowired
-	public boolean ImageBoardMember2(String loginId, Integer ibno, boolean isReport) {
-		this.username = loginId;
-		this.ibno = ibno;
-		return isReport;
-	}*/
 
 	/*
 	 	@ManyToOne
@@ -45,6 +36,8 @@ public class ImageBoardMember {
 	private Integer ibno;
 	
 	private Boolean isReport;
+	
+	private Boolean isHeart;
 	/*
 	@PrePersist
 	public void init() {

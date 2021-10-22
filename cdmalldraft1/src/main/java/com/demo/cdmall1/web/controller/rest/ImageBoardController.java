@@ -84,7 +84,7 @@ public class ImageBoardController {
 		
 		@GetMapping("/imageBoard/report")
 		public ResponseEntity<?> ReportCnt(@RequestParam Integer ibno, @RequestParam Integer state){
-			Integer cnt = imageService.reportCheck(ibno, state);
+			Integer cnt = imageService.isreportCheck(ibno, state);
 			return ResponseEntity.ok(cnt);
 		}
 		

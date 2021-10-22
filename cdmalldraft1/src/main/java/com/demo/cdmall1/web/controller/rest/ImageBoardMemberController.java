@@ -40,7 +40,7 @@ public class ImageBoardMemberController {
 	}
 	
 	@PreAuthorize("isAuthenticated()")
-	@PatchMapping("/imageBoard_member/report")
+	@PatchMapping("/imageBoard_member/is_report")
 	public ResponseEntity<?> report(Integer ibno, Principal principal){
 		ReportCheck state = imageMemberService.reportcheck(ibno, principal.getName());
 		URI uri = UriComponentsBuilder.fromHttpUrl("http://localhost:8081").path("/imageBoard/report")

@@ -42,6 +42,7 @@
 	let currentUser = undefined;
 	
 	const init=(imageBoard)=>{
+		
 		// board의 필드들을 출력
 		$("#ibno").text(imageBoard.ibno);
 		$("#writeday").text(imageBoard.createTime);
@@ -51,6 +52,16 @@
 		$("#content").html(imageBoard.content);
 		$("#ibimage").attr("src", "/upload/ibimage/" + imageBoard.imageFileName);
 		//$("#bad_cnt").text(imageBoard.badCnt);
+		
+		// ajax 실행 결과값 isReported true/false	
+		const param = {
+				ibno : ibno,
+				loginId : currentUser
+			};
+			$.ajax({ async: false, url: "/imageBoard_member/is_report", data: param, method: "get"})
+				.done(reportCheck=>{
+		 
+		 			isReported = reportCheck;
 		
 		// 비로그인, 글쓴이, 글쓴이 아님에 따른 화면 구성
 		if(isLogin==true && isWriter==true) {
@@ -77,9 +88,9 @@
 			const $ibcommentBtnArea = $("#ibcommentBtnArea");
 			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($ibcommentBtnArea);
 		}
-		
-	}
-		
+	});		
+}
+	
 		
 	const printIBAttachments=(ibattachments)=>{
 		console.log(ibattachments);
@@ -201,7 +212,7 @@
 		// 신고
 		$("#report_btn").on("click", ()=>{
 			const param = {ibno: imageBoard.ibno}
-			$.ajax({ url: "/imageBoard_member/report", data: param, method: "patch"})
+			$.ajax({ url: "/imageBoard_member/is_report", data: param, method: "patch"})
 				.done(reportCnt=>$("#report_cnt").text(reportCnt));
 		});
 		
