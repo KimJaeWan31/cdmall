@@ -26,6 +26,7 @@ import lombok.*;
 @RestController
 public class ProductController {
 	private final ProductService service;
+	private final ProductMemberService productMemberService;
 	// 이미지 첨부파일 보기
 	@GetMapping(path={"/products/image", "/temp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<?> showImage(@RequestParam String imagename) throws IOException {
@@ -101,7 +102,9 @@ public class ProductController {
 	}
 	
 	@GetMapping(path="/products/wishList", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> withList(@RequestParam(defaultValue="1") Integer pageno, String username){
+	public ResponseEntity<?> withList(@RequestParam(defaultValue="1") Integer pageno, Principal principal){
+		String username = principal.getName();
+		System.out.println("1234Username = " + username);
 		return ResponseEntity.ok(service.wishList(pageno, username));
 	}
 }

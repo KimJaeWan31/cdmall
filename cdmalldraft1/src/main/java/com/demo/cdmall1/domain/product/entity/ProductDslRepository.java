@@ -43,12 +43,12 @@ public class ProductDslRepository {
 	
 	
 	//product & product_member join 
-	public List<ProductList> readByUsername(Pageable pageable, String username){
+	public List<ProductWishList> readByUsername(Pageable pageable, String username){
 		BooleanBuilder condition = new BooleanBuilder();
 		condition.and(qproduct.pno.gt(0));
 		return factory.from(qproduct).join(qProductMember).on(qproduct.pno.eq(qProductMember.pno)) //join하는 코드 
-				.select(Projections.constructor(ProductDto.ProductList.class, 
-						qproduct.pno, qproduct.name, qproduct.price, qproduct.manufacturer, qproduct.imageFileName))
+				.select(Projections.constructor(ProductDto.ProductWishList.class, 
+						qproduct.pno, qproduct.name, qproduct.image, qproduct.price, qproduct.manufacturer, qproduct.imageFileName))
 				.where(qproduct.pno.eq(qProductMember.pno).and(qProductMember.username.eq(username)))
 				.orderBy(qproduct.pno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	}

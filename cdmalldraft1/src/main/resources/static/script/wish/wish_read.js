@@ -69,11 +69,10 @@ const main = {
 			$("<img>").attr("src", "/upload/productimage/"+wish.imageFileName).css("height","150px").attr("class","cart_image").appendTo($td2);
 			
 			const $td3 = $("<td>").css("width","800px").appendTo($tr);
-			
-			$("<div>").text("상품명: " + wish.name).css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
-			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($td3);
+			$("<div>").text("상품명: " + wish.name).css({"font-size":"20px"}).appendTo($td3);
 			$("<div>").text("제조사: " + wish.manufacturer).css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
-			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($td3);
+			$("<div>").text("가격: " + wish.price + "원").css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
+
 
 			
 			

@@ -52,8 +52,33 @@ public class ProductDto {
 	
 	@Data
 	@AllArgsConstructor
+	public static class ProductWishList{
+		private Integer pno;
+		private String name;
+		private String image;
+		private Integer price;
+		private String manufacturer;
+		private String imageFileName;
+		public void changeImageName() {
+			this.image = ZmallConstant.PRODUCT_URL + this.image;
+			
+		}
+	}
+	
+	@Data
+	@AllArgsConstructor
 	public static class ProductListResponse {
 		private List<ProductList> content;
+		private Long totalcount;
+		private Integer pageno;
+		private Integer pagesize;
+		
+	}
+	
+	@Data
+	@AllArgsConstructor
+	public static class ProductWishListResponse {
+		private List<ProductWishList> content;
 		private Long totalcount;
 		private Integer pageno;
 		private Integer pagesize;
