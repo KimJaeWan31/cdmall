@@ -195,8 +195,10 @@
 			}
 			$.ajax({
 				 url: "/product/continueShopping",
-				data: param, 
-				method: "get"
+				data: JSON.stringify(param), 
+				contentType : "application/json", 
+				method: "get",
+				
 			}).done(location.href = "/imageBoard/read?ibno="+ibno);
 		 }
 	

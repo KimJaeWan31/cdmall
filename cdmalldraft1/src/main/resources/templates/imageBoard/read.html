@@ -51,15 +51,11 @@
 		$("#report_cnt").text(imageBoard.reportCnt);
 		$("#content").html(imageBoard.content);
 		$("#ibimage").attr("src", "/upload/ibimage/" + imageBoard.imageFileName);
-		//$("#bad_cnt").text(imageBoard.badCnt);
 		
 		// ajax 실행 결과값 isReported true/false	
-		const param = {
-				ibno : ibno,
-				loginId : currentUser
-			};
-			$.ajax({ async: false, url: "/imageBoard_member/is_report", data: param, method: "get"})
-				.done(reportCheck=>{
+		const param = {ibno : imageBoard.ibno};
+		$.ajax({ async: false, url: "/imageBoard_member/is_report", data: param, method: "patch"})
+			.done(reportCheck=>{
 		 
 		 			isReported = reportCheck;
 		
@@ -79,13 +75,16 @@
 			$("#ibcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
 
 			const $ibcommentBtnArea = $("#ibcommentBtnArea");
+			$("#ibcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
 			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($ibcommentBtnArea);
+
 		} else if (isLogin==true && isWriter==false) {
+			console.log("아무거나");
 			$("#report_btn").prop("disabled", false);
 			$("#content").prop("readonly",true);
-			$("#ibcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
-
+			
 			const $ibcommentBtnArea = $("#ibcommentBtnArea");
+			$("#ibcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
 			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($ibcommentBtnArea);
 		}
 	});		
@@ -211,9 +210,15 @@
 		
 		// 신고
 		$("#report_btn").on("click", ()=>{
-			const param = {ibno: imageBoard.ibno}
-			$.ajax({ url: "/imageBoard_member/is_report", data: param, method: "patch"})
-				.done(reportCnt=>$("#report_cnt").text(reportCnt));
+			const param = {
+					ibno: imageBoard.ibno
+			}
+			$.ajax({ 
+				url: "/imageBoard_member/is_report", 
+				data: param, 
+				method: "patch"
+			})
+			.done(reportCnt=>$("#report_cnt").text(reportCnt));
 		});
 		
 		// 뒤로가기
@@ -242,7 +247,7 @@
 	</nav>
 	<div id="main">
 
-		<section id="section">
+		<section id="section1">
 			<div id="title_div">
 				<!-- 제목, 작성자 출력 영역 -->
 				<div id="upper">
@@ -270,11 +275,11 @@
 			</div>
 			<!--  본문, 갱신 버튼, 삭제 버튼 출력 영역 -->
 			<div id="content_div">
-				<div class="form-group">
-					<div class="form-control" id="content" ></div>
+				<div class="form-group" style="margin: 0">
+					<div class="form-control1" id="content" style=" resize: none; background-color: #F4FFFF; padding: 13px;"></div>
 				</div>
 			</div>
-			<div id="btnArea">
+			<div id="btnArea" style="margin-top: 15px;">
 			</div>
 			<hr>
 			<div class="form-group1" style="width: 1270px;">
