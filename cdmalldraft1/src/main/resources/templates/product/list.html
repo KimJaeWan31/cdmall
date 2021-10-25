@@ -38,8 +38,7 @@
   			border-radius: 10px;
   			
 	}
-	
-	.grid-view {
+.grid-view {
   	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	
@@ -51,7 +50,6 @@
  .content_css{
   margin-left: 10px;
  }
- 
 
 </style>
 <script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
@@ -116,15 +114,21 @@
 			const $figcaption = $("<figcaption>").attr("class","content_css").appendTo($li);
 			const $div = $("<div>").appendTo($figcaption);
 			/* $("<a>").attr("href", "/product/read?pno=" + c.pno).css({"color":"red" ,"text-decoration-line": "none","cursor":"pointer"}).text(c.name).appendTo($div); */		
-			$("<p>").attr("id", c.pno+"_"+c.name).attr("onclick","productClicked("+ c.pno +")").css({"color":"red" ,"text-decoration-line": "none","cursor":"pointer"}).text(c.name).appendTo($div);
+			$("<p>").attr("class","text_deco").attr("id", c.pno+"_"+c.name).attr("onclick","productClicked("+ c.pno +")")
+			.css({"color":"red" ,"text-decoration-line": "none","cursor":"pointer","font-size":"20px"}).text(c.name).appendTo($div);
 			$("<p>").text( c.price +"원").css({"font-size":"15px","margin-top":"5px"}).appendTo($div);
 			$("<p>").text("제조사 : "+ c.manufacturer).css({"font-size":"15px"}).appendTo($div);
 			if(isLogin==true ) {$("<span>").text("찜하기 : ").css({"font-size":"15px","margin-bottom":"30px"}).appendTo($div)};
 			
-		    $('.myPetImg').hover(function() {
-				$(this).css({'width':'310px','height':'280px','overflow':'hidden'});
+		    $('.prodImg').hover(function() {
+				$(this).css({"border": "1px solid #346AFF"   , "border-radius": "10px"});
 				    }, function(){
-				        $(".myPetImg").css('width','300px');
+				        $(".prodImg").css({"border":"none"});
+				    });
+		    $('.text_deco').hover(function() {
+				$(this).css({"text-decoration":"underline"});
+				    }, function(){
+				        $(".text_deco").css({"text-decoration":"none"});
 				    });
 			
 			
