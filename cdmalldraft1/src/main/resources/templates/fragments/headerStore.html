@@ -28,6 +28,7 @@
 				      <li class="list-group-item" id="oneOnOneInquiry">1:1문의</li>
 				      <li class="list-group-item" id="frequentlyQuestion">자주묻는질문</li>
 				      <li class="list-group-item" id="VoiceOfCustomer">고객의소리</li>
+				      
 				    </ul>
             	</li>
            </ul>
@@ -77,12 +78,19 @@
         $('#nav-sub-button').click(function(){
             $('.nav-sub').slideToggle();
           })
+        $('#nav-sub-button').mouseleave(function(){
+            $('.nav-sub').hide();
+          })
+
+          
          
           
         $('#nav-sub-button2').click(function(){
             $('.nav-sub2').slideToggle();
           })
-          
+        $('#nav-sub-button2').mouseleave(function(){
+            $('.nav-sub2').hide();
+          })  
           
           
           
