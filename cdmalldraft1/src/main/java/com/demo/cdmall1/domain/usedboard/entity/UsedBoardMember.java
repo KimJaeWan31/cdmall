@@ -23,8 +23,7 @@ public class UsedBoardMember {
 	@Id
 	private Integer ubno;
 	
-	@NotNull
-	private String kind;
+	private String kind = "null";
 	
 	private Boolean isWarn;
 	

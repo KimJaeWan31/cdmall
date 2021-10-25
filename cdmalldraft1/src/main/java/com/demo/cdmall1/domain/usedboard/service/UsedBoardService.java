@@ -3,8 +3,11 @@ package com.demo.cdmall1.domain.usedboard.service;
 import java.io.*;
 
 import java.nio.file.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.*;
+
+import javax.transaction.Transactional;
 
 import org.jsoup.*;
 import org.modelmapper.*;
@@ -73,27 +76,24 @@ private final ModelMapper modelMapper;
 	}
 	
 	// 읽기
-//		@Transactional
-//		public Map<String,Object> read(Integer qbno, String loginId) {
-//			QuestionBoard questionBoard = dao.findById(nbno).orElseThrow(BoardFail.BoardNotFoundException::new);
-//			questionBoard.increaseReadCnt(loginId);		
-//			List<QSCommentDto.Read> comments = questionBoard.getComments().stream().map(c->c.toDto()).collect(Collectors.toList());
-//			Map<String,Object> map = new HashMap<>();
-//			map.put("nbno", questionBoard.getQbno());
-//			map.put("title", questionBoard.getTitle());
-//			map.put("content", questionBoard.getContent());
-//			map.put("commentCnt", questionBoard.getCommentCnt());
-//				
-//			// map에는 @JsonFormat을 걸수가 없으므로 직접 변환해서 map에 저장하자
-//			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
-//			map.put("createTime", dtf.format(questionBoard.getCreateTime()));
-//			map.put("readCnt", questionBoard.getReadCnt());
-//			map.put("updateTime", questionBoard.getUpdateTime());
-//			map.put("writer", questionBoard.getWriter());
-//			map.put("attachments", questionBoard.getQSAttachments());
-//			map.put("comments", comments);
-//			return map;
-//		}
+//	@Transactional
+//	public Map<String,Object> read(Integer ubno, String loginId) {
+//		UsedBoard usedBoard = dao.findById(ubno).orElseThrow(BoardFail.BoardNotFoundException::new);		
+//		List<UsedCommentDto.Read> usedcomments = usedBoard.getusedattachments().stream().map(c->c.toDto()).collect(Collectors.toList());
+//		Map<String,Object> map = new HashMap<>();
+//		map.put("ubno", usedBoard.getUbno());
+//		map.put("title", usedBoard.getTitle());
+//		map.put("content", usedBoard.getContent());
+//		map.put("goodCnt", usedBoard.getGoodCnt());
+//		//map.put("badCnt", imageBoard.getBadCnt());
+//		// map에는 @JsonFormat을 걸수가 없으므로 직접 변환해서 map에 저장하자
+//		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+//		map.put("createTime", dtf.format(usedBoard.getCreateTime()));
+//		map.put("updateTime", usedBoard.getUpdateTime());
+//		map.put("writer", usedBoard.getWriter());
+//		map.put("ibcomments", usedcomments);
+//		return map;
+//	}
 //		
 	@Transactional
 	public UsedBoardDto.Read read(Integer ubno, String loginId) {
