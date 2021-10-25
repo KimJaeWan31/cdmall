@@ -50,7 +50,6 @@ public class ProductService {
 	@Transactional(readOnly=true)
 	public Product read(Integer pno) {
 		Product product = dao.findById(pno).orElseThrow(ProductFail.ProductNotFoundException::new);
-		//product.setImage(ZmallConstant.PRODUCT_URL + product.getImage());
 		return product;
 	}
 	

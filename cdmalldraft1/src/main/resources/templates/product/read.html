@@ -14,6 +14,10 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- main.js 내부에 두면 sec:authorize를 이해못하는 자바스크립트에 의해 무조건 실행되버린다 -->
 <script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
 <style>
+	#name {
+	border-bottom: 1px solid;
+	border-bottom-color: #dcdcdc;
+	}
 	#left {
 		float: left;
 		width: 500px;
@@ -48,17 +52,19 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	}
 	
 	#price {
-		margin-top: 15px;
-		font-size: 24px;
-		color: rgb(107,144,220);	/* color를 10진수로 지정. rgb, rgba 두 가지.*/
+		margin-top: 12px;
+		font-size: 20px;
+		color: black;	/* color를 10진수로 지정. rgb, rgba 두 가지.*/
 		font-weight: 700;
-		text-align: right;
+		text-align: left;
+		
 	}
 	
 	#total_price {
-		font-size: 1.75em;			/* em은 퍼센트(175%). %는 문서 원래 크기 기준. em은 부모 기준.*/ 
+		font-size: 1.85em;			/* em은 퍼센트(175%). %는 문서 원래 크기 기준. em은 부모 기준.*/ 
 		font-weight: bold;
-		color:rgb(233,96,97);
+		color:#AE0000;
+		
 	}
 	
 	#buy, #add_to_cart {
@@ -75,11 +81,13 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	}
 	
 	#buy {
-		background-color: #3fc910;
+		background-color: #346aff;
 	}
 	
 	#add_to_cart {
-		background-color: #565656;
+		background-color: white;
+		color: #346aff;
+		border: solid 1px;
 	}
 	
 	  ul.list {
@@ -275,7 +283,7 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 				<div id="right">
 					<div id="manufacturer"></div>
 					<div id="name"></div>
-					<div id="price"><span></span>원</div>
+					<div id="price">가격 :  <span></span>원</div>
 					
 					<!-- 옵션이 없는 경우 바로 개수 선택 div -->
 					<hr>

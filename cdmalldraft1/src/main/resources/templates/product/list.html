@@ -109,7 +109,8 @@
 			const $li = $("<li>").appendTo($list);
 			const $figure = $("<figure>").appendTo($li);
 			// 
-			$("<img>").attr("src", "/upload/productimage/" + c.imageFileName).attr("onclick","productClicked("+ c.pno +")").attr("class","prodImg").css({"cursor":"pointer"}).attr("id", c.pno+"_"+c.imageFileName).appendTo($figure);
+			$("<img>").attr("src", "/upload/productimage/" + c.imageFileName).attr("onclick","productClicked("+ c.pno +")").attr("class","prodImg")
+					.css({"cursor":"pointer"}).attr("id", c.pno+"_"+c.imageFileName).appendTo($figure);
 // 			console.log(c.imageFileName)
 			$('img').attr('id', c.pno+"_"+c.imageFileName);
 			const $figcaption = $("<figcaption>").attr("class","content_css").appendTo($li);

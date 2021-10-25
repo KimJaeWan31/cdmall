@@ -1,11 +1,61 @@
 let _this = undefined;
-
-// 전체 선택버튼을 위한 boolean 변수
+let product = undefined;
 const isChoice = false;
 	
 // csrf 처리를 위한 토큰과 헤더
 /* const token = $("meta[name='_csrf']").attr("content");
 const header = $("meta[name='_csrf_header']").attr("content"); */
+
+const cart = {
+	init: function() {
+		console.log("************product.name: " + product.name);
+		
+		this.pno = product.pno;
+		this.name = product.name;
+		this.manufacturer = product.manufacturer;
+		this.price = product.price;
+		this.count = 1;
+		this.image = product.imageFileName;
+		this.cartPrice = this.price * this.count;
+		
+		$.ajax({
+			async: false,
+			url:"/carts",
+			method:"post",
+			data: JSON.stringify(cart),
+			contentType: "application/json",
+			/* beforeSend: function(xhr) {
+				xhr.setRequestHeader(header, token)
+			} */
+		}).done(
+			Swal.fire({ 
+				title: '장바구니 추가 완료!', 
+				text: "장바구니 화면으로 이동 하시겠습니까?", 
+				icon: 'success', 
+				showCancelButton: true, 
+				confirmButtonColor: '#3085d6', 
+				cancelButtonColor: '#d33', 
+				confirmButtonText: '승인', 
+				cancelButtonText: '취소' 
+			}).then((result) => {
+				if (result.isConfirmed) { // 승인버튼 누르면
+					location.href = "/cart/cart_read";
+				}
+			}),
+		);
+	},
+};
+
+	 const productClicked=(pno)=>{
+		const param = {
+			 url: window.location.href
+		}
+		$.ajax({
+			 url: "/product/save_url",
+			data: param, 
+			method: "post"
+		}).done(location.href = "/product/read?pno="+pno);
+	 }
 	
 const main = {
 	init : function() {
@@ -23,14 +73,23 @@ const main = {
 		});
 		
 		$("#check_all").on("change", this.checkAll);
-		$("#wish_div").on("click", ".inc", this.incProduct);
-		$("#wish_div").on("click", ".dec", this.decProduct);
 		$("#delete_product").on("click", this.deleteProduct);
-		$("#order").on("click", this.order);
 		$("#continueShopping").on("click", this.continueShopping);
-		
 		window._this = this;
+		
+
+		
+	
+		//$("#add_to_cart").on("click", this.addToCart);
+		//$(".addCart").on("click", this.addToCart);
+		const pno = location.search.substr(5);
+		/*$.ajax("/products/" + pno).done(result=>{
+			product = result;
+			this.printPage();
+		});*/
 	},
+	
+	
 	
 	continueShopping: function(){
 		$.ajax({
@@ -66,14 +125,17 @@ const main = {
 			$("<input>").attr("type","checkbox").attr("class","check").data("pno", wish.pno).appendTo($td1);
 			
 			const $td2 = $("<td>").css({"width":"300px"}).appendTo($tr);
-			$("<img>").attr("src", "/upload/productimage/"+wish.imageFileName).css("height","150px").attr("class","cart_image").appendTo($td2);
+			$("<img>").attr("src", "/upload/productimage/"+wish.imageFileName).css({"height":"130px","width":"130px","cursor":"pointer"})
+			.attr("onclick","productClicked("+ wish.pno +")").attr("class","cart_image")
+			.attr("id", wish.pno+"_"+wish.imageFileName).appendTo($td2);
 			
 			const $td3 = $("<td>").css("width","800px").appendTo($tr);
-			$("<div>").text("상품명: " + wish.name).css({"font-size":"20px"}).appendTo($td3);
-			$("<div>").text("제조사: " + wish.manufacturer).css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
-			$("<div>").text("가격: " + wish.price + "원").css({"margin-top":"20px","font-size":"20px"}).appendTo($td3);
-
-
+			$("<div>").text("상품명: " + wish.name).attr("onclick","productClicked("+ wish.pno +")").css({"font-size":"15px","cursor":"pointer"}).attr("id","text_deco").appendTo($td3);
+			$("<div>").text("제조사: " + wish.manufacturer).attr("onclick","productClicked("+ wish.pno +")").css({"margin-top":"20px","font-size":"15px","cursor":"pointer"}).attr("id","text_deco").appendTo($td3);
+			$("<div>").text("가격: " + wish.price + "원").css({"margin-top":"20px","font-size":"15px","color":"#AE0000","font-weight":"700"}).appendTo($td3);
+			
+			
+			
 			
 			
 //			const $td4 = $("<td>").appendTo($tr);
@@ -82,12 +144,17 @@ const main = {
 //			$("<span class='count'>").text(cart.count).appendTo($td4_div);
 //			$("<span>").attr("class","inc").data("pno", cart.pno).text("+").appendTo($td4_div);
 //			
-			const $td5 = $("<td>").css({"float":"right"}).appendTo($tr);
+			const $td5 = $("<td>").css({"float":"right","width":"200px"}).appendTo($tr);
 //			$("<div>").text(cart.cartPrice + "원").appendTo($td5);
-			$("<div>").append($("<button type='button' class='button addCart'>장바구니에 담기</button>").css({"margin-top":"20px","width":"100px"}).attr("data-cartNo", idx)).appendTo($td5);
-			$("<div>").append($("<button type='button' class='button delete'>삭제</button>").css({"margin-top":"20px","width":"100px"}).attr("data-cartNo", idx)).appendTo($td5);
+			$("<div>").append($("<button type='button' class='button addCart'>장바구니에 담기</button>").attr("id","add_to_cart_" + wish.pno)
+				.attr("onclick", "window._this.addToCart(" + wish.pno + ")")
+				.css({"margin-top":"20px"}).attr("data-cartNo", idx)).appendTo($td5);
+			$("<div>").append($("<button type='button' class='button delete'>삭제</button>").css({"margin-top":"20px"})
+			.attr("data-cartNo", idx)).appendTo($td5);
 		});	
 		$("#total_price").text(totalPrice + "원");
+		
+		
 	},
 		
 	checkAll : function() {
@@ -102,40 +169,29 @@ const main = {
 		}
 	},
  
-	incProduct: function() {
-		const param = {
-			pno: $(this).data("pno"),
-			optionNo : $(this).data("optionNo")
-		};
+	
+	getProductInfo: function(pno){
 		$.ajax({
-			url:"/carts/increase", 
-			method:"patch",
-			data:param,
-			/* beforeSend: function(xhr) { 
-				xhr.setRequestHeader(header, token) 
-			} */
-		}).done(result=>{
-			wishList = result;
-			window._this.printwishList();
-		}).fail(result=>alert(result.responseText));
-	},
+			async: false,
+			url: "/products/" + pno,
+			}).done(result=>{
+				product = result;
+				
+				cart.init();
+			});
 		
-	decProduct: function() {
-		const param = {
-			pno: $(this).data("pno"),
-			optionNo : $(this).data("optionNo")
-		};
-		$.ajax({
-			url:"/carts/decrease", 
-			method:"patch", data:param,
-			/* beforeSend: function(xhr) { 
-				xhr.setRequestHeader(header, token)
-			} */
-		}).done(result=>{
-			wishList = result;
-			window._this.printwishList();
-		});
+		
 	},
+	
+	addToCart: function(pno) {
+		
+		this.getProductInfo(pno);  // 장바구니에 담을 현제 상품의 정보 가져오기
+		
+		console.log("123123123123"+cart.name);
+		
+		
+	},
+	
 		
 	// 체크박스를 선택하고 선택상품 삭제 버튼을 클릭하면
 	deleteProduct:function() {
@@ -162,27 +218,7 @@ const main = {
 			window._this.printPage();
 		});
 	},
-		
-	// 주문버튼을 클릭하면 선택한 체크박스의 pno값들을 배열로 만들어 서버로 보낸다
-	order: function() {
-		const dto = [];
-		$(".check").each(function(idx) {
-			if($(this).is(":checked"))
-				dto.push($(this).data("pno"));
-		});
-		$.ajax({
-			url:"/orders/cart",
-			method:"post",
-			data: JSON.stringify(dto),
-			contentType: "application/json",
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader(header, token)
-			}
-		}).done((result, text, response)=>{
-			location.href = response.getResponseHeader('Location')
-		});
-	}
-}
+};
 	
 window.onload = function() {
 	main.init();

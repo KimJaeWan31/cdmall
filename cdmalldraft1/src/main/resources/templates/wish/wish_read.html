@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
 <link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/main.css">
 <link rel="stylesheet" href="/css/nav.css">
@@ -34,9 +35,43 @@
 }
 #list {
 font-family: 'Open Sans', sans-serif;
-font-family: 'Zen Kurenaido', sans-serif;	
+font-family: 'Zen Kurenaido', sans-serif;
 }
 
+
+#text_deco:hover {
+	text-decoration: underline;
+	color: #0064FF;
+}
+.delete_button {
+font-family: 'Open Sans', sans-serif;
+font-family: 'Zen Kurenaido', sans-serif;
+background: white;
+border: 1px solid;
+width: 95px;
+height: 30px;
+border-color: grey;
+}
+.delete_button:hover {
+text-decoration: underline;
+}
+
+.addCart {
+font-family: 'Open Sans', sans-serif;
+font-family: 'Zen Kurenaido', sans-serif;
+background: white;
+width: 150px;
+color: #0064FF;
+border-color: #0064FF;
+}
+.delete {
+font-family: 'Open Sans', sans-serif;
+font-family: 'Zen Kurenaido', sans-serif;
+background: white;
+width: 150px;
+color: #0064FF;
+border-color: #ccc;
+}
 </style>
 <script>
 	
@@ -53,9 +88,9 @@ font-family: 'Zen Kurenaido', sans-serif;
 					<table class="table">
 						<thead>
 							<tr>
-								<th colspan="4">주 문 목 록 <br />
+								<th colspan="4" > <span class="fas fa-star" style="color: #FFE400; font-size: 30px; margin-bottom: 20px;" ></span> 찜 리 스 트  <br />
 							<input type="checkbox" id="check_all">
-							<button id="delete_product" class="btn btn-light" style="color:#0064FF;">선택상품 삭제</button>
+							<button id="delete_product" class="delete_button" style="color:#0064FF;">선택상품 삭제</button>
 								</th>
 							</tr>
 							<tr>
@@ -72,7 +107,7 @@ font-family: 'Zen Kurenaido', sans-serif;
 						<button id="delete_product" class="btn btn-light" style="color:#0064FF;">선택상품 삭제</button>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button id='continueShopping' class="btn btn-primary">쇼핑계속 하기</button>
-						<button id='addOrder' class="btn btn-primary">장바구니에 담기 </button>
+						<button id='add_to_cart2' class="btn btn-primary">장바구니에 담기 </button>
 					</div>
 				</div>
 				<div id="empty_wish_div" style="display: none;">
