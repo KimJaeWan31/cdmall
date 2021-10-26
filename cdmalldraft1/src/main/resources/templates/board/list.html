@@ -42,8 +42,13 @@
 		
 		// 서버 응답에 현재 페이지가 포함되어 있지 않다....재계산하자
 		let pageno = location.search.substr(8);
+		let pages = location.search.split('&');
 		if(pageno=="")
 			pageno=1;
+		if(location.search.length>10) {
+			no=pages[0].substr(8);
+			pageno=Number(no);
+		}
 		
 		// 0번 블록 : 1~5 page, 1번 블록 : 6~10 page
 		const blockNo = Math.floor((pageno-1)/blockSize);
@@ -65,17 +70,25 @@
 	const printPagination = ({pageno, prev, next, first, last}) => {
 		const $pagination = $("ul.pagination");
 		const url = "/board/list?pageno="
+		let no = location.search.split('&');
+		let category = no[1];
 				
 		// 이전으로 
 		if(prev>0) {
 			const $li = $("<li>").appendTo($pagination)
 			$("<a>").attr("href", url+prev).text("이전으로").appendTo($li);
+			if(location.search.length>10){
+				$("<a>").attr("href", url+prev+'&'+category).text("이전으로").appendTo($li);
+			}
 		}
 		
 		// 시작 페이지에서 마지막 페이지....현재 페이지 번호일 경우 active 클래스 추가
 		for(let idx=first; idx<=last; idx++) {
 			const $li = $("<li>").appendTo($pagination)
-			$("<a>").attr("href", url+idx).text(idx).appendTo($li);
+			if(location.search.length>10){
+				$("<a>").attr("href", url+idx+'&'+category).text(idx).appendTo($li);
+			} else 
+				$("<a>").attr("href", url+idx).text(idx).appendTo($li);
 			if(idx==pageno)
 				$li.attr("class", "active");
 		}
@@ -84,6 +97,9 @@
 		if(next>0) {
 			const $li = $("<li>").appendTo($pagination)
 			$("<a>").attr("href", url+next).text("다음으로").appendTo($li);
+			if(location.search.length>10){
+				$("<a>").attr("href", url+prev+'&'+category).text("다음으로").appendTo($li);
+			}
 		}
 	}
 	
@@ -131,6 +147,11 @@
 		<section id="section">
 			<div id="wrap">
 				<table class="table table-hover">
+				<button class="btn btn-primary btn-sm" style="float: right;" type="button" onclick="location.href='/board/list?pageno=1&category=고양이'">고양이</button>
+				<button class="btn btn-primary btn-sm" style="float: right;" type="button" onclick="location.href='/board/list?pageno=1&category=댕댕이'">댕댕이</button>
+				<button class="btn btn-primary btn-sm" style="float: right;" type="button" onclick="location.href='/board/list?pageno=1&category=유머'">유머</button>
+				<button class="btn btn-primary btn-sm" style="float: right;" type="button" onclick="location.href='/board/list?pageno=1&category=잡담'">잡답</button>
+				<button class="btn btn-primary btn-sm" style="float: right;" type="button" onclick="location.href='/board/list?pageno=1'">홈</button>
 					<tr>
 						<th>번호</th><th>제목</th><th>글쓴이</th><th>시간</th><th>조회수</th><th>좋아요</th><th>싫어요</th>
 					</tr>
