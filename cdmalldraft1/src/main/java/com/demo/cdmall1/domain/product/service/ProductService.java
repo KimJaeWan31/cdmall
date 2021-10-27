@@ -2,7 +2,6 @@ package com.demo.cdmall1.domain.product.service;
 
 import java.io.*;
 import java.util.*;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.data.domain.*;
@@ -128,5 +127,17 @@ public class ProductService {
 		}
 		
 	}
+	
+	@Transactional
+	public void productCurrentWishDelete(Integer pno) {
+		System.out.println("########pno: "+pno);
+			pmdao.deleteByPno(pno);
+			Product product = dao.findById(pno).orElseThrow(BoardFail.BoardNotFoundException::new);
+			product.setGoodCnt(product.getGoodCnt()-1);
+			//return 값이랑, 개별적으로 삭제 버튼 활성화
+			
+		
+	}
+
 
 }

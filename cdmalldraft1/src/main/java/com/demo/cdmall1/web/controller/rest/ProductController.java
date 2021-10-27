@@ -111,10 +111,16 @@ public class ProductController {
 		return ResponseEntity.ok(service.wishList(pageno, username));
 	}
 	
-	@DeleteMapping(path="/products/wish_delete")
+	@DeleteMapping(path="/products/wish_delete")	
 	public ResponseEntity<?> productWishDelete(@RequestBody List<Integer> dtos){
 		service.wishDelete(dtos);
 		return ResponseEntity.ok(null); 
 	};
 	
+	@DeleteMapping(path="/products/currentWishDelete", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> productCurrentWishDelete(@RequestParam Integer pno) {
+		System.out.println("%%%%%%%%" + pno);
+		service.productCurrentWishDelete(pno);
+		return ResponseEntity.ok(null); 
+	}
 }

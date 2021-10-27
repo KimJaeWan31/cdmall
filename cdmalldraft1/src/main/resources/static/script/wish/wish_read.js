@@ -156,11 +156,14 @@ const main = {
 //			
 			const $td5 = $("<td>").css({"float":"right","width":"200px"}).appendTo($tr);
 //			$("<div>").text(cart.cartPrice + "원").appendTo($td5);
-			$("<div>").append($("<button type='button' class='button addCart'>장바구니에 담기</button>").attr("id","add_to_cart_" + wish.pno)
-				.attr("onclick", "window._this.addToCart(" + wish.pno + ")")
-				.css({"margin-top":"20px"}).attr("data-cartNo", idx)).appendTo($td5);
-			$("<div>").append($("<button type='button' class='button delete'>삭제</button>").css({"margin-top":"20px"})
-			.attr("data-cartNo", idx)).appendTo($td5);
+			$("<div>").append($("<button type='button' class='button addCart'>장바구니에 담기</button>")
+			.attr("id","add_to_cart_" + wish.pno).attr("onclick", "window._this.addToCart(" + wish.pno + ")")
+			.css({"margin-top":"20px"}).attr("data-cartNo", idx)).appendTo($td5);
+			
+			
+			$("<div>").append($("<button type='button' class='button delete'>삭제</button>")
+			.attr("onclick", "window._this.deleteCurrentProduct(" + wish.pno + ")")
+			.css({"margin-top":"20px"}).attr("data-cartNo", idx)).appendTo($td5);
 		});	
 		
 		
@@ -235,6 +238,35 @@ const main = {
 					wishList = result;
 					console.log(wishList);
 					console.log(wishList.content);
+					main.printPage();
+					
+				});
+			
+		});
+	},
+	
+		deleteCurrentProduct: function(pno) {
+		
+		const param = {pno:pno}
+		// 선택한 체크박스의 pno를 읽어와 dto에 push
+//		$(".check").each(function(idx) {
+//			if($(this).is(":checked"))
+//				dto.push($(this).data("pno"));
+//		});
+		console.log("*****");
+		$.ajax({
+			url:"/products/currentWishDelete",
+			method:"delete",
+			data: param,			
+		}).done(()=>{
+			console.log("#####");
+			$.ajax({ 
+				url: "/products/wishList",
+				method: "get"
+				}).done(result=>{
+					wishList = result;
+//					console.log(wishList);
+//					console.log(wishList.content);
 					main.printPage();
 					
 				});
