@@ -50,6 +50,7 @@ const cart = {
 		const param = {
 			 url: window.location.href
 		}
+		/*console.log("*******************this: "+window._this.test);*/
 		$.ajax({
 			 url: "/product/save_url",
 			data: param, 
@@ -65,15 +66,21 @@ const main = {
 			this.printPage();
 		});*/
 		
-		$.ajax({ url: "/products/wishList", method: "get"}).done(result=>{
+		
+		const pageno = location.search.substr(8);
+		
+		$.ajax({ url: "/products/wishList?pageno="+pageno, method: "get"}).done(result=>{
 			wishList = result;
 			console.log(wishList);
 			console.log(wishList.content);
 			this.printPage();
 		});
 		
+		
+	
+		
 		$("#check_all").on("change", this.checkAll);
-		$("#delete_product").on("click", this.deleteProduct);
+		$(".delete_button").on("click", this.deleteProduct);
 		$("#continueShopping").on("click", this.continueShopping);
 		window._this = this;
 		
@@ -82,7 +89,7 @@ const main = {
 	
 		//$("#add_to_cart").on("click", this.addToCart);
 		//$(".addCart").on("click", this.addToCart);
-		const pno = location.search.substr(5);
+		
 		/*$.ajax("/products/" + pno).done(result=>{
 			product = result;
 			this.printPage();
@@ -101,9 +108,13 @@ const main = {
 		});
 	},
 	
+	/*test: function(){
+		console.log("test********************");
+	},*/
+	
 	printPage: function() {
-		// 장바구니가 비어있으면 emtpy_cart 이미지를, 아니면 출력 div를 
-		if(wishList.length==0) {
+		//찜하기 비어있으면 emtpy_cart 이미지를, 아니면 출력 div를 
+		if(wishList.content.length==0) {
 			$("#wish_div").hide();
 			$("#empty_wish_div").css({"text-align":"center","height":"400px"}).show();
 		} else {
@@ -116,7 +127,6 @@ const main = {
 
 	printwishList: function() {
 		// 장바구니 전체 가격을 계산할 변수
-		let totalPrice = 0;
 		const $list = $("#list");
 		$list.empty();
 		$.each(wishList.content, function(idx, wish) {
@@ -152,7 +162,8 @@ const main = {
 			$("<div>").append($("<button type='button' class='button delete'>삭제</button>").css({"margin-top":"20px"})
 			.attr("data-cartNo", idx)).appendTo($td5);
 		});	
-		$("#total_price").text(totalPrice + "원");
+		
+		
 		
 		
 	},
@@ -192,9 +203,11 @@ const main = {
 		
 	},
 	
+	
+	
 		
 	// 체크박스를 선택하고 선택상품 삭제 버튼을 클릭하면
-	deleteProduct:function() {
+	deleteProduct: function() {
 		// [1,2,3]으로 보내면 서버에서 @RequestBody를 이용해 ArrayList<Integer>로 받는다
 		// 선택한 체크박스의 pno 값들을 읽어와 추가할 비어있는 배열
 		const dto = [];
@@ -206,20 +219,105 @@ const main = {
 		});
 		
 		$.ajax({
-			url:"/carts",
+			url:"/products/wish_delete",
 			method:"delete",
 			data: JSON.stringify(dto),
 			contentType: "application/json",
-			beforeSend: function(xhr) {
+			/*beforeSend: function(xhr) {
 				xhr.setRequestHeader(header, token)
-			}
-		}).done(result=>{
-			carts = result;
-			window._this.printPage();
+			}*/
+		}).done(()=>{
+			
+			$.ajax({ 
+				url: "/products/wishList",
+				method: "get"
+				}).done(result=>{
+					wishList = result;
+					console.log(wishList);
+					console.log(wishList.content);
+					main.printPage();
+					
+				});
+			
 		});
 	},
 };
+
+let page = null;
+
+
+const getPagination = () => {
+	// 한번에 다섯개의 페이지씩
+	const blockSize = 5;
+	
+	// 서버 응답에 현재 페이지가 포함되어 있지 않다....재계산하자
+	let pageno = location.search.substr(8);
+	if(pageno=="")
+		pageno=1;
+	
+	// 0번 블록 : 1~5 page, 1번 블록 : 6~10 page
+	const blockNo = Math.floor((pageno-1)/blockSize);
+	const prev = blockNo * blockSize;
+	const first = prev + 1;
+	let last = first + blockSize - 1;
+	let next = last + 1;
+	const countOfPage = Math.ceil(page.totalcount/10)
+	if(last>=countOfPage) {
+		last = countOfPage;
+		next = 0;
+	}
+	return {pageno, prev, next, first, last};
+	
+};
+
+// 구조 분해 할당 : 객체를 변수로 풀어헤치는 문법
+// const {pageno, prev, next, first, last} = getPagination();
+const printPagination = ({pageno, prev, next, first, last}) => {
+	const $pagination = $("ul.pagination");
+	const url = "/wish/wish_read?pageno="
+			
+	// 이전으로 
+	if(prev>0) {
+		const $li = $("<li>").appendTo($pagination)
+		$("<a>").attr("href", url+prev).text("이전으로").appendTo($li);
+	}
+	
+	// 시작 페이지에서 마지막 페이지....현재 페이지 번호일 경우 active 클래스 추가
+	for(let idx=first; idx<=last; idx++) {
+		const $li = $("<li>").appendTo($pagination)
+		$("<a>").attr("href", url+idx).text(idx).appendTo($li);
+		if(idx==pageno)
+			$li.attr("class", "active");
+	}
+	
+	// 다음으로
+	if(next>0) {
+		const $li = $("<li>").appendTo($pagination)
+		$("<a>").attr("href", url+next).text("다음으로").appendTo($li);
+	}
+}
+
+
 	
 window.onload = function() {
 	main.init();
+	
+	// 주소창에서 페이지 번호를 잘라낸다. 페이지 번호가 없으면 1로
+	//const $username = $("#username").text();
+	currentUser = $("#username").text();
+	// 주소창에서 페이지 번호를 잘라낸다. 페이지 번호가 없으면 1로
+	let pageno = location.search.substr(8);
+	if(pageno=="")
+		pageno=1;
+	
+	
+	console.log(pageno);
+	$.ajax("/products/wishList?pageno="+pageno).done(result=>{
+		page=result;
+		main;
+		printPagination(getPagination());
+	});
+	
+	
+	
 }

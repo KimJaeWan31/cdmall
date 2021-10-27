@@ -106,7 +106,15 @@ public class ProductController {
 	@GetMapping(path="/products/wishList", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> withList(@RequestParam(defaultValue="1") Integer pageno, Principal principal){
 		String username = principal.getName();
+		System.out.println("********" + pageno);
 		System.out.println("1234Username = " + username);
 		return ResponseEntity.ok(service.wishList(pageno, username));
 	}
+	
+	@DeleteMapping(path="/products/wish_delete")
+	public ResponseEntity<?> productWishDelete(@RequestBody List<Integer> dtos){
+		service.wishDelete(dtos);
+		return ResponseEntity.ok(null); 
+	};
+	
 }

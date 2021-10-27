@@ -21,6 +21,7 @@ import lombok.*;
 @Service
 public class ProductService {
 	private final ProductRepository dao;
+	private final ProductMemberRepository pmdao;
 	private final ProductDslRepository dslDao;
 	
 	public Product insert(ProductDto.Write dto, String name ) {
@@ -80,7 +81,8 @@ public class ProductService {
 	@Transactional(readOnly=true)
 	public ProductDto.ProductWishListResponse wishList(Integer pageno, String username) {
 		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
-		Pageable pageable = PageRequest.of(pageno-1, 15);
+		Pageable pageable = PageRequest.of(pageno-1, 10);
+		System.out.println("+++++" + pageno);
 		ProductDto.ProductWishListResponse dto = new ProductDto.ProductWishListResponse(dslDao.readByUsername(pageable, username), dslDao.wishTotalCount(username), pageno, 10);
 		System.out.println("11111" + dto);
 		return dto;
@@ -111,4 +113,20 @@ public class ProductService {
 		HttpSession session = ZmallUtil.getSession();	
 		session.setAttribute("saved_url", currentUrl);
 	}
+
+	@Transactional
+	public void wishDelete(List<Integer> dtos) {
+		
+		System.out.println("*************************List dtos: "+dtos);
+		for(int i = 0; i < dtos.size(); i++) {
+			System.out.println("*************************dtos.get(i): " + dtos.get(i));
+			pmdao.deleteByPno(dtos.get(i));
+			Product product = dao.findById(dtos.get(i)).orElseThrow(BoardFail.BoardNotFoundException::new);
+			product.setGoodCnt(product.getGoodCnt()-1);
+			//return 값이랑, 개별적으로 삭제 버튼 활성화
+			
+		}
+		
+	}
+
 }

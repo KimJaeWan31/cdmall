@@ -127,8 +127,7 @@ const main = {
 		});
 	},
 		
-	// 체크박스를 선택하고 선택상품 삭제 버튼을 클릭하면
-	deleteProduct:function() {
+		deleteProduct:function() {
 		// [1,2,3]으로 보내면 서버에서 @RequestBody를 이용해 ArrayList<Integer>로 받는다
 		// 선택한 체크박스의 pno 값들을 읽어와 추가할 비어있는 배열
 		const dto = [];
@@ -144,9 +143,9 @@ const main = {
 			method:"delete",
 			data: JSON.stringify(dto),
 			contentType: "application/json",
-			/*beforeSend: function(xhr) {
+			beforeSend: function(xhr) {
 				xhr.setRequestHeader(header, token)
-			}*/
+			}
 		}).done(result=>{
 			carts = result;
 			window._this.printPage();

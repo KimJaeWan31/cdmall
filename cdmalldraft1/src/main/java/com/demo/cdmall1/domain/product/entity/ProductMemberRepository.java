@@ -10,4 +10,6 @@ public interface ProductMemberRepository extends CrudRepository<ProductMember, P
 	void deleteByPnoAndUsername(Integer pno, String loginId);
 	
 	List<ProductMember> findAllByUsername(String username);
+
+	void deleteByPno(Integer integer);
 }

@@ -73,9 +73,7 @@ color: #0064FF;
 border-color: #ccc;
 }
 </style>
-<script>
-	
-</script>
+
 </head>
 <body>
 	<div id="page">
@@ -104,11 +102,16 @@ border-color: #ccc;
 
 					<div>
 						<input type="checkbox" id="check_all">
-						<button id="delete_product" class="btn btn-light" style="color:#0064FF;">선택상품 삭제</button>
+						<button id="delete_product1" class="delete_button" style="color:#0064FF;">선택상품 삭제</button>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<button id='continueShopping' class="btn btn-primary">쇼핑계속 하기</button>
 						<button id='add_to_cart2' class="btn btn-primary">장바구니에 담기 </button>
 					</div>
+					
+				<div id="pagination" style="text-align: center;">
+					<ul class="pagination">
+					</ul>
+				</div>
 				</div>
 				<div id="empty_wish_div" style="display: none;">
 					<h1>찜 목록이 비어있습니다</h1>

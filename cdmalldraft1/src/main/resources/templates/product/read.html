@@ -5,6 +5,7 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <title>Insert title here</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
 <script
 src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="/script/main.js"></script>
@@ -13,6 +14,12 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <link rel="stylesheet" href="/css/nav.css">
 <!-- main.js 내부에 두면 sec:authorize를 이해못하는 자바스크립트에 의해 무조건 실행되버린다 -->
 <script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
+<script sec:authorize="isAuthenticated()">
+	const isLogin = true
+</script>
+<script  sec:authorize="isAnonymous()">
+	const isLogin = false;
+</script>
 <style>
 	#name {
 	border-bottom: 1px solid;
@@ -187,13 +194,67 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 				$("#image").attr("src", "/upload/productimage/" + product.imageFileName);
 				$("#manufacturer").text(product.manufacturer);
 				$("#name").text(product.name);
-				$("#price span").text(product.price);
+				if(isLogin==true ) {$("<span>").text("").css({"font-size":"15px","float":"right","positon":"fixed"}).appendTo($("#manufacturer"))};
 				
+				 const param = {
+							
+							pno : product.pno,
+							loginId : currentUser
+					} ;
+					$.ajax({ async: false, url: "/product_member/is_exist", data: param, method: "get"})
+						.done(heartCheck=>{
+				 
+				 			isHearted = heartCheck;
+				 			
+				 			if(isLogin==true ){
+								if(isHearted == true){
+									console.log("in TFT");
+									const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ product.pno).attr("type", "button").attr("class","far fa-star").css({"color": "black", "font-size": "25px","cursor":"pointer", "display":"none"})
+									.attr("onclick","like("+product.pno+")").text("").appendTo($("#manufacturer span")); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
+									
+									const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + product.pno).attr("type", "button").attr("class","fas fa-star").css({"color": "#FFE400", "font-size": "25px", "cursor":"pointer"})
+									.attr("onclick","likeCancel("+product.pno+")").text("").appendTo($("#manufacturer span"));
+									
+									$("<span>").attr("id", "good_cnt_"+product.pno).text(product.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($("#manufacturer span"));
+						 			$("<span>").attr("id", "likeCheck").text("").css({"color": "black", "font-size": "15px"}).appendTo($("#manufacturer span"));
+								}else{
+									console.log("in TFF");
+									const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ product.pno).attr("type", "button").attr("class","far fa-star").css({"color": "black", "font-size": "25px","cursor":"pointer"})
+									.attr("onclick","like("+product.pno+")").text("").appendTo($("#manufacturer span")); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
+									
+									const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + product.pno).attr("type", "button").attr("class","fas fa-star").css({"color": "#FFE400", "font-size": "25px", "cursor":"pointer", "display":"none"})
+									.attr("onclick","likeCancel("+product.pno+")").text("").appendTo($("#manufacturer span"));
+									
+									$("<span>").attr("id", "good_cnt_"+product.pno).text(product.goodCnt).css({"color": "black", "font-size": "15px","margin-left":"20px"}).appendTo($("#manufacturer span"));
+						 			$("<span>").attr("id", "likeCheck").text("").css({"color": "black", "font-size": "15px"}).appendTo($("#manufacturer span"));
+								}
+							}else if(isLogin==false) {
+								console.log("in F**");
+								$("#goodOn_btn").prop("disabled", true);
+								$("#goodOff_btn").prop("disabled", true);
+							}
+							 
+						});
+				
+				
+				
+				
+				
+				$("#price span").text(product.price);
 				// 상품 페이지로 들어오면 1개의 상품을 담은 장바구니 객체를 생성
 				cart.init();	
 				$("#count").text(cart.count);
 				this.printTotalCountAndPrice();
+				
+				
+				
 			},
+			
+			
+			
+			
+			
+			
 			
 			// 옵션이 있는 경우 상품 개수 증가/감소
 			incProduct: function() {
@@ -260,6 +321,57 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		};
 	
 	
+	const like = (pno)=>{
+		// 추천
+		
+		if(isLogin==true){
+			const param = {
+					pno: pno,
+					isGood: 1
+			}
+			
+			$.ajax({ url: "/product_member/good_or_bad", data: param, method: "patch"})
+				.done(goodCnt=> goodClicked(goodCnt, pno));
+		}	
+	}
+	
+	const likeCancel = (pno)=>{
+		// 추천 취소
+		if(isLogin==true){
+			const param = {
+					pno: pno,
+					isGood: 0
+			}
+			
+			$.ajax({ url: "/product_member/good_or_bad", data: param, method: "patch"})
+				.done(goodCnt=>goodCnlClicked(goodCnt, pno));
+		}	
+	}
+	
+	const goodClicked=(goodCnt, pno)=>{
+		if($("#good_cnt_"+pno).text()!=goodCnt){
+			$("#good_cnt_"+pno).text(goodCnt);
+			$("#goodBtn_"+pno).hide();
+			$("#goodCancelBtn_"+pno).show();
+		}
+	}
+	
+	 const goodCnlClicked=(goodCnt, pno)=>{
+		 if($("#good_cnt_"+pno).text()!=goodCnt){
+			$("#good_cnt_"+pno).text(goodCnt);
+			$("#goodBtn_"+pno).show();
+			$("#goodCancelBtn_"+pno).hide();
+		} 
+	 }
+	 
+	 
+	$(document).ready(()=>{
+
+		currentUser = $("#username").text();
+		console.log(currentUser)
+
+		});
+	
 	window.onload = function(){
 		main.init();
 	}
@@ -270,6 +382,7 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
 	<div id="page">
+	<div id="username" sec:authentication="name" style="display:none;"></div>
 		<header id="header" th:replace="/fragments/headerStore">
 		</header>
 	<nav id="nav" th:replace="/fragments/navStore">
