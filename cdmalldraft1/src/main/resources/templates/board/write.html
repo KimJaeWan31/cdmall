@@ -30,6 +30,7 @@
 			const formData = new FormData();
 			formData.append("title", $("#title").val());
 			formData.append("content", CKEDITOR.instances['content'].getData());
+			formData.append("category", $("#category").val());
 			
 			$.each($(".form-control-file"), function(idx, attachment) {
 				if($(this)[0].files[0]!=undefined)
@@ -67,6 +68,14 @@
 		<aside id="aside" th:replace="/fragments/aside">
 		</aside>
 		<section id="section">
+			<div>
+				<select class="form-control" name="category" id="category">
+					<option value="잡담">잡답</option>
+					<option value="유머">유머</option>
+					<option value="댕댕이">댕댕이</option>
+					<option value="고양이">고양이</option>
+				</select>
+			</div>
 			<form id="write_form">
 				<div class="form-group">
 					<label for="title">제목:</label>
