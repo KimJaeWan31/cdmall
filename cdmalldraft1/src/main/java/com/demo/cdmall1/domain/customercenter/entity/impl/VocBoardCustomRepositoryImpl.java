@@ -43,27 +43,17 @@ public class VocBoardCustomRepositoryImpl extends QuerydslRepositorySupport impl
 					.orderBy(vocBoard.vbno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 		}
 
-		//
+		@Override
+		public List<VocBoardDto.List> updateList(Pageable pageable) {
+			QVocBoard vocBoard = QVocBoard.vocBoard;
+			return factory.from(vocBoard).select(Projections.constructor(VocBoardDto.List.class, vocBoard.vbno, vocBoard.title, vocBoard.writer, 
+					vocBoard.createTime, vocBoard.readCnt, vocBoard.attachmentCnt, vocBoard.commentCnt, vocBoard.re_lev)).where(vocBoard.vbno.gt(0))
+					.orderBy(vocBoard.re_ref.desc(),vocBoard.re_seq.asc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+		}
+
 		@Override
 		public Long countByVbno() {
 			QVocBoard vocBoard = QVocBoard.vocBoard;
 			return factory.from(vocBoard).select(vocBoard.vbno.count()).where(vocBoard.vbno.gt(0)).fetchOne();
 		}
 	}
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

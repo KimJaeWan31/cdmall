@@ -22,6 +22,17 @@ public class VocBoardDto {
 			return VocBoard.builder().title(title).content(content).build();
 		}
 	}
+	@Data
+	@AllArgsConstructor
+	public static class WriteReply {	
+		private Integer vbno;
+		private String title;
+		private String content;
+		private java.util.List<MultipartFile> vattachments;
+		public VocBoard toEntity() {
+			return VocBoard.builder().title(title).content(content).build();
+		}
+	}
 	
 	@Data
 	@AllArgsConstructor
@@ -46,5 +57,7 @@ public class VocBoardDto {
 		private Integer readCnt;
 		private Integer attachmentCnt;
 		private Integer commentCnt;
+		private Integer re_lev;
 	}
+
 }

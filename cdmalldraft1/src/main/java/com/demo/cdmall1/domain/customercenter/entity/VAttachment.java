@@ -20,7 +20,7 @@ public class VAttachment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="vattachment_seq")
 	@SequenceGenerator(name="vattachment_seq", sequenceName="vattachment_seq", allocationSize=1)
-	private Integer ano;
+	private Integer vano;
 	
 	@JsonIgnore
 	@Id									

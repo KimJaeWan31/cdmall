@@ -6,23 +6,24 @@ import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
 import com.demo.cdmall1.domain.board.entity.*;
+import com.demo.cdmall1.domain.customercenter.entity.*;
 
 import lombok.*;
 
 @RequiredArgsConstructor
 @Service
 public class VAttachmentService {
-	private final AttachmentRepository dao;
+	private final VAttachmentRepository dao;
 
 	@Transactional
-	public List<Attachment> delete(Integer bno, Integer ano) {
-		AttachmentId id = new AttachmentId(bno, ano);
-		Attachment attachment = dao.findById(id).orElseThrow(BoardFail.AttachmentNotFoundException::new);
-		dao.delete(attachment);
-		return dao.findByBoard(Board.builder().bno(bno).build());
+	public List<VAttachment> delete(Integer vbno, Integer vano) {
+		VAttachmentId id = new VAttachmentId(vbno, vano);
+		VAttachment vattachment = dao.findById(id).orElseThrow(VocBoardFail.VAttachmentNotFoundException::new);
+		dao.delete(vattachment);
+		return dao.findByVocBoard(VocBoard.builder().vbno(vbno).build());
 	}
 
-	public Attachment read(Integer ano) {
-		return dao.findByAno(ano).orElseThrow(BoardFail.AttachmentNotFoundException::new);
+	public VAttachment read(Integer vano) {
+		return dao.findByVano(vano).orElseThrow(VocBoardFail.VAttachmentNotFoundException::new);
 	}
 }

@@ -53,10 +53,10 @@
 			$("<button>").attr("id","update").attr("class","btn btn-info").text("변 경").appendTo($btnArea);
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
 			$("<button>").attr("id","delete").attr("class","btn btn-info").text("삭 제").appendTo($btnArea);
-			
+			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
+			$("<button>").attr("id","reply").attr("class","btn btn-info").attr("onclick", "moveToReply("+vocBoard.vbno+")").text("답글쓰기").appendTo($btnArea);
 			$("#vcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
-
-
+			$("<button>").attr("id","back").attr("class","btn btn-light").css({"float":"right", "color":"black"}).text("뒤로가기").appendTo($btnArea);
 
 		} else if(isLogin==true && isWriter==false) {
 			const $vcommentBtnArea = $("#vcommentBtnArea");
@@ -72,21 +72,21 @@
 		
 		// $("어쩌구").each(function(idx, item)) -> jQuery 객체 전용
 		// $.each(집합, function(idx, item)) -> 범용
-		$.each(attachments, function(i, vattachment) {
+		$.each(vattachments, function(i, vattachment) {
 			const $tr = $("<tr>").appendTo($table);
 			
 			const $td1 = $("<td class='td1'>").appendTo($tr)
-			if(attachment.isImage==true)
+			if(vattachment.isImage==true)
 				$('<i class="fa fa-file-image-o"></i>').appendTo($td1);
 			else
 				$('<i class="fa fa-paperclip"></i>').appendTo($td1);
 			
 			const $td2 = $("<td class='td2'>").appendTo($tr)
-			$("<a href='/vattachments/" + vattachment.ano + "'>" + vattachment.originalFileName + "</a>").appendTo($td2);
+			$("<a href='/vattachments/" + vattachment.vano + "'>" + vattachment.originalFileName + "</a>").appendTo($td2);
 							
 			const $td3 = $("<td class='td3'>").appendTo($tr)
 			if(isLogin==true && isWriter==true) {
-				$("<span class='delete_vattachment' data-ano='" + attachment.ano + "' data-vbno='" + vocBoard.vbno + "'>X</span>").appendTo($td3);
+				$("<span class='delete_vattachment' data-vano='" + vattachment.vano + "' data-vbno='" + vocBoard.vbno + "'>X</span>").appendTo($td3);
 				$(".delete_vattachment").css("cursor","pointer").attr("title", vattachment.originalFileName + " 삭제");
 			}
 		});
@@ -113,6 +113,10 @@
 			$("<hr>").appendTo($("#vcomments"));
 		});
 	};
+	
+	const moveToReply=(vbno)=>{
+		location.href = "/customerCenter/vocWriteReply?vbno="+vbno;
+	}
 
 	$(document).ready(()=>{
 		// 로그인 아이디를 자바스크립트에서 접근하고 싶다. JSTL은 <c:set>을 이용해 변수 생성이 가능한데 타임리프는 안되는 것 같다
@@ -154,7 +158,7 @@
 		});
 	
 		// 변경
-				$("#btnArea").on("click", "#update", ()=>{
+		$("#btnArea").on("click", "#update", ()=>{
 			const param = {
 				title : $("#title").val(),
 				content : CKEDITOR.instances['content'].getData(),
@@ -169,29 +173,37 @@
 		});
 		
 		// 삭제
-				$("#btnArea").on("click", "#delete", ()=>{
-					$.ajax({
-						url: "/vocBoard/" + vocBoard.vbno,
-						method:"delete",
-					})
-					.done((result, text, response)=>{ location.href = "/customerCenter/vocList" })
-					.fail((response, text, message)=>{})
-				});
-				
-				
-			});
+		$("#btnArea").on("click", "#delete", ()=>{
+			$.ajax({
+				url: "/vocBoard/" + vocBoard.vbno,
+				method:"delete",
+			})
+			.done((result, text, response)=>{ location.href = "/customerCenter/vocList" })
+			.fail((response, text, message)=>{})
+		});
+			
+		// 뒤로가기
+		$("#btnArea").on("click", "#back", ()=>{
+			$.ajax({
+				url: "/vocBoard/" + vocBoard.vbno,
+				method:"get",
+			})
+			.done((result, text, response)=>{ location.href = "/customerCenter/vocList" })
+			.fail((response, text, message)=>{})
+		});
+	});
 </script>
 
 </head>
 <script>
-	// 화면 구성, 댓글 출력, 댓글 작성, 댓글 삭제, 추천, 비추, 변경, 삭제
+	// 화면 구성, 게시글 출력, 답글 작성, 답글 변경, 답글 삭제
 </script>
 <body>
 <div id="page">
-		<header id="header" th:replace="/fragments/headerBoard">
+		<header id="header" th:replace="/fragments/headerStore">
 	</header>
 	<div id="username" sec:authentication="name" style="display:none;"></div>
-	<nav id="nav" th:replace="/fragments/navBoard">
+	<nav id="nav" th:replace="/fragments/navStore">
 	</nav>
 	<div id="main">
 		<aside id="aside" th:replace="/fragments/aside">
@@ -223,6 +235,7 @@
 				</div>
 			</div>
 			<div id="btnArea">
+			
 			</div>
 			<hr>
 			<div class="form-group1">

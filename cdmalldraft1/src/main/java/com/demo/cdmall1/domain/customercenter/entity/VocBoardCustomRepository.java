@@ -11,4 +11,5 @@ public interface VocBoardCustomRepository {
 		
 		public Long countByVbno();
 
+		List<VocBoardDto.List> updateList(Pageable pageable);
 }

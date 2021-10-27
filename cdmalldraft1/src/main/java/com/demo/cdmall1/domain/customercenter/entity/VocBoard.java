@@ -47,6 +47,12 @@ public class VocBoard extends BaseCreateAndUpdateTimeEntity {
 	
 	private Integer attachmentCnt;
 	
+	private Integer re_ref;
+	
+	private Integer re_lev;
+	
+	private Integer re_seq;
+	
 	@OneToMany(mappedBy="vocBoard", cascade=CascadeType.REMOVE)
 	@OrderBy(value="vcno DESC")
 	private Set<VComment> vcomments;

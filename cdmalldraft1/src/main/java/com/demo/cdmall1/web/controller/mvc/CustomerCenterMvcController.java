@@ -21,4 +21,8 @@ public class CustomerCenterMvcController {
 	@GetMapping("/customerCenter/vocRead")
 	public void vocRead() {
 	}
+	
+	@GetMapping("/customerCenter/vocWriteReply")
+	public void vocWriteReply() {
+	}
 }

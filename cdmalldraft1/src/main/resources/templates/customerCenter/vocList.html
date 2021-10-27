@@ -27,6 +27,15 @@
 			const $td = $("<td>").appendTo($tr);
 			if(c.attachmentCnt>0)
 				$("<i class='fa fa-paperclip'></i>").appendTo($td);
+			
+			
+			if(c.re_lev>0) {
+				for(let i=0; i<c.re_lev; i++) {
+					c.title= "re: "+c.title;
+				}
+				
+			}
+			
 			$("<a>").attr("href", "/customerCenter/vocRead?vbno=" + c.vbno).text(c.title).appendTo($td);
 			if(c.commentCnt>0)
 				$("<span>").text(" [" + c.commentCnt + "]").appendTo($td);
@@ -94,16 +103,12 @@
 			pageno=1;
 		
 		$.ajax("/vocBoard/all?pageno="+pageno).done(result=>{
+			
 			page=result;
 			printVocBoard();
 			printPagination(getPagination());
 		});
 	});
-	
-
-	
-	
-	
 	
 </script>
 </head>
@@ -131,7 +136,7 @@
 				</ul>
 			</div>
 			<a class="btn btn-info" role="button" href="/customerCenter/vocWrite">글쓰기</a>
-</div>
+		</div>
 		</section>
 	</div>
 	<footer id="footer" th:replace="/fragments/footer">

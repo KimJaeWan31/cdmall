@@ -8,5 +8,5 @@ import lombok.*;
 @NoArgsConstructor
 public class VAttachmentId implements Serializable {
 	private Integer vocBoard;
-	private Integer ano;
+	private Integer vano;
 }
