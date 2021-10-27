@@ -26,12 +26,14 @@ import lombok.*;
 @RestController
 public class ProductController {
 	private final ProductService service;
-	private final ProductMemberService productMemberService;
 	// 이미지 첨부파일 보기
 	@GetMapping(path={"/products/image", "/temp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
-	public ResponseEntity<?> showImage(@RequestParam String imagename) throws IOException {
-		File file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
-		System.out.println(file);
+	public ResponseEntity<?> showImage(@RequestParam String imagename, HttpServletRequest req) throws IOException {
+		String command = req.getRequestURI().substring(1, req.getRequestURI().lastIndexOf("/"));
+		File file = new File(ZmallConstant.TEMP_FOLDER + imagename);
+		if(command.equals("board")) {
+			file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
+		}
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(ZmallUtil.getMediaType(imagename));
 		headers.add("Content-Disposition", "inline;filename="  + imagename);

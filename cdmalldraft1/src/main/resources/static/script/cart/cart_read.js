@@ -144,9 +144,9 @@ const main = {
 			method:"delete",
 			data: JSON.stringify(dto),
 			contentType: "application/json",
-			beforeSend: function(xhr) {
+			/*beforeSend: function(xhr) {
 				xhr.setRequestHeader(header, token)
-			}
+			}*/
 		}).done(result=>{
 			carts = result;
 			window._this.printPage();

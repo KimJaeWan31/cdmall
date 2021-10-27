@@ -31,9 +31,13 @@ private final BoardService service;
 	// 이미지 첨부파일 보기
 	@GetMapping(path={"/board/image", "/temp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<?> showImage(@RequestParam String imagename, HttpServletRequest req) throws IOException {
-		File file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
+		String command = req.getRequestURI().substring(1, req.getRequestURI().lastIndexOf("/"));
+		File file = new File(ZmallConstant.TEMP_FOLDER + imagename);
+		if(command.equals("board")) {
+			file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
+		}
 		
-		System.out.println(file);
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(ZmallUtil.getMediaType(imagename));
 		headers.add("Content-Disposition", "inline;filename="  + imagename);
@@ -74,7 +78,6 @@ private final BoardService service;
 	
 	@GetMapping(path="/board/warnlist", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> warnlist(@RequestParam(defaultValue="1") Integer pageno, Integer warnCnt) {
-		System.out.println("sssssssssssssssssssssss");
 		return ResponseEntity.ok(service.warnList(pageno, warnCnt));
 	}
 	
