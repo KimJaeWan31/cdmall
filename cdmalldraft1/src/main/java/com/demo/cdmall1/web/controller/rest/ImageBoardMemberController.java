@@ -40,6 +40,14 @@ public class ImageBoardMemberController {
 	}
 	
 	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/imageBoard_member/report_check")
+	public ResponseEntity<?> reportCheck(Integer ibno, Principal principal) {
+		String username = principal.getName();
+		boolean check = imageMemberService.isReport(ibno, username); 
+		return ResponseEntity.ok(check);                                                                                                                                                                                                                                                                                                     
+	}
+	
+	@PreAuthorize("isAuthenticated()")
 	@PatchMapping("/imageBoard_member/is_report")
 	public ResponseEntity<?> report(Integer ibno, Principal principal){
 		ReportCheck state = imageMemberService.reportcheck(ibno, principal.getName());
