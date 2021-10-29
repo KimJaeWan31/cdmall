@@ -80,6 +80,7 @@ const main = {
 	
 		
 		$("#check_all").on("change", this.checkAll);
+		$("#check_all2").on("change", this.checkAll);
 		$(".delete_button").on("click", this.deleteProduct);
 		$("#continueShopping").on("click", this.continueShopping);
 		window._this = this;
@@ -135,7 +136,7 @@ const main = {
 			$("<input>").attr("type","checkbox").attr("class","check").data("pno", wish.pno).appendTo($td1);
 			
 			const $td2 = $("<td>").css({"width":"300px"}).appendTo($tr);
-			$("<img>").attr("src", "/upload/productimage/"+wish.imageFileName).css({"height":"130px","width":"130px","cursor":"pointer"})
+			$("<img>").attr("src", "/upload/productimage/"+wish.imageFileName).css({"height":"130px","width":"130px","cursor":"pointer", "border":"none"})
 			.attr("onclick","productClicked("+ wish.pno +")").attr("class","cart_image")
 			.attr("id", wish.pno+"_"+wish.imageFileName).appendTo($td2);
 			
@@ -148,14 +149,8 @@ const main = {
 			
 			
 			
-//			const $td4 = $("<td>").appendTo($tr);
-//			const $td4_div = $("<div class='item_amount'>").appendTo($td4);
-//			$("<span>").attr("class","dec").data("pno", cart.pno).text("-").appendTo($td4_div);
-//			$("<span class='count'>").text(cart.count).appendTo($td4_div);
-//			$("<span>").attr("class","inc").data("pno", cart.pno).text("+").appendTo($td4_div);
-//			
+
 			const $td5 = $("<td>").css({"float":"right","width":"200px"}).appendTo($tr);
-//			$("<div>").text(cart.cartPrice + "원").appendTo($td5);
 			$("<div>").append($("<button type='button' class='button addCart'>장바구니에 담기</button>")
 			.attr("id","add_to_cart_" + wish.pno).attr("onclick", "window._this.addToCart(" + wish.pno + ")")
 			.css({"margin-top":"20px"}).attr("data-cartNo", idx)).appendTo($td5);

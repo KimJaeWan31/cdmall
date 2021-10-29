@@ -54,7 +54,24 @@ border-color: grey;
 }
 .delete_button:hover {
 text-decoration: underline;
+color: #0064FF;
 }
+
+.continueShopping {
+font-family: 'Open Sans', sans-serif;
+font-family: 'Zen Kurenaido', sans-serif;
+background: white;
+border: 1px solid;
+width: 95px;
+height: 30px;
+border-color: grey;
+color: black;
+}
+.continueShopping:hover {
+text-decoration: underline;
+color: #0064FF;
+}
+
 
 .addCart {
 font-family: 'Open Sans', sans-serif;
@@ -72,6 +89,9 @@ width: 150px;
 color: #0064FF;
 border-color: #ccc;
 }
+
+
+
 </style>
 
 </head>
@@ -101,11 +121,9 @@ border-color: #ccc;
 					<hr>
 
 					<div>
-						<input type="checkbox" id="check_all">
-						<button id="delete_product1" class="delete_button" style="color:#0064FF;">선택상품 삭제</button>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<button id='continueShopping' class="btn btn-primary">쇼핑계속 하기</button>
-						<button id='add_to_cart2' class="btn btn-primary">장바구니에 담기 </button>
+						<input type="checkbox" id="check_all2">
+						<button id="delete_product1" class="delete_button" >선택상품 삭제</button>
+						<button id="continueShopping" class="continueShopping" >쇼핑계속 하기</button>
 					</div>
 					
 				<div id="pagination" style="text-align: center;">

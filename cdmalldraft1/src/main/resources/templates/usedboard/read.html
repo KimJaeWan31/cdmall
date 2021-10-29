@@ -19,6 +19,13 @@
 	.td1 { width: 30px; }
 	.td2 { width: 170px; }
 	.td3 { width: 50px; }
+	
+	.form-group {
+	width: 1260px;
+	}
+	.form-control {
+	width: 1260px;
+	}
 </style>
 <script sec:authorize="isAuthenticated()">
 	const isLogin = true
@@ -237,9 +244,9 @@
 			<div id="btnArea">
 			</div>
 			<hr>
-			<div class="form-group1">
+			<div class="form-group">
       			<label for="usedcomment_teaxarea">댓글을 입력하세요</label>   
-      			<textarea class="form-control1" rows="5" id="usedcomment_textarea" readonly="readonly"
+      			<textarea class="form-control" rows="5" id="usedcomment_textarea" readonly="readonly"
       				placeholder="댓글을 작성하려면 로그인 해주세요"></textarea>
     		</div>
 			<div id="usedcommentBtnArea">

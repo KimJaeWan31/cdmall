@@ -57,6 +57,13 @@
 		});
 	});
 </script>
+<style type="text/css">
+
+.write_form {
+width: 1250px;
+}
+
+</style>
 </head>
 <body>
 <div id="page">
@@ -69,16 +76,17 @@
 		</aside>
 		<section id="section">
 			<div>
+			<div>등록할 카테고리를 선택해주세요</div>
 				<select class="form-control" name="category" id="category">
-					<option value="잡담">잡답</option>
+					<option value="잡담">잡담</option>
 					<option value="유머">유머</option>
 					<option value="댕댕이">댕댕이</option>
 					<option value="고양이">고양이</option>
 				</select>
 			</div>
-			<form id="write_form">
+			<form id="write_form" class="write_form" style="width: 1240px;">
 				<div class="form-group">
-					<label for="title">제목:</label>
+					<label for="title" style="margin-top: 15px;">제목:</label>
 					<input type="text" class="form-control" id="title" name="title" placeholder="제목">
 				</div>
 				<div class="form-group">

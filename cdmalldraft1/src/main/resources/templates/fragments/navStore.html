@@ -3,12 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"
+  />
 <title>Insert title here</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
 header, nav, aside, footer, section ,li, a{
 	font-family: 'Jua', sans-serif;
 } 
+
+
+
 
 </style>
 
@@ -70,13 +77,11 @@ header, nav, aside, footer, section ,li, a{
 			<nav class="navbar navbar-light bg-light">
 			  <a class="navbar-brand"></a>
 			  <form class="form-inline">
-			    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="word">
-			    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searshButton">검색</button>
+			    <input class="form-control mr-sm-2" style="width:205px; background: white;" type="search" placeholder="찾고싶은 상품을 검색해 보세요!" aria-label="Search" id="word">
+			    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searshButton"> <span class="fas fa-search"></span> </button>
 			  </form>
 			</nav>
     	</ul>
-    	
-
 	
     	<ul sec:authorize="isAuthenticated()" class="nav navbar-nav" id="menu_authenticated">
         	<li><a href="/product/list">NEW</a></li>
@@ -89,8 +94,8 @@ header, nav, aside, footer, section ,li, a{
 			  <a class="navbar-brand"></a>
 			  <form class="form-inline">
 			  
-			    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="word">
-			    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searshButton">검색</button>
+			    <input class="form-control mr-sm-2" style="width:205px; background: white;" type="search" placeholder="찾고싶은 상품을 검색해 보세요!" aria-label="Search" id="word">
+			    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searshButton"><span class="fas fa-search"></span></button>
 			  </form>
 			</nav>
     	</ul>

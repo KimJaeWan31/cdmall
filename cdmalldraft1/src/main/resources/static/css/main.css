@@ -291,6 +291,31 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
  .form-inline {
  width: 300px;
  }
+ 
+ 
+@import url('https://fonts.googleapis.com/css2?family=Gothic+A1:wght@100&family=Noto+Sans+KR:wght@100&family=Open+Sans:ital,wght@1,800&display=swap');
+.mr-sm-2  {
+font-family: 'Gothic A1', sans-serif;
+font-family: 'Noto Sans KR', sans-serif;
+font-family: 'Open Sans', sans-serif;
+font-size: 12px;
+border: 1px solid #4285f4; 
+border-radius: 0px;
+height: 36px;
+}
+
+.my-sm-0 {
+font-family: 'Gothic A1', sans-serif;
+font-family: 'Noto Sans KR', sans-serif;
+font-family: 'Open Sans', sans-serif;
+border: 1px solid #4285f4; 
+border-radius: 0px;
+margin-left: -11px;
+color: #4285f4;
+height: 36px;
+}
+
+ 
 
 .page-container{
     width: 100vw;
