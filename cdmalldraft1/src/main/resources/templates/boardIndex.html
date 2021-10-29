@@ -23,8 +23,93 @@
 	
 	
 </script>
+
+    <style>
+    
+    .main_background {
+     height: 3000px;
+     width: 100%;
+     background: white;
+    }
+        .grey {
+            background: #F4FFFF;
+            height: 5000px;
+			width: 1280px;
+			margin: 0 auto;
+        }
+        .image_sticky {
+            float: right;
+            width: 400px;
+            position: sticky;
+            top: 100px;
+        }
+        .text{
+            float: left;
+            width: 300px;
+            
+        }
+        
+       .image_sticky2 {
+            float: right;
+            width: 400px;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .text2{
+            float: right;
+            width: 300px;
+            margin-right: 50px;
+            
+        }
+        
+        .second {
+        clear:both;
+        float: left;
+        
+        }
+        
+        .image_sticky2{
+            float: left;
+            width: 400px;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .text2{
+            float: right;
+            width: 300px;
+            
+        }
+        
+        
+         .image_sticky3{
+            float: right;
+            width: 400px;
+            position: sticky;
+            top: 500px;
+        }
+        
+        .text3{
+            float: left;
+            width: 300px;
+            
+        }
+	.button {
+	width: 200px;
+	color: #000069;
+	background: none;
+	border-radius: 10px;
+	}
+	
+	.button:hover {
+	color: #B9062F;
+	}
+
+    </style>
+
 </head>
-<body>
+<body >
 <div id="page">
 	<header id="header" th:replace="/fragments/headerBoard">
 	</header>
@@ -38,89 +123,149 @@
 	       <li style="background-image: url('image/board_pet.png'); background-size: cover"><a href="/questionBoard/list" style="text-decoration:none">게시판4</a></li>
 	     </ul>	
     </div>
-	<div id="main">	
-		<section id="section" style="border: 1px solid aqua;">
-			<div class="alert alert-danger" style="display:none;" id="msg">
-  				<strong>작업 실패 </strong> <span id="msg_span"></span>
-			</div>
-			        <div class="main_text0">
-            <h1>오늘의 발견 | <span class="newArrival" >댕댕의 정석에 새롭게 들어온 상품!</span> </h1>
-            <div class="contents1">
-
-                <ul class="icons">
-                    <li>
-                      <div class="icon_img">
-                        <img src="image/icon1.png" style="width: 150px; height: 150px;">
-                      </div>
-                      <div class="contents1_bold">신상품1</div>
-                      <div class="contents2">
-                        구경하러 가기
-                      </div>
-                      <div class="more" style=" cursor: pointer;"  onclick=" location.href='https://mypetlife.co.kr/';">
-                        MORE
-                      </div>
-                    </li>
-          
-                    <li>
-                      <div class="icon_img">
-                        <img src="image/icon2.png" style="width: 150px; height: 150px;">
-                      </div>
-                      <div class="contents1_bold">신상품2</div>
-                      <div class="contents2">
-                        구경하러 가기
-                      </div>
-                      <div class="more" style=" cursor: pointer;"  onclick=" location.href='https://mypetlife.co.kr/';">
-                        MORE
-                      </div>
-                    </li>
-          
-                    
-                  </ul>
-                </div>
-
-                <h1>요즘 뜨는 상품 | <span class="newArrival" >댕댕의 정석이 엄선한 가장 HOT한 상품!</span> </h1>
-          
-                <div class="contents2">
-
-                  <ul class="icons2">
-                      <li>
-                        <div class="icon2_img">
-                          <img src="image/icon3.png" style="width: 150px; height: 150px;">
-                        </div>
-                        <div class="contents2_bold">뜨는상품1</div>
-                        <div class="contents2">
-                          구경하러 가기
-                        </div>
-                        <div class="more" style=" cursor: pointer;"  onclick=" location.href='https://mypetlife.co.kr/';">
-                          MORE
-                        </div>
-                      </li>
+    
+    <div class="main_background">
+	        <div class="grey" style="background: #F4FFFF; height: 1200px;">
+              <div class="image_sticky">
+                <img src="/image/pet_img1.png" width="100%">
+            </div>
+	        
+	        
+	        <div style="width: 500px; margin-top: 200px; margin-left: 50px; " class="text">
+                     <h2 style="font-size: 28px;">
+                     캣독왓숑에 오신것을 환영합니다. <br>
+                     저희는 공지사항을 제공 하고 있습니다.<br>
+                     공지사항으로 이동하시겠습니까?<br>
+                     밑에 링크를 눌러주세요 <br>
+                     <button class="button nbboard" style="float: right;">공지사항으로 </button>
+                     </h2>
+           </div>
+           
+           
+           <div style="clear: both;"></div>
+          <div style="width: 500px; margin-top: 400px; margin-left: 50px; " class="text">
+                     <h2 style="font-size: 28px;">
+                     중고 좋아하시나요? <br>
+                     저희는 중고게시판을 제공 하고 있습니다.<br>
+                     중고게시판으로 이동하시겠습니까?<br>
+                     밑에 링크를 눌러주세요 <br>
+                     <button class="button usboard" style="float: right;">중고게시판으로 </button>
+                     </h2>
+           </div>
             
-                      <li>
-                        <div class="icon2_img">
-                          <img src="image/icon4.png" style="width: 150px; height: 150px;">
-                        </div>
-                        <div class="contents2_bold">뜨는상품2</div>
-                        <div class="contents2">
-                          구경하러 가기
-                        </div>
-                        <div class="more" style=" cursor: pointer;"  onclick=" location.href='https://mypetlife.co.kr/';">
-                          MORE
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="bottomad">
-                  아랫광고
-                  </div>
-
-
-        </div>
-
-		</section>
+            </div>      
+<!--            ***********************************						 -->
+            
+   	        <div class="grey" style="background: #F4FFFF; height: 1400px;">
+              <div class="image_sticky2">
+                <img src="/image/pet_img4.png" width="100%">
+            </div>
+            
+	        
+	        
+	        <div style="width: 540px; margin-top: 200px;  " class="text2">
+                     <h2 style="font-size: 28px;">
+                     강아지 사진 보고 가십쇼 <br>
+                     저희는 사진게시판을 제공하고 있습니다.<br>
+                     사진게시판으로 이동하시겠습니까?<br>
+                     밑에 링크를 눌러주세요 <br>
+                     <button class="button imgboard" style="float: right;">사진게시판으로 </button>
+                     </h2>
+             </div>        
+                     
+                 <div style="clear: both;"></div>
+                <div class="text2" style="width:550px; margin-top: 200px;">
+                     <h2 style="font-size: 28px;">
+                     아직도 궁금한게 많으신가요? <br>
+                     저희는 질문게시판을 제공 하고 있습니다.<br>
+                     질문게시판으로 이동하시겠습니까?<br>
+                     밑에 링크를 눌러주세요 <br>
+                     <button class="button qsboard" style="float: right;">질문게시판으로 </button>
+                     </h2>
+                </div>
+           
+            </div>         
+<!--            ***********************************						 -->
+        	<div class="grey" style="background: #F4FFFF; height: 1200px;">
+              <div class="image_sticky3">
+                <img src="/image/pet_img5.png" width="100%">
+            </div>
+	        
+	        
+	        <div style="width: 550px; margin-top: 200px; margin-left: 50px; " class="text3">
+                     <h2 style="font-size: 28px;">
+                     자유를 원하십니까? <br>
+                     저희는 자유게시판을 제공 하고 있습니다.<br>
+                     자유게시판으로 이동하시겠습니까?<br>
+                     밑에 링크를 눌러주세요 <br>
+                     <button class="button frboard" style="float: right;">자유게시판으로 </button>
+                     </h2>
+                     
+                    <div style="clear: both;"></div>
+                <div class="text3" style="width:550px; margin-top: 300px;">
+                     <h2 style="font-size: 28px;">
+                     추천을 원하시나요? <br>
+                     저희는 추천게시판을 제공 하고 있습니다.<br>
+                     추천게시판으로 이동하시겠습니까?<br>
+                     밑에 링크를 눌러주세요 <br>
+                     <button class="button rcboard" style="float: right;">추천게시판으로 </button>
+                     </h2>
+                </div>
+           </div>
+            
+            </div>    
+            <div>
+	<div style=" text-align: center; height: 50px;">
+		<h5 class="white-text">copyright &copy; 2021 ICIA Web</h5>
 	</div>
-	<footer id="footer" th:replace="/fragments/footer">
-	</footer>
+            </div>
+	  </div>
+	<div>
+	</div>
+
+<!-- <script type="text/javascript">
+$(window).scroll(function () { var scrollValue = $(document).scrollTop(); console.log(scrollValue); });
+<!-- 	</script> -->
+
+<script type="text/javascript">
+$(function() {
+	$(".nbboard").click(function() {
+		location.href='/noticeBoard/list';
+	})
+});
+
+$(function() {
+	$(".usboard").click(function() {
+		location.href='/usedBoard/list';
+	})
+});
+
+$(function() {
+	$(".qsboard").click(function() {
+		location.href='/questionBoard/list';
+	})
+});
+$(function() {
+	$(".rcboard").click(function() {
+		location.href='/bestBoard/bestList';
+	})
+});
+$(function() {
+	$(".imgboard").click(function() {
+		location.href='/imageBoard/list';
+	})
+});
+
+$(function() {
+	$(".frboard").click(function() {
+		location.href='/board/list';
+	})
+})
+
+
+</script>
+
 </div>
-</body>
+</body >
+
 </html>

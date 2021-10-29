@@ -19,7 +19,7 @@ ul, li {
 
 
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
-header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, label {
+header, nav, aside, footer, section , h2, #communitypic, li, span,button, h1, input, label {
 	font-family: 'Jua', sans-serif;
 } 
 
