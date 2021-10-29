@@ -18,9 +18,10 @@ public class BoardDto {
 	public static class Write {
 		private String title;
 		private String content;
+		private String category;
 		private java.util.List<MultipartFile> attachments;
 		public Board toEntity() {
-			return Board.builder().title(title).content(content).build();
+			return Board.builder().title(title).content(content).category(category).build();
 		}
 	}
 	

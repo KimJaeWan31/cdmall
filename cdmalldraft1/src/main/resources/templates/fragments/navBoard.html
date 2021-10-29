@@ -10,6 +10,24 @@ header, nav, aside, footer, section ,li, a{
 } 
 
 </style>
+<script>
+	$(document).ready(()=>{
+		//찾기
+		$("#searshButton").on("click", ()=>{
+			console.log("================");
+			const words=$("#word").val();
+			const pageno=1;
+		$.ajax({
+			url: "/board/search",
+			data: {word:words},
+			method:"post",
+		})
+		.done((result, text, response)=>{ location.href = "/board/search?pageno="+pageno})
+		//.fail((response, text, message)=>{})
+	});
+		
+	});
+</script>
 </head>
 <body>
 <div th:fragment="nav" id="nav" class="navbar navbar-inverse">
@@ -35,6 +53,14 @@ header, nav, aside, footer, section ,li, a{
 			<li><a href="/board/list">자유게시판</a></li>
 			<li><a href="/bestBoard/bestList">추천게시판</a></li>
 			<li><a href="/usedBoard/list">중고게시판</a></li>
+			<nav class="navbar navbar-light bg-light">
+				
+			<form class="form-inline">
+			  	<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="word">
+			    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searshButton">검색</button>
+			  </form>
+			  
+			</nav>
     	</ul>
 	</div>
 	<script th:inline="javascript">

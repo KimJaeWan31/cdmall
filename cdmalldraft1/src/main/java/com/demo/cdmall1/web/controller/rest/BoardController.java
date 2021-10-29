@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 import java.security.*;
+import java.util.*;
 
 import javax.servlet.http.*;
 import javax.validation.*;
@@ -127,6 +128,16 @@ private final BoardService service;
 	public ResponseEntity<?> updateAttachmentCnt(Integer bno) {
 		Integer cnt = service.updateAttachment(bno);
 		return ResponseEntity.ok(cnt);
+	}
+	
+	
+	// 검색
+	@PostMapping(path="/board/searchAll", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> search(@RequestParam(defaultValue = "1") Integer pageno, HttpSession session){
+		String word = session.getAttribute("word").toString();
+		URI uri = UriComponentsBuilder.newInstance().path("/board/search").queryParam("word", word).build().toUri();
+		Map<String, Object> board = service.readSearchAll(pageno, word);
+		return ResponseEntity.created(uri).body(board);
 	}
 	
 }

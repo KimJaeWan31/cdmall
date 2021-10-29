@@ -28,4 +28,8 @@ public interface BoardCustomRepository {
 		public Long countByWarnCnt();
 		
 
+		// 검색
+		List<BoardDto.List> search(Pageable pageable, String word);
+		
+		public Long countSearch(String word);
 }

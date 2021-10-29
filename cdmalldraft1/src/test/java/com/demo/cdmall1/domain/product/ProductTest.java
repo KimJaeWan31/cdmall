@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.*;
 
+import com.demo.cdmall1.domain.board.entity.*;
 import com.demo.cdmall1.domain.product.entity.*;
 
 
@@ -15,6 +16,9 @@ import com.demo.cdmall1.domain.product.entity.*;
 public class ProductTest {
 	@Autowired
 	private ProductRepository pdao;
+	
+	@Autowired
+	private BoardRepository bdao;
 
 	// 카테고리 코드
 	// dog : 1
@@ -73,4 +77,7 @@ public class ProductTest {
 			List<Product> plist = pdao.readCreateTimeDesc();
 			System.out.println(plist);
 		}
+		
+		
+	
 }

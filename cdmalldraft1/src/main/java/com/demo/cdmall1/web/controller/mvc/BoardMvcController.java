@@ -1,5 +1,7 @@
 package com.demo.cdmall1.web.controller.mvc;
 
+import javax.servlet.http.*;
+
 import org.springframework.security.access.prepost.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +38,15 @@ public class BoardMvcController {
 	@GetMapping("/board/readMap")
 	public void map() {
 		
+	}
+	
+	@GetMapping("/board/search")
+	public void search() {
+		
+	}
+	
+	@PostMapping("/board/search")
+	public void search(@RequestParam (defaultValue = "1") Integer pageno,String word, HttpSession session) {
+		session.setAttribute("word", word);
 	}
 }
