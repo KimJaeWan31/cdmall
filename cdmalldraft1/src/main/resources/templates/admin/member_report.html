@@ -122,81 +122,7 @@ body {
 			$("<a>").attr("href", url+next).text("다음으로").appendTo($li);
 		}
 	}
-	////////////////////////admin 출력/////////////////////
 	
-	const printAdminBoard = ()=>{
-		const $list = $("#admin_list");
-		// 서버가 보낸 board들은 page.content에 저장되어 있다
-		for(m of adminPage.content) {
-			const $tr = $("<tr>").appendTo($list);
-			$("<td>").text(m.username).appendTo($tr);
-			
-			$("<td>").text(m.irum).appendTo($tr);
-			$("<td>").text(m.email).appendTo($tr);
-			if(m.tel ==null){
-				$("<td>").text("-").appendTo($tr);
-			}else{
-				$("<td>").text(m.tel).appendTo($tr);
-			}
-			if(m.enabled){
-				$("<td>").text("활성").attr("id",  m.username+"state").css("color", "blue").appendTo($tr);
-				$("<button>").attr("data-username", m.username).attr("class","admin_active").text("비활성").appendTo($tr);
-			}
-			else{
-				$("<td>").text("비활성").attr("id", m.username+"state").css("color", "red").appendTo($tr);
-				$("<button>").attr("data-username", m.username).attr("class","admin_active").text("활성").appendTo($tr);
-			}
-		}
-	};
-	
-	const getAdminPagination = () => {
-		// 한번에 다섯개의 페이지씩
-		const blockSize = 5;
-		
-		// 서버 응답에 현재 페이지가 포함되어 있지 않다....재계산하자
-		let pageno = location.search.substr(8);
-		if(pageno=="")
-			pageno=1;
-		
-		// 0번 블록 : 1~5 page, 1번 블록 : 6~10 page
-		const blockNo = Math.floor((pageno-1)/blockSize);
-		const prev = blockNo * blockSize;
-		const first = prev + 1;
-		let last = first + blockSize - 1;
-		let next = last + 1;
-		const countOfPage = Math.ceil(adminPage.totalcount/10)
-		if(last>=countOfPage) {
-			last = countOfPage;
-			next = 0;
-		}
-		return {pageno, prev, next, first, last};
-		
-	};
-	
-	const printAdminPagination = ({pageno, prev, next, first, last}) => {
-		const $pagination = $("#admin_ul.pagination");
-		const url = "/admin/member_report?pageno="
-				
-		// 이전으로 
-		if(prev>0) {
-			const $li = $("<li>").appendTo($pagination)
-			$("<a>").attr("href", url+prev).text("이전으로").appendTo($li);
-		}
-		
-		// 시작 페이지에서 마지막 페이지....현재 페이지 번호일 경우 active 클래스 추가
-		for(let idx=first; idx<=last; idx++) {
-			const $li = $("<li>").appendTo($pagination)
-			$("<a>").attr("href", url+idx).text(idx).appendTo($li);
-			if(idx==pageno)
-				$li.attr("class", "active");
-		}
-		
-		// 다음으로
-		if(next>0) {
-			const $li = $("<li>").appendTo($pagination)
-			$("<a>").attr("href", url+next).text("다음으로").appendTo($li);
-		}
-	}
 	
 	$(document).ready(()=>{
 		// 주소창에서 페이지 번호를 잘라낸다. 페이지 번호가 없으면 1로
@@ -206,13 +132,6 @@ body {
 			console.log(result);
 			printUserBoard();
 			printUserPagination(getUserPagination());
-		});
-		
-		$.ajax("/members/role_admin").done(result=>{
-			adminPage = result;
-			console.log(result);
-			printAdminBoard();
-			printAdminPagination(getAdminPagination());
 		});
 		
 		$("#user_list").on("click",".user_active", function() {
@@ -266,26 +185,6 @@ body {
 				<ul id = "user_ul"class="pagination"></ul>
 			</div>
 		</div>
-		
-		<h3>관리자 정보</h3>
-		<div class="wrap" style="margin: 0 auto;">
-			<table class="table table-hover">
-				<tr>
-					<th>아이디</th>
-					<th>이름</th>
-					<th>이메일</th>
-					<th>연락처</th>
-					<th>상태</th>
-					<th></th>
-				</tr>
-				<tbody id="admin_list">
-				</tbody>
-			</table>
-			<div id="admin_pagination" style="text-align: center;">
-				<ul id = "admin_ul"class="pagination"></ul>
-			</div>
-		</div>
-	</div>
 	<script th:inline="javascript">
 		$("#logout").on("click", (e)=> {
 			e.preventDefault();

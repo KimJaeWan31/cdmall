@@ -130,7 +130,7 @@ public class BoardCustomRepositoryImpl extends QuerydslRepositorySupport impleme
 	@Override
 	public Long countByWarnCnt() {
 		QBoard board = QBoard.board;
-		return factory.from(board).select(board.bno.count()).where(board.bno.gt(0).and(board.warnCnt.goe(10))).fetchOne();
+		return factory.from(board).select(board.bno.count()).where(board.bno.gt(0).and(board.warnCnt.goe(0))).fetchOne();
 	}
 	
 	// 검색

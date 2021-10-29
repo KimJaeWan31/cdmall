@@ -62,6 +62,7 @@ public class ImageBoard extends BaseCreateAndUpdateTimeEntity{
 		this.goodCnt = 0;
 		this.goodCnlCnt = 0;
 		this.reportCnt=0;
+		this.isActive=true;
 	}
 	
 	public ImageBoard update(ImageBoardDto.Update dto) {
@@ -88,4 +89,16 @@ public class ImageBoard extends BaseCreateAndUpdateTimeEntity{
 	}
 	
 	public Integer checkCnt;
+	
+	private Boolean isActive;
+
+	public Boolean updateIsActive() {
+		System.out.println(this.isActive);
+		if(this.isActive == null) {
+			this.isActive = true;
+		}
+		this.isActive = !(this.isActive);
+		System.out.println(this.isActive);
+		return this.isActive;
+	}
 }

@@ -37,7 +37,8 @@
 				<li><a href="#" id="logout">LOGOUT</a></li>
                 <li><a href="/product/list">ORDER</a></li>
                 <li><a href="/product/read">CART</a></li>
-                <li><a href='/member/read'>MYPAGE</a></li>
+                 <li sec:authorize="hasRole('ADMIN')" class=""><a href="/admin/index">MANAGE</a></li>
+                 <li sec:authorize="hasRole('USER')" class=""><a href='/member/read'>MYPAGE</a></li>
 				<li id="nav-sub-button" style="width:120px"><a>고객센터</a>
                 	  <ul class="list-group nav-sub">
 				      <li class="list-group-item" id="oneOnOneInquiry">1:1문의</li>

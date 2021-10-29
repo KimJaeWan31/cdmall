@@ -102,5 +102,15 @@ public class ImageBoardController {
 			return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
 		}
 		
+		@GetMapping(path="/imageBoard/warnlist", produces=MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<?> warnlist(@RequestParam(defaultValue="1") Integer pageno, Integer warnCnt) {
+			return ResponseEntity.ok(imageService.warnList(pageno, warnCnt));
+		}
+		
+		@PostMapping("/imageBoard/inactive")
+		public ResponseEntity<?> update_isActive(@RequestParam Integer ibno) {
+			Boolean isActive = imageService.updateIsActive(ibno);
+			return ResponseEntity.ok(isActive);
+		}
 	}
 

@@ -1,15 +1,14 @@
 package com.demo.cdmall1.web.dto;
 
 import java.time.*;
-import java.util.*;
 
 import org.springframework.web.multipart.*;
 
 import com.demo.cdmall1.domain.board.entity.*;
 import com.fasterxml.jackson.annotation.*;
+import com.sun.istack.NotNull;
 
 import lombok.*;
-import lombok.experimental.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardDto {

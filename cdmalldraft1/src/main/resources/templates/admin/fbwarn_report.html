@@ -9,16 +9,22 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-<link rel="stylesheet" href="/css/admin.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
 body {
   	font-family: "Lato", sans-serif;
 }
-
+.board_active {
+	color : white;
+	border: 0;
+	border-radius: 5px;
+	padding: 6px 12px;
+	margin: 5px 0;
+		 
+}
 .sidenav {
-  height: 100%;
+  height: 800px;
   width: 300px;
   float: left;
   z-index: 1;
@@ -42,12 +48,14 @@ body {
 </style>
 <script>
 	// 서버 응답을 저장할 변수
-	let page = null;
+	let free_page = null;
 	
-	const printBoard = ()=>{
-		const $list = $("#list");
+	////////////////////////////자유게시판 출력////////////////
+	
+	const printFreeBoard = ()=>{
+		const $list = $("#free_list");
 		// 서버가 보낸 board들은 page.content에 저장되어 있다
-		for(c of page.content) {
+		for(c of free_page.content) {
 			let createdTime = c.writeTime.substr(-26,10);
 			const $tr = $("<tr>").appendTo($list);
 			$("<td>").text(c.bno).appendTo($tr);
@@ -63,18 +71,19 @@ body {
 			$("<td>").text(c.goodCnt).appendTo($tr);
 			$("<td>").text(c.badCnt).appendTo($tr);
 			$("<td>").text(c.warnCnt).appendTo($tr);
+			
 			if(c.isActive){
 				$("<td>").text("활성").attr("id", c.bno+"state").css("color", "blue").appendTo($tr);
-				$("<button>").attr("data-bno", c.bno).attr("class","board_active").text("비활성").appendTo($tr);
+				$("<button>").attr("data-bno", c.bno).attr("class","board_active").css("background-color", "#DC3545").text("비활성").appendTo($tr);
 			}
 			else{
 				$("<td>").text("비활성").attr("id", c.bno+"state").css("color", "red").appendTo($tr);
-				$("<button>").attr("data-bno", c.bno).attr("class","board_active").text("활성").appendTo($tr);
+				$("<button>").attr("data-bno", c.bno).attr("class","board_active").css("background-color", "#007BFF").text("활성").appendTo($tr);
 			}
 		}
 	};
 	
-	const getPagination = () => {
+	const getFreePagination = () => {
 		// 한번에 다섯개의 페이지씩
 		const blockSize = 5;
 		
@@ -89,7 +98,7 @@ body {
 		const first = prev + 1;
 		let last = first + blockSize - 1;
 		let next = last + 1;
-		const countOfPage = Math.ceil(page.totalcount/10)
+		const countOfPage = Math.ceil(free_page.totalcount/10)
 		if(last>=countOfPage) {
 			last = countOfPage;
 			next = 0;
@@ -100,9 +109,9 @@ body {
 	
 	// 구조 분해 할당 : 객체를 변수로 풀어헤치는 문법
 	// const {pageno, prev, next, first, last} = getPagination();
-	const printPagination = ({pageno, prev, next, first, last}) => {
-		const $pagination = $("ul.pagination");
-		const url = "/board/list?pageno="
+	const printFreePagination = ({pageno, prev, next, first, last}) => {
+		const $pagination = $("#free.pagination");
+		const url = "/admin/fbwarn_report?pageno="
 				
 		// 이전으로 
 		if(prev>0) {
@@ -125,6 +134,7 @@ body {
 		}
 	}
 	
+
 	$(document).ready(()=>{
 		// 주소창에서 페이지 번호를 잘라낸다. 페이지 번호가 없으면 1로
 		let pageno = location.search.substr(8);
@@ -133,12 +143,14 @@ body {
 		
 		console.log(pageno);
 		$.ajax("/board/warnlist?pageno="+pageno).done(result=>{
-			page=result;
-			printBoard();
-			printPagination(getPagination());
+			free_page=result;
+			console.log(free_page);
+			printFreeBoard();
+			printFreePagination(getFreePagination());
 		});
 		
-		$("#list").on("click",".board_active", function() {
+		
+		$("#free_list").on("click",".board_active", function() {
 			
 			const bno = {bno :$(this).attr("data-bno")}
 			
@@ -147,11 +159,11 @@ body {
 				if(result==true){
 					Swal.fire('작업 성공', "해당 게시물을 활성했습니다.",'success');
 					$("#"+$(this).attr("data-bno")+"state").text("활성").css("color", "blue");
-					$(this).text("비활성");
+					$(this).text("비활성").css("background-color", "#DC3545");
 				}else{
 					Swal.fire('작업 성공', "해당 게시물을 활성했습니다.",'success');
 					$("#"+$(this).attr("data-bno")+"state").text("비활성").css("color", "red");
-					$(this).text("활성");
+					$(this).text("활성").css("background-color", "#007BFF");
 				}
 			}).fail((result)=>{
 				Swal.fire('작업 실패', "해당 작업을 실패했습니다.",'error')
@@ -167,8 +179,8 @@ body {
 		<a href="/admin/index">HOME</a> <a href="/boardMain">BOARD</a> <a
 			href="/">SHOP</a> <a href="#" id="logout">LOGOUT</a>
 	</div>
-	<div id="page" style="float: right; width: 80%">
-		<h3>자유게시판 시고글</h3>
+	<div class="page" style="float: right; width: 80%">
+		<h3>자유게시판 신고글</h3>
 		<div class="wrap" style="margin: 0 auto;">
 			<table class="table table-hover">
 				<tr>
@@ -183,11 +195,11 @@ body {
 					<th>상태</th>
 					<th></th>
 				</tr>
-				<tbody id="list">
+				<tbody id="free_list">
 				</tbody>
 			</table>
 			<div id="pagination" style="text-align: center;">
-				<ul class="pagination"></ul>
+				<ul id="free" class="pagination"></ul>
 			</div>
 		</div>
 	</div>

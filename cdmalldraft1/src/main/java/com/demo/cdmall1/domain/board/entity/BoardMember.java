@@ -26,8 +26,4 @@ public class BoardMember {
 	
 	private Boolean isWarn;
 	
-	@PrePersist
-	public void init() {
-		kind = "null";
-	}
 }

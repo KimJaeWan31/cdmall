@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.demo.cdmall1.domain.board.entity.Board;
 import com.demo.cdmall1.domain.board.entity.BoardFail;
 import com.demo.cdmall1.domain.imageboard.entity.*;
 import com.demo.cdmall1.util.ZmallConstant;
@@ -158,5 +159,22 @@ public class ImageBoardService {
 			if(imageBoard.getWriter().equals(loginId)==false)
 				throw new BoardFail.IllegalJobException();
 			dao.delete(imageBoard);
+		}
+
+		public Map<String,Object> warnList(Integer pageno, Integer warnCnt){
+			Pageable pageable = PageRequest.of(pageno-1, 10);
+			Map<String,Object> map = new HashMap<>();
+			map.put("content", dao.readReportAll(pageable, warnCnt));
+			map.put("totalcount", dao.countByReportCnt());
+			map.put("pageno", pageno);
+			map.put("pagesize", 10);
+			return map;
+		}
+
+		@Transactional
+		public Boolean updateIsActive(Integer ibno) {
+			ImageBoard imageBoard = dao.findById(ibno).orElseThrow(BoardFail.BoardNotFoundException::new);
+			
+			return imageBoard.updateIsActive();
 		}
 }

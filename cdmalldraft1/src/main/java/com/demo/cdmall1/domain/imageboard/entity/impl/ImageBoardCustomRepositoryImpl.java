@@ -51,7 +51,7 @@ public class ImageBoardCustomRepositoryImpl extends QuerydslRepositorySupport im
 	public List<ReportList> readReportAll(Pageable pageable, Integer reportCnt) {
 		QImageBoard imageBoard = QImageBoard.imageBoard;
 		return factory.from(imageBoard).select(Projections.constructor(ImageBoardDto.ReportList.class, imageBoard.ibno, imageBoard.title, imageBoard.writer, 
-				imageBoard.createTime, imageBoard.goodCnt, imageBoard.reportCnt))
+				imageBoard.createTime, imageBoard.goodCnt, imageBoard.reportCnt, imageBoard.isActive))
 				.where(imageBoard.ibno.gt(0).and(imageBoard.reportCnt.goe(1)))
 				.orderBy(imageBoard.reportCnt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	}
@@ -59,6 +59,21 @@ public class ImageBoardCustomRepositoryImpl extends QuerydslRepositorySupport im
 	@Override
 	public Long countByReportCnt() {
 		QImageBoard imageBoard = QImageBoard.imageBoard;
-		return factory.from(imageBoard).select(imageBoard.ibno.count()).where(imageBoard.ibno.gt(0).and(imageBoard.reportCnt.goe(10))).fetchOne();
+		return factory.from(imageBoard).select(imageBoard.ibno.count()).where(imageBoard.ibno.gt(0).and(imageBoard.reportCnt.goe(0))).fetchOne();
 	}
+	/*
+	@Override
+	public List<WarnList> readWarnAll(Pageable pageable, Integer reportCnt) {
+		QImageBoard imageBoard = QImageBoard.imageBoard;
+		return factory.from(imageBoard).select(Projections.constructor(ImageBoardDto.WarnList.class, imageBoard.ibno, imageBoard.title, imageBoard.writer, 
+				imageBoard.createTime, imageBoard.goodCnt, imageBoard.reportCnt, imageBoard.isActive))
+				.where(imageBoard.ibno.gt(0).and(imageBoard.reportCnt.goe(1)))
+				.orderBy(imageBoard.reportCnt.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+	}
+
+	@Override
+	public Long countByWarnCnt() {
+		QImageBoard imageBoard = QImageBoard.imageBoard;
+		return factory.from(imageBoard).select(imageBoard.ibno.count()).where(imageBoard.ibno.gt(0).and(imageBoard.reportCnt.goe(10))).fetchOne();
+	}*/
 }

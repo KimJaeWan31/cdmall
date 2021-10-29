@@ -239,7 +239,7 @@
 				url: "/board/" + board.bno,
 				method:"delete",
 			})
-			.done((result, text, response)=>{ location.href = "/" })
+			.done((result, text, response)=>{ location.href = "/board/list" })
 			.fail((response, text, message)=>{})
 		});
 		

@@ -22,6 +22,7 @@ public class BoardMemberService {
 		if(isExist==true) {
 			BoardMember boardMember = dao.findByBnoAndUsername(bno, loginId);
 			
+			System.out.println("=====isExist===============");
 			if(boardMember.getKind().equals(null)) {
 				boardMember.setKind("null");
 			}
@@ -48,7 +49,9 @@ public class BoardMemberService {
 				}
 			}
 		} else {
+			System.out.println("=====isNOtExist===============");
 			if(isGood==true) {
+				System.out.println("=====isGood===============");
 				dao.save(new BoardMember(loginId, bno, "good", false));
 				return GoodOrBad.DO_GOOD;		
 			} 
@@ -72,7 +75,7 @@ public class BoardMemberService {
 			boardMember.setIsWarn(true);
 			return WarnCheck.DO_WARN;
 		} else {
-			dao.save(new BoardMember(loginId, bno, "null" ,true));
+			dao.save(new BoardMember(loginId, bno, "nll" ,true));
 			return WarnCheck.DO_WARN;
 		}
 	}

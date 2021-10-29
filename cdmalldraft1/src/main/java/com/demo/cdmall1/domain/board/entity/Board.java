@@ -110,10 +110,11 @@ public class Board extends BaseCreateAndUpdateTimeEntity {
 	}
 	
 	public Boolean updateIsActive() {
-		
+		System.out.println(this.isActive);
 		if(this.isActive == null) {
 			this.isActive = true;
 		}this.isActive = !(this.isActive);
+		System.out.println(this.isActive);
 		return this.isActive;
 	}
 }

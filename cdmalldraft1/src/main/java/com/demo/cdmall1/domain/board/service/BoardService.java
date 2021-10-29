@@ -128,7 +128,6 @@ private final BoardRepository dao;
 	}
 	
 	public Map<String,Object> warnList(Integer pageno, Integer warnCnt){
-		System.out.println("aaaaaaaaaaaaaaaaaaaa");
 		Pageable pageable = PageRequest.of(pageno-1, 10);
 		Map<String,Object> map = new HashMap<>();
 		map.put("content", dao.readWarnAll(pageable, warnCnt));

@@ -69,6 +69,20 @@ public class ImageBoardDto {
 		private LocalDateTime createDateTime;
 		private Integer goodCnt;
 		private Integer reportCnt;
+		private Boolean isActive;
 		
+	}
+	
+	@Data
+	@AllArgsConstructor
+	public static class WarnList {
+		private Integer ibno;
+		private String title;
+		private String writer;
+		@JsonProperty("writeTime")
+		private LocalDateTime createDateTime;
+		private Integer goodCnt;
+		private Integer reportCnt;
+		private Boolean isActive;
 	}
 }
