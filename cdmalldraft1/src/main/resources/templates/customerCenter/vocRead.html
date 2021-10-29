@@ -28,7 +28,8 @@
 <script>
 	let isWriter = undefined;
 	let vocBoard = undefined;
-	let currentUser = undefined;
+	let currentAuthority = undefined;
+	
 	
 	const init=(vocBoard)=>{
 		// board의 필드들을 출력
@@ -38,6 +39,9 @@
 		$("#title").val(vocBoard.title);
 		$("#content").html(vocBoard.content);
 
+		currentAuthority = $("#currentAuthority").val();
+		
+		const $btnArea = $("#btnArea");
 		// 비로그인, 글쓴이, 글쓴이 아님에 따른 화면 구성
 		if(isLogin==true && isWriter==true) {
 			$("#title").prop("disabled", false);
@@ -48,15 +52,26 @@
 				filebrowserUploadUrl : '/vocBoard/image'
 			});
 			
-			const $btnArea = $("#btnArea");
 			$("<button>").attr("id","update").attr("class","btn btn-info").text("변 경").appendTo($btnArea);
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
 			$("<button>").attr("id","delete").attr("class","btn btn-info").text("삭 제").appendTo($btnArea);
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
-			$("<button>").attr("id","reply").attr("class","btn btn-info").attr("onclick", "moveToReply("+vocBoard.vbno+")").text("답글쓰기").appendTo($btnArea);
+			$("<button>").attr("id","reply").attr("class","btn btn-info").attr("onclick", "moveToReply("+vocBoard.vbno+")+'("+ vocBoard.writer +")'").text("답글쓰기").appendTo($btnArea);
 			$("<button>").attr("id","back").attr("class","btn btn-light").css({"float":"right", "color":"black"}).text("뒤로가기").appendTo($btnArea);
 			
 		}
+		else if(isLogin==true && currentAuthority == "admin"){
+			 $("#title").prop("disabled", false);
+				const ck = CKEDITOR.replace('content', {
+					/*width:1270,
+					height: 600,*/
+					height: 300,
+					filebrowserUploadUrl : '/vocBoard/image'
+				});
+				
+				$("<button>").attr("id","reply").attr("class","btn btn-info").attr("onclick", "moveToReply("+vocBoard.vbno+")+'("+ vocBoard.writer +")'").text("답글쓰기").appendTo($btnArea);
+				$("<button>").attr("id","back").attr("class","btn btn-light").css({"float":"right", "color":"black"}).text("뒤로가기").appendTo($btnArea);	
+		} 
 	};
 	
 	const printVAttachments=(vattachments)=>{
@@ -86,8 +101,8 @@
 		});
 	};
 	
-	const moveToReply=(vbno)=>{
-		location.href = "/customerCenter/vocWriteReply?vbno="+vbno;
+	const moveToReply=(vbno,writer)=>{
+		location.href = "/customerCenter/vocWriteReply?vbno="+vbno + "&writer=" +vocBoard.writer ;
 	}
 
 	$(document).ready(()=>{
@@ -105,7 +120,6 @@
 			//currentUser = $("#username").text();
 			init(vocBoard);
 			printVAttachments(vocBoard.vattachments);
-			printVComments(vocBoard.vcomments);
 		});
 		
 		// 변경
@@ -150,6 +164,9 @@
 	// 화면 구성, 게시글 출력, 답글 작성, 답글 변경, 답글 삭제
 </script>
 <body>
+<input sec:authorize="hasRole('ROLE_ADMIN')" id="currentAuthority" value="admin" >
+<input sec:authorize="hasRole('ROLE_USER')" id="currentAuthority" value="user" >
+ 
 <div id="page">
 		<header id="header" th:replace="/fragments/headerStore">
 	</header>

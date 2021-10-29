@@ -14,9 +14,16 @@
 <link rel="stylesheet" href="/css/nav.css">
 <link rel="stylesheet" href="/css/read.css">
 <script>
+
 $(document).ready(()=>{
 
-	let vbno = location.search.substr(6);
+	let param1 = location.search.split('&')[0]; //구분자 &로 분리된 배열 0 인덱스
+    let param2 = location.search.split('&')[1];
+	
+	const vbno = param1.substr(6);
+	const writer = param2.substr(7);
+	let currentUser = writer;
+	console.log(currentUser);
 
 	const ck = CKEDITOR.replace('content', {
 		height: 400,
@@ -82,7 +89,7 @@ $(document).ready(()=>{
 				<div class="form-group1" style="margin-top: 10px;">
 					<textarea class="form-control1" id="content1" name="content" style="min-height:600px; "></textarea>
 				</div>
-				<button type="button" class="btn btn-success" id="writeReply">답변 작성</button>
+				<button sec:authorize= "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" type="button" class="btn btn-success" id="writeReply">답변 작성</button>
 				<button type="button" class="btn btn-danger" id="cancle">답변 취소</button>
 			</form>
 			<hr>
