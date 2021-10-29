@@ -26,7 +26,7 @@ import lombok.*;
 public class ImageBoardController {
 	private final ImageBoardService imageService;
 	// 이미지 첨부파일 보기
-		@GetMapping(path={"/imageBoard/image", "/temp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
+		@GetMapping(path={"/imageBoard/image", "/ibtemp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
 		public ResponseEntity<?> showImage(@RequestParam String imagename) throws IOException {
 			File file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
 			System.out.println(file);

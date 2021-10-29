@@ -28,13 +28,13 @@ import lombok.*;
 public class UsedBoardController {
 	private final UsedBoardService usedService;
 	// 이미지 첨부파일 보기
-	@GetMapping(path={"/usedBoard/image", "/temp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
+	@GetMapping(path={"/usedBoard/image", "/ubtemp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<?> showImage(@RequestParam String imagename, HttpServletRequest req) throws IOException {
 		
 		// 호출한 주소에 따라 폴더명을 계산하자
 		String command = req.getRequestURI().substring(1, req.getRequestURI().lastIndexOf("/"));
 		File file = new File(ZmallConstant.TEMP_FOLDER + imagename);
-		if(command.equals("board"))
+		if(command.equals("usedBoard"))
 			file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
 		
 		HttpHeaders headers = new HttpHeaders();

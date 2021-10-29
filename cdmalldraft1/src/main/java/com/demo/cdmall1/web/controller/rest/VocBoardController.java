@@ -30,7 +30,7 @@ import lombok.*;
 public class VocBoardController {
 	private final VocBoardService vocService;
 	// 이미지 첨부파일 보기
-		@GetMapping(path={"/vocBoard/image", "/temp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
+		@GetMapping(path={"/vocBoard/image", "/voctemp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
 		public ResponseEntity<?> showImage(@RequestParam String imagename, HttpServletRequest req) throws IOException {
 				File file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
 				HttpHeaders headers = new HttpHeaders();

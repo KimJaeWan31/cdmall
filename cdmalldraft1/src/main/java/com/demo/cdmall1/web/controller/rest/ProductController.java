@@ -27,11 +27,11 @@ import lombok.*;
 public class ProductController {
 	private final ProductService service;
 	// 이미지 첨부파일 보기
-	@GetMapping(path={"/products/image", "/temp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
+	@GetMapping(path={"/products/image", "/ptemp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<?> showImage(@RequestParam String imagename, HttpServletRequest req) throws IOException {
 		String command = req.getRequestURI().substring(1, req.getRequestURI().lastIndexOf("/"));
 		File file = new File(ZmallConstant.TEMP_FOLDER + imagename);
-		if(command.equals("board")) {
+		if(command.equals("products")) {
 			file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
 		}
 		HttpHeaders headers = new HttpHeaders();
