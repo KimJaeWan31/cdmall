@@ -16,18 +16,25 @@
 html{min-height: 900px;}
 
 body {
-	display: flex;
   	font-family: "Lato", sans-serif;
+     overflow-x: scroll;
+     white-space:nowrap;
+
+  	
 }
 
 .sidenav {
   height: 100%;
-  width: 200px;
+  float: left;
   z-index: 1;
   background-color: #111;
   overflow-x: hidden;
   padding-top: 20px;
+   width: 350px;
+   position: fixed;
+   margin-left: -350px;
 }
+
 
 .sidenav a {
   padding: 6px 8px 6px 16px;
@@ -208,21 +215,24 @@ body {
 
 
 	});
+	
+
 </script>
 
 </head>
-<body style="min-width: 1700px">
+<body style="min-width: 1500px">
 	<div class="sidenav">
   		<a href="/admin/index">HOME</a>
   		<a href="/boardMain">BOARD</a>
   		<a href="/">SHOP</a>
   		<a href="#" id="logout">LOGOUT</a>
 	</div>
-	<div id="page" style="width: 1320px; padding: 20px; ">
-		
+	<div id="page" style="margin: 0 auto; width: 1388px; padding: 20px; ">
+			
 		<div id="main" >
 			
 			<section id="section">
+			<button class="btn btn-primary open-siedbar" style="background: skyblue; border: none;">SHOW SIDEMENU </button>
 				<h1 style="text-align: center; margin-bottom: 60px;">관리자 페이지입니다</h1>
 				
 				<div class="row" style="margin-bottom: 60px;">
@@ -306,6 +316,20 @@ body {
 			}).done(()=>location.href="/");
 			
 		});	
+		
+		
+        $('.open-siedbar').on('mouseover', function(){
+        	$(".sidenav").animate({marginLeft:'0px'},1000);
+          })
+		
+		
+
+		$('.sidenav').mouseleave(function() {
+		    $(".sidenav").hide();
+		    location.reload();
+		    
+		    // goodsBtn을 클릭하면 goodsDiv를 보여줘라
+		});
 	</script>
 </body>
 </html>
