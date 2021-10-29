@@ -54,9 +54,7 @@ public class VocBoardDto {
 		//@JsonProperty Json으로 변환시 이름을 개발자가 지정한대로 설정
 		@JsonProperty("writeTime")
 		private LocalDateTime createDateTime;
-		private Integer readCnt;
 		private Integer attachmentCnt;
-		private Integer commentCnt;
 		private Integer re_lev;
 	}
 

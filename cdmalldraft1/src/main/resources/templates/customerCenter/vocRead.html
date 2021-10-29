@@ -37,7 +37,6 @@
 		$("#writer").text(vocBoard.writer);
 		$("#title").val(vocBoard.title);
 		$("#content").html(vocBoard.content);
-		$("#read_cnt").text(vocBoard.readCnt);
 
 		// 비로그인, 글쓴이, 글쓴이 아님에 따른 화면 구성
 		if(isLogin==true && isWriter==true) {
@@ -55,13 +54,8 @@
 			$("<button>").attr("id","delete").attr("class","btn btn-info").text("삭 제").appendTo($btnArea);
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
 			$("<button>").attr("id","reply").attr("class","btn btn-info").attr("onclick", "moveToReply("+vocBoard.vbno+")").text("답글쓰기").appendTo($btnArea);
-			$("#vcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
 			$("<button>").attr("id","back").attr("class","btn btn-light").css({"float":"right", "color":"black"}).text("뒤로가기").appendTo($btnArea);
-
-		} else if(isLogin==true && isWriter==false) {
-			const $vcommentBtnArea = $("#vcommentBtnArea");
-			$("#vcomment_textarea").prop("readonly",false).attr("placeholder", "욕설이나 모욕적인 댓글은 삭제될 수 있습니다");
-			$("<button>").attr("id","write").attr("class","btn btn-info").text("댓글 추가").appendTo($vcommentBtnArea);
+			
 		}
 	};
 	
@@ -91,28 +85,6 @@
 			}
 		});
 	};
-
-	const printVComments=(vcomments)=>{
-
-		$("#vcomments").empty();
-		$.each(vcomments, function(idx, vcomment) {
-			const $outer_div = $("<div>").appendTo($("#vcomments"));
-			const $upper_div = $("<div>").appendTo($outer_div);
-
-			$("<span>").css("color","blue").text(vcomment.writer).appendTo($upper_div);
-			$("<span>").text(" [" + vcomment.createTime+"]").appendTo($upper_div);
-			
-			const $lower_div = $("<div>").css("overflow", "hidden").appendTo($outer_div);
-			$("<img>").attr("src",vcomment.profile).css("width","60px").appendTo($lower_div);
-			$("<span>").text(vcomment.content).appendTo($lower_div);
-
-			if(isLogin==true && currentUser==vcomment.writer) {
-				$("<button>").attr("class","delete_vcomment").attr("data-vbcno", vcomment.vbcno).attr("data-vbno", vocBoard.vbno)
-					.text("삭제").css("float","right").appendTo($lower_div);
-			}
-			$("<hr>").appendTo($("#vcomments"));
-		});
-	};
 	
 	const moveToReply=(vbno)=>{
 		location.href = "/customerCenter/vocWriteReply?vbno="+vbno;
@@ -136,27 +108,6 @@
 			printVComments(vocBoard.vcomments);
 		});
 		
-		// 댓글 작성
-		$("#vcommentBtnArea").on("click", "#write", ()=> {
-			const param = {
-				vbno: vbno, // 앞에는 이름, 뒤에는 값
-				content : $("#vcomment_textarea").val()
-			};
-			$.ajax({url: "/vcomments", method:"post", data:param}).done(vcomments=>{
-				$("#vcomment_textarea").val("");
-				printVComments(vcomments);
-			});
-		});
-		
-		
-		// 댓글 삭제
-		// 자바의 경우 this가 고정되어 있다. 자바스크립트의 경우 this는 상황에 따라 바뀐다 => 화살표 함수는 this 고정.
-		// this를 사용해야 하는 경우는 화살표 함수를 사용하지 말자
-		$("#vcomments").on("click", ".delete_vcomment", function() {
-			const param = {vbcno : $(this).attr("data-vbcno"), vbno : vocBoard.vbno};
-			$.ajax({url: "/vcomments", method:"delete", data:param}).done(vcomments=>printVComments(vcomments));
-		});
-	
 		// 변경
 		$("#btnArea").on("click", "#update", ()=>{
 			const param = {
@@ -222,7 +173,6 @@
 						<li><span id="writeday"></span></li>
 					</ul>
 					<ul id="lower_right">
-						<li><button type="button" class="btn btn-success" id="b" disabled="disabled">조회 <span class="badge" id="read_cnt"></span></button></li>    
 					</ul>
 				</div>
 			</div>
@@ -238,25 +188,7 @@
 			
 			</div>
 			<hr>
-			<div class="form-group1">
-      			<label for="vcomment_teaxarea">댓글을 입력하세요</label>   
-      			<textarea class="form-control1" rows="5" id="vcomment_textarea" readonly="readonly"
-      				placeholder="댓글을 작성하려면 로그인 해주세요"></textarea>
-    		</div>
-			<div id="vcommentBtnArea">
-    			<!-- 로그인하면 댓글 달기 버튼을 추가 -->
-			</div>
-			<hr>
-			<div id="vcomments">
-				<div>
-					<div><span style="color:blue;"></span> </div>
-					<div style="overflow:hidden;">
-						<img style="width:60px;">
-						<span></span>
-					</div>
-				</div>
-				<hr>
-			</div>
+
 		</section>
 	</div>
 	

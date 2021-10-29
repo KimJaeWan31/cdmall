@@ -15,7 +15,5 @@ public class VocBoardFail {
 
 	public static class VAttachmentNotFoundException extends RuntimeException {
 	}
-	
-	public static class VCommentNotFoundException extends RuntimeException {
-	}
+
 }

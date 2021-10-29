@@ -41,10 +41,6 @@ public class VocBoard extends BaseCreateAndUpdateTimeEntity {
 	@Column(length=10)
 	private String writer;
 	
-	private Integer readCnt;
-	
-	private Integer commentCnt;
-	
 	private Integer attachmentCnt;
 	
 	private Integer re_ref;
@@ -53,30 +49,14 @@ public class VocBoard extends BaseCreateAndUpdateTimeEntity {
 	
 	private Integer re_seq;
 	
-	@OneToMany(mappedBy="vocBoard", cascade=CascadeType.REMOVE)
-	@OrderBy(value="vcno DESC")
-	private Set<VComment> vcomments;
-	
 	@OneToMany(mappedBy="vocBoard", cascade={CascadeType.PERSIST, CascadeType.REMOVE})
 	private Set<VAttachment> vattachments;
 	
 	@PrePersist
 	public void init() {
-		this.commentCnt = 0;
 		this.attachmentCnt = 0;
 		if(this.vattachments!=null)
 			this.attachmentCnt = vattachments.size();
-	}
-
-	public VocBoard increaseReadCnt(String loginId) {
-		if(loginId!=null && loginId.equals(this.writer)==false)
-			this.readCnt++;
-		return this;
-	}
-	
-	public Integer updateCommentCnt() {
-		this.commentCnt = this.getVcomments().size();
-		return this.commentCnt;
 	}
 
 	public void addVAttachment(VAttachment vattachment) {
@@ -98,7 +78,4 @@ public class VocBoard extends BaseCreateAndUpdateTimeEntity {
 	}
 
 }
-
-
-
 

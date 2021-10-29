@@ -135,7 +135,7 @@
 				<ul class="pagination">
 				</ul>
 			</div>
-			<a class="btn btn-info" role="button" href="/customerCenter/vocWrite">글쓰기</a>
+			<a sec:authorize ="hasAnyRole('ROLE_ADMIN','ROLE_USER')" id="voc_write" class="btn btn-info" role="button" href="/customerCenter/vocWrite">글쓰기</a>
 		</div>
 		</section>
 	</div>

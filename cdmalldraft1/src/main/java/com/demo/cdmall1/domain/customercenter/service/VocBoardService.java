@@ -3,6 +3,7 @@ package com.demo.cdmall1.domain.customercenter.service;
 import java.io.*;
 
 
+
 import java.nio.file.*;
 import java.time.format.*;
 import java.util.*;
@@ -19,7 +20,6 @@ import com.demo.cdmall1.domain.board.entity.*;
 import com.demo.cdmall1.domain.customercenter.entity.*;
 import com.demo.cdmall1.util.*;
 import com.demo.cdmall1.web.dto.*;
-import com.demo.cdmall1.web.dto.VCommentDto.*;
 
 import lombok.*;
 
@@ -143,21 +143,16 @@ private final VocBoardRepository dao;
 	@Transactional
 	public Map<String,Object> read(Integer vbno, String loginId) {
 		VocBoard vocBoard = dao.findById(vbno).orElseThrow(BoardFail.BoardNotFoundException::new);
-		vocBoard.increaseReadCnt(loginId);		
-		List<Read> vcomments = vocBoard.getVcomments().stream().map(c->c.toDto()).collect(Collectors.toList());
 		Map<String,Object> map = new HashMap<>();
 		map.put("vbno", vocBoard.getVbno());
 		map.put("title", vocBoard.getTitle());
 		map.put("content", vocBoard.getContent());
-		map.put("commentCnt", vocBoard.getCommentCnt());
 		// map에는 @JsonFormat을 걸수가 없으므로 직접 변환해서 map에 저장하자
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 		map.put("createTime", dtf.format(vocBoard.getCreateTime()));
-		map.put("readCnt", vocBoard.getReadCnt());
 		map.put("updateTime", vocBoard.getUpdateTime());
 		map.put("writer", vocBoard.getWriter());
 		map.put("vattachments", vocBoard.getVattachments());
-		map.put("vcomments", vcomments);
 		return map;
 	}
 	
@@ -168,12 +163,6 @@ private final VocBoardRepository dao;
 		if(vocBoard.getWriter().equals(loginId)==false)
 			throw new BoardFail.IllegalJobException();
 		return vocBoard.update(dto);
-	}
-	
-	@Transactional
-	public Integer updateVCommentCnt(Integer vbno) {
-		VocBoard vocBoard = dao.findById(vbno).orElseThrow(BoardFail.IllegalJobException::new);
-		return vocBoard.updateCommentCnt();
 	}
 	
 	public Map<String,Object> list(Integer pageno) {

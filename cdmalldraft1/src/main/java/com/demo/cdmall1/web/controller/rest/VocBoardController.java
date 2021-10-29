@@ -90,13 +90,7 @@ public class VocBoardController {
 				throw new BindException(bindingResult);
 			return ResponseEntity.ok(vocService.update(dto, principal.getName()));
 		}
-		
-		@PostMapping("/vocBoard/vcomments")
-		public ResponseEntity<?> VCommentCnt(@RequestParam Integer vbno) {
-			Integer cnt = vocService.updateVCommentCnt(vbno);
-			return ResponseEntity.ok(cnt);
-		}                       
-		
+	
 		@DeleteMapping("/vocBoard/{vbno}")
 		public ResponseEntity<?> delete(@PathVariable Integer vbno, Principal principal) {
 			vocService.delete(vbno, principal.getName());
