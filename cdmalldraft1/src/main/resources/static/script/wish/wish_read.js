@@ -143,7 +143,8 @@ const main = {
 			const $td3 = $("<td>").css("width","800px").appendTo($tr);
 			$("<div>").text("상품명: " + wish.name).attr("onclick","productClicked("+ wish.pno +")").css({"font-size":"15px","cursor":"pointer"}).attr("id","text_deco").appendTo($td3);
 			$("<div>").text("제조사: " + wish.manufacturer).attr("onclick","productClicked("+ wish.pno +")").css({"margin-top":"20px","font-size":"15px","cursor":"pointer"}).attr("id","text_deco").appendTo($td3);
-			$("<div>").text("가격: " + wish.price + "원").css({"margin-top":"20px","font-size":"15px","color":"#AE0000","font-weight":"700"}).appendTo($td3);
+			const price = wish.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","); 
+			$("<div>").text("가격: " + price + "원").css({"margin-top":"20px","font-size":"15px","color":"#AE0000","font-weight":"700"}).appendTo($td3);
 			
 			
 			

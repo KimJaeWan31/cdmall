@@ -74,7 +74,8 @@ const main = {
 			$("<span>").attr("class","inc").data("pno", cart.pno).text("+").appendTo($td4_div);
 			
 			const $td5 = $("<td>").appendTo($tr);
-			$("<div>").text(cart.cartPrice + "원").appendTo($td5);
+			const price = cart.cartPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","); 
+			$("<div>").text(price + "원").appendTo($td5);
 			$("<div>").append($("<button type='button' class='button order'>주문하기</button>").attr("data-cartNo", idx)).appendTo($td5);
 		});	
 		$("#total_price").text(totalPrice + "원");

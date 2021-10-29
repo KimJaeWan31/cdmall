@@ -104,6 +104,9 @@
 // 			$("<td>").text(c.avgOfStar).appendTo($tr);
 // 			$("<td>").text(c.reviewCount).appendTo($tr);
 			
+
+		    
+			
 			const $li = $("<li>").appendTo($list);
 			const $figure = $("<figure>").appendTo($li);
 			// 
@@ -116,7 +119,10 @@
 			/* $("<a>").attr("href", "/product/read?pno=" + c.pno).css({"color":"red" ,"text-decoration-line": "none","cursor":"pointer"}).text(c.name).appendTo($div); */		
 			$("<p>").attr("class","text_deco").attr("id", c.pno+"_"+c.name).attr("onclick","productClicked("+ c.pno +")")
 			.css({"color":"red" ,"text-decoration-line": "none","cursor":"pointer","font-size":"20px"}).text(c.name).appendTo($div);
-			$("<p>").text( c.price +"원").css({"font-size":"15px","margin-top":"5px"}).appendTo($div);
+			const price = c.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");  //1,000 단위 끊어서 출력하는 함수
+// 			$("<p>").text( c.price +"원").css({"font-size":"15px","margin-top":"5px"}).appendTo($div);
+			$("<p>").text( price +"원").css({"font-size":"15px","margin-top":"5px"}).appendTo($div);
+			
 			$("<p>").text("제조사 : "+ c.manufacturer).css({"font-size":"15px"}).appendTo($div);
 			if(isLogin==true ) {$("<span>").text("찜하기 : ").css({"font-size":"15px","margin-bottom":"30px"}).appendTo($div)};
 			
@@ -130,7 +136,7 @@
 				    }, function(){
 				        $(".text_deco").css({"text-decoration":"none"});
 				    });
-			
+		    
 			
 			 const param = {
 						
@@ -268,6 +274,7 @@
 			$("#goodCancelBtn_"+pno).hide();
 		} 
 	 }
+	 
 	 
 	 // product/read 화면 이동 전 세션에 현제 쇼핑 주소 저장
 	 const productClicked=(pno)=>{

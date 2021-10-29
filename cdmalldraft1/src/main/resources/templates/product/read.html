@@ -186,7 +186,8 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 			
 			// 개수와 총 가격을 출력하는 일이 여러번이라 메서드로 분리
 			printTotalCountAndPrice: function() {
-				$("#total_price").text(cart.cartPrice);
+				const price = cart.cartPrice.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","); 
+				$("#total_price").text(price);
 				$("#total_count").text(cart.count);
 			}, 
 			
@@ -239,8 +240,9 @@ src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 				
 				
 				
-				
-				$("#price span").text(product.price);
+				//****************************************************
+				const price = product.price.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","); 
+				$("#price span").text(price);
 				// 상품 페이지로 들어오면 1개의 상품을 담은 장바구니 객체를 생성
 				cart.init();	
 				$("#count").text(cart.count);
