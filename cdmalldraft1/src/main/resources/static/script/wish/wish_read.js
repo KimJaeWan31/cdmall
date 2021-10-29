@@ -8,7 +8,6 @@ const header = $("meta[name='_csrf_header']").attr("content"); */
 
 const cart = {
 	init: function() {
-		console.log("************product.name: " + product.name);
 		
 		this.pno = product.pno;
 		this.name = product.name;
@@ -104,7 +103,12 @@ const main = {
 			url: "/carts/get_url",
 			method: "get"
 		}).done(result=>{
-			savedUrl = result;
+			if(result==null){
+				savedUrl = "/"
+			}else{
+				savedUrl = result;	
+			}
+			
 			location.href = savedUrl;
 		});
 	},
@@ -197,7 +201,6 @@ const main = {
 		
 		this.getProductInfo(pno);  // 장바구니에 담을 현제 상품의 정보 가져오기
 		
-		console.log("123123123123"+cart.name);
 		
 		
 	},
@@ -249,13 +252,11 @@ const main = {
 //			if($(this).is(":checked"))
 //				dto.push($(this).data("pno"));
 //		});
-		console.log("*****");
 		$.ajax({
 			url:"/products/currentWishDelete",
 			method:"delete",
 			data: param,			
 		}).done(()=>{
-			console.log("#####");
 			$.ajax({ 
 				url: "/products/wishList",
 				method: "get"

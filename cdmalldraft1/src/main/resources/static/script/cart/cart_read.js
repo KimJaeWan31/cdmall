@@ -12,8 +12,6 @@ const main = {
 		$.ajax({ url: "/carts", method: "get"}).done(result=>{
 			carts = result;
 			this.printPage();
-			console.log(carts);
-			
 		});
 		
 		$("#check_all").on("change", this.checkAll);
@@ -23,7 +21,6 @@ const main = {
 		$("#order").on("click", this.order);
 		$("#continueShopping").on("click", this.continueShopping);
 		
-		
 		window._this = this;
 	},
 	
@@ -32,7 +29,13 @@ const main = {
 			url: "/carts/get_url",
 			method: "get"
 		}).done(result=>{
-			savedUrl = result;
+			
+			if(result==null){
+				savedUrl = "/"
+			}else{
+				savedUrl = result;	
+			}
+			
 			location.href = savedUrl;
 		});
 	},
