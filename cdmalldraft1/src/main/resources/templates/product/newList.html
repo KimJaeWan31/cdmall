@@ -55,38 +55,38 @@
 <script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
 <script>
 
-	$(function() {
-		$.ajax("/categories/all").done(categories=>{
-			const $ul = $("#menu #ul");
-			$.each(categories, function(idx, category) {
-				// 대분류는 li에 붙여서 출력
-				const $li = $("<li>").text(category.categoryName).appendTo($ul);
-				
-				// 중분류가 있다면
-				if(category.categories.length>0) {
-					// 중분류의 경우 ul을 만들고 li에 붙여서 출력
-					const $sub_ul = $("<ul class='main2'>").appendTo($li);
-					$.each(category.categories, function(idx, sub_category) {
-						const $sub_li = $("<li>").text(sub_category.categoryName).css("cursor","pointer").appendTo($sub_ul);
-						
-						// 소분류가 있다면
-						if(sub_category.categories.length>0) {
-							// 소분류의 ul을 만들고 li에 붙여서 출력
-							const $descendant_ul = $("<ul class='main3'>").appendTo($sub_li);
-							$.each(sub_category.categories, function(idx, descendant_category) {
-								$("<li>").data("categoryCode",descendant_category.categoryCode).text(descendant_category.categoryName).attr("onclick","categoryClicked("+descendant_category.categoryCode+")").css("cursor","pointer").appendTo($descendant_ul);
-							});
-						}
-					});
-				}
-			});
+$(function() {
+	$.ajax("/categories/all").done(categories=>{
+		const $ul = $("#menu #ul");
+		$.each(categories, function(idx, category) {
+			// 대분류는 li에 붙여서 출력
+			const $li = $("<li>").text(category.categoryName).appendTo($ul);
+			
+			// 중분류가 있다면
+			if(category.categories.length>0) {
+				// 중분류의 경우 ul을 만들고 li에 붙여서 출력
+				const $sub_ul = $("<ul class='main2'>").appendTo($li);
+				$.each(category.categories, function(idx, sub_category) {
+					const $sub_li = $("<li>").text(sub_category.categoryName).css("cursor","pointer").appendTo($sub_ul);
+					
+					// 소분류가 있다면
+					if(sub_category.categories.length>0) {
+						// 소분류의 ul을 만들고 li에 붙여서 출력
+						const $descendant_ul = $("<ul class='main3'>").appendTo($sub_li);
+						$.each(sub_category.categories, function(idx, descendant_category) {
+							$("<li>").data("categoryCode",descendant_category.categoryCode).text(descendant_category.categoryName).attr("onclick","categoryClicked("+descendant_category.categoryCode+")").css("cursor","pointer").appendTo($descendant_ul);
+						});
+					}
+				});
+			}
 		});
 	});
-	
-	const categoryClicked=(categoryCode)=>{
-		 let pageno = 1;
-		 location.href = "/product/listByCateg?pageno="+pageno+"&categoryCode="+categoryCode;
-	}
+});
+
+const categoryClicked=(categoryCode)=>{
+	 let pageno = 1;
+	 location.href = "/product/listByCateg?pageno="+pageno+"&categoryCode="+categoryCode;
+}
 	
 	
 	let currentUser = undefined;
@@ -98,6 +98,18 @@
 		const $list = $("#list");
 		// 서버가 보낸 board들은 page.content에 저장되어 있다
 		for(c of page.content) {
+			
+// 			const $tr = $("<tr>").appendTo($list);
+// 			$("<td>").text(c.pno).appendTo($tr);
+// 			const $td = $("<td>").appendTo($tr);
+// 			$("<a>").attr("href", "/product/read?pno=" + c.pno).text(c.name).appendTo($td);
+// 			$("<td>").text(c.manufacturer).appendTo($tr);
+// 			$("<td>").text(c.image).appendTo($tr);
+// 			$("<td>").text(c.price).appendTo($tr);
+// 			$("<td>").text(c.avgOfStar).appendTo($tr);
+// 			$("<td>").text(c.reviewCount).appendTo($tr);
+			
+
 		    
 			
 			const $li = $("<li>").appendTo($list);
@@ -281,8 +293,6 @@
 		}).done(location.href = "/product/read?pno="+pno);
 	 }
 	 
-	 
-	 
 	 $("#top_menu_authenticated").on("click", "#logout", (e)=> {
 			// a태그는 클릭하면 이동(동작이 2개, 그때 두번째 동작을 막아버린다)
 			e.preventDefault();
@@ -310,9 +320,8 @@
 		if(pageno=="")
 			pageno=1;
 		
-		$.ajax("/products/all?pageno="+pageno).done(result=>{
+		$.ajax("/products/newList?pageno="+pageno).done(result=>{
 			page=result;
-			console.log("****page: "+page);
 			printProduct();
 			printPagination(getPagination());
 		});

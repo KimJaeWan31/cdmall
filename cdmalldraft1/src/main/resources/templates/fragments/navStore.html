@@ -28,7 +28,6 @@ header, nav, aside, footer, section ,li, a{
 	$(document).ready(()=>{
 		
 		$("#searshButton").on("click", ()=>{
-			console.log("================");
 			const words=$("#word").val();
 			const pageno=1;
 			
@@ -68,7 +67,7 @@ header, nav, aside, footer, section ,li, a{
 		 -->
 
 		<ul sec:authorize="isAnonymous()" class="nav navbar-nav" id="menu_anonymous">
-        	<li><a href="/product/list">NEW</a></li>
+        	<li><a href="/product/newList">NEW</a></li>
 			<li><a href="/shop/bestList">BEST</a></li>
 			<li><a href="/shop/outdoorList">야외용품</a></li>
 			<li><a href="/product/list">훈련용품</a></li>
@@ -84,7 +83,7 @@ header, nav, aside, footer, section ,li, a{
     	</ul>
 	
     	<ul sec:authorize="isAuthenticated()" class="nav navbar-nav" id="menu_authenticated">
-        	<li><a href="/product/list">NEW</a></li>
+        	<li><a href="/product/newList">NEW</a></li>
 			<li><a href="/shop/bestList">BEST</a></li>
 			<li><a href="/shop/outdoorList">야외용품</a></li>
 			<li><a href="/product/list">훈련용품</a></li>

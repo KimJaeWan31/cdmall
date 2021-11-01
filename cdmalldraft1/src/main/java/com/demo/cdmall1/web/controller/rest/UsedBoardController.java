@@ -35,7 +35,7 @@ public class UsedBoardController {
 		String command = req.getRequestURI().substring(1, req.getRequestURI().lastIndexOf("/"));
 		File file = new File(ZmallConstant.TEMP_FOLDER + imagename);
 		if(command.equals("usedBoard"))
-			file = new File(ZmallConstant.IMAGE_FOLDER + imagename);
+			file = new File(ZmallConstant.NBIMAGE_FOLDER + imagename);
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(ZmallUtil.getMediaType(imagename));

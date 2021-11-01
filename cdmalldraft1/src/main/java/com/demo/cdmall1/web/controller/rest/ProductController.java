@@ -81,8 +81,13 @@ public class ProductController {
 	}
 	
 	@GetMapping(path="/products/all", produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, String writer) {
-		return ResponseEntity.ok(service.list(pageno, writer));
+	public ResponseEntity<?> list(@RequestParam(defaultValue="1") Integer pageno, String manufacturer) {
+		return ResponseEntity.ok(service.list(pageno, manufacturer));
+	}
+	
+	@GetMapping(path="/products/allByCateg", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> listByCateg(@RequestParam(defaultValue="1") Integer pageno, String categCode) {
+		return ResponseEntity.ok(service.listByCateg(pageno, categCode));
 	}
 	
 	@GetMapping("/product/good_or_bad")
@@ -106,7 +111,6 @@ public class ProductController {
 	@GetMapping(path="/products/wishList", produces=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> withList(@RequestParam(defaultValue="1") Integer pageno, Principal principal){
 		String username = principal.getName();
-		System.out.println("********" + pageno);
 		System.out.println("1234Username = " + username);
 		return ResponseEntity.ok(service.wishList(pageno, username));
 	}
@@ -119,8 +123,17 @@ public class ProductController {
 	
 	@DeleteMapping(path="/products/currentWishDelete", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> productCurrentWishDelete(@RequestParam Integer pno) {
-		System.out.println("%%%%%%%%" + pno);
 		service.productCurrentWishDelete(pno);
 		return ResponseEntity.ok(null); 
+	}
+	
+	@GetMapping(path="/products/newList", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> newList(@RequestParam(defaultValue="1") Integer pageno, String manufacturer) {
+		return ResponseEntity.ok(service.listByCreateTime(pageno, manufacturer));
+	}
+	
+	@GetMapping(path="/products/bestList", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> bestList(@RequestParam(defaultValue="1") Integer pageno, String manufacturer) {
+		return ResponseEntity.ok(service.listBySalesAmount(pageno, manufacturer));
 	}
 }

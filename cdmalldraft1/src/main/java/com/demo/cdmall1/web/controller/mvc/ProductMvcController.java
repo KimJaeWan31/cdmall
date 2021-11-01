@@ -19,6 +19,17 @@ public class ProductMvcController {
 	public void list() {
 	}
 	
+	@GetMapping("/product/newList")
+	public void newList() {
+	}
+	
+	@GetMapping("/product/bestList")
+	public void bestList() {
+	}
+	@GetMapping("/product/listByCateg")
+	public void listByCateg() {
+	}
+	
 	@GetMapping("/shop/search")
 	public void search() {
 		

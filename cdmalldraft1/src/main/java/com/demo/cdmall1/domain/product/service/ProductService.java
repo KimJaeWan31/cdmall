@@ -73,7 +73,16 @@ public class ProductService {
 	public ProductDto.ProductListResponse list(Integer pageno, String manufacturer) {
 		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
 		Pageable pageable = PageRequest.of(pageno-1, 15);
-		ProductDto.ProductListResponse dto = new ProductDto.ProductListResponse(dslDao.readAll(pageable, manufacturer), dslDao.aaaaaa(manufacturer), pageno, 10);
+		ProductDto.ProductListResponse dto = new ProductDto.ProductListResponse(dslDao.readAll(pageable, manufacturer), dslDao.countAll(manufacturer), pageno, 15);
+		return dto;
+	}
+	
+	@Transactional(readOnly=true)
+	public ProductDto.ProductListResponse listByCateg(Integer pageno, String categCode) {
+		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
+		Pageable pageable = PageRequest.of(pageno-1, 15);
+		ProductDto.ProductListResponse dto = new ProductDto.ProductListResponse(dslDao.readByCateg(pageable, categCode), dslDao.countByCateg(categCode), pageno, 15);
+		
 		return dto;
 	}
 	
@@ -81,9 +90,25 @@ public class ProductService {
 	public ProductDto.ProductWishListResponse wishList(Integer pageno, String username) {
 		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
 		Pageable pageable = PageRequest.of(pageno-1, 10);
-		System.out.println("+++++" + pageno);
 		ProductDto.ProductWishListResponse dto = new ProductDto.ProductWishListResponse(dslDao.readByUsername(pageable, username), dslDao.wishTotalCount(username), pageno, 10);
-		System.out.println("11111" + dto);
+		
+		
+		return dto;
+	}
+	
+	@Transactional(readOnly=true)
+	public ProductDto.ProductListResponse listByCreateTime(Integer pageno, String manufacturer) {
+		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
+		Pageable pageable = PageRequest.of(pageno-1, 15);
+		ProductDto.ProductListResponse dto = new ProductDto.ProductListResponse(dslDao.readAll(pageable, manufacturer), dslDao.countAll(manufacturer), pageno, 15);
+		return dto;
+	}
+	
+	@Transactional(readOnly=true)
+	public ProductDto.ProductListResponse listBySalesAmount(Integer pageno, String manufacturer) {
+		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
+		Pageable pageable = PageRequest.of(pageno-1, 15);
+		ProductDto.ProductListResponse dto = new ProductDto.ProductListResponse(dslDao.readAll(pageable, manufacturer), dslDao.countAll(manufacturer), pageno, 15);
 		return dto;
 	}
 	
@@ -116,9 +141,7 @@ public class ProductService {
 	@Transactional
 	public void wishDelete(List<Integer> dtos) {
 		
-		System.out.println("*************************List dtos: "+dtos);
 		for(int i = 0; i < dtos.size(); i++) {
-			System.out.println("*************************dtos.get(i): " + dtos.get(i));
 			pmdao.deleteByPno(dtos.get(i));
 			Product product = dao.findById(dtos.get(i)).orElseThrow(BoardFail.BoardNotFoundException::new);
 			product.setGoodCnt(product.getGoodCnt()-1);
@@ -130,7 +153,6 @@ public class ProductService {
 	
 	@Transactional
 	public void productCurrentWishDelete(Integer pno) {
-		System.out.println("########pno: "+pno);
 			pmdao.deleteByPno(pno);
 			Product product = dao.findById(pno).orElseThrow(BoardFail.BoardNotFoundException::new);
 			product.setGoodCnt(product.getGoodCnt()-1);
@@ -138,6 +160,8 @@ public class ProductService {
 			
 		
 	}
+
+	
 
 
 }

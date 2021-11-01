@@ -22,11 +22,11 @@ public class ProductDslRepository {
 	private JPAQueryFactory factory;
 	private QProduct qproduct;
 	private QProductMember qProductMember;
-	
+
 	@PostConstruct
 	public void init() {
 		this.factory = new JPAQueryFactory(em);
-		qproduct  = QProduct.product;
+		qproduct = QProduct.product;
 		qProductMember = QProductMember.productMember;
 	}
 
@@ -34,45 +34,108 @@ public class ProductDslRepository {
 	public List<ProductList> readAll(Pageable pageable, String manufacturer) {
 		BooleanBuilder condition = new BooleanBuilder();
 		condition.and(qproduct.pno.gt(0));
-		if(manufacturer!=null)
+		if (manufacturer != null)
 			condition.and(qproduct.manufacturer.eq(manufacturer));
-		return factory.from(qproduct).select(Projections.constructor(ProductDto.ProductList.class, qproduct.pno, qproduct.manufacturer, qproduct.name, 
-				qproduct.image,qproduct.price, qproduct.avgOfStar,qproduct.reviewCount,qproduct.imageFileName,qproduct.goodCnt, qproduct.goodCnlCnt)).where(qproduct.pno.gt(0))
-				.orderBy(qproduct.pno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+
+		return factory.from(qproduct)
+				.select(Projections.constructor(ProductDto.ProductList.class, qproduct.pno, qproduct.manufacturer,
+						qproduct.name, qproduct.image, qproduct.price, qproduct.avgOfStar, qproduct.reviewCount,
+						qproduct.imageFileName, qproduct.goodCnt, qproduct.goodCnlCnt))
+				.where(qproduct.pno.gt(0)).orderBy(qproduct.createTime.desc()).offset(pageable.getOffset())
+				.limit(pageable.getPageSize()).fetch();
 	}
 	
-	
-	//product & product_member join 
-	public List<ProductWishList> readByUsername(Pageable pageable, String username){
+	public List<ProductList> readByCateg(Pageable pageable, String categCode) {
 		BooleanBuilder condition = new BooleanBuilder();
 		condition.and(qproduct.pno.gt(0));
-		return factory.from(qproduct).join(qProductMember).on(qproduct.pno.eq(qProductMember.pno)) //join하는 코드 
-				.select(Projections.constructor(ProductDto.ProductWishList.class, 
-						qproduct.pno, qproduct.name, qproduct.image, qproduct.price, qproduct.manufacturer, qproduct.imageFileName))
+		if (categCode != null)
+			condition.and(qproduct.categoryCode.eq(categCode));
+
+		return factory.from(qproduct)
+				.select(Projections.constructor(ProductDto.ProductList.class, qproduct.pno, qproduct.manufacturer,
+						qproduct.name, qproduct.image, qproduct.price, qproduct.avgOfStar, qproduct.reviewCount,
+						qproduct.imageFileName, qproduct.goodCnt, qproduct.goodCnlCnt))
+				.where(condition).orderBy(qproduct.createTime.desc()).offset(pageable.getOffset())
+				.limit(pageable.getPageSize()).fetch();
+	}
+
+	// product & product_member join
+	public List<ProductWishList> readByUsername(Pageable pageable, String username) {
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(qproduct.pno.gt(0));
+		return factory.from(qproduct).join(qProductMember).on(qproduct.pno.eq(qProductMember.pno)) // join하는 코드
+				.select(Projections.constructor(ProductDto.ProductWishList.class, qproduct.pno, qproduct.name,
+						qproduct.image, qproduct.price, qproduct.manufacturer, qproduct.imageFileName))
 				.where(qproduct.pno.eq(qProductMember.pno).and(qProductMember.username.eq(username)))
 				.orderBy(qproduct.pno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
 	}
-	
-	//찜하기 CountAll
+
+	// 찜하기 CountAll
 	public Long wishTotalCount(String username) {
 		BooleanBuilder condition = new BooleanBuilder();
-		condition.and(qProductMember.pno.gt(0)); 
-		if(username!=null) {
+		condition.and(qProductMember.pno.gt(0));
+		if (username != null) {
 			condition.and(qProductMember.username.eq(username));
 		}
-  
-		return factory.from(qProductMember).select(qProductMember.pno.count())
-				.where(condition).fetchOne();
+
+		return factory.from(qProductMember).select(qProductMember.pno.count()).where(condition).fetchOne();
 	}
-	
-	
-	//productList countAll
-	public Long aaaaaa(String manufacturer) {
+
+	// productList countAll
+	public Long countAll(String manufacturer) {
 		BooleanBuilder condition = new BooleanBuilder();
 		condition.and(qproduct.pno.gt(0));
-		if(manufacturer!=null)
+		if (manufacturer != null)
 			condition.and(qproduct.manufacturer.eq(manufacturer));
-		
+
 		return factory.from(qproduct).select(qproduct.pno.count()).where(condition).fetchOne();
 	}
+	
+	public Long countByCateg(String categCode) {
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(qproduct.pno.gt(0));
+		if (categCode != null)
+			condition.and(qproduct.categoryCode.eq(categCode));
+
+		return factory.from(qproduct).select(qproduct.pno.count()).where(condition).fetchOne();
+	}
+
+	// select * from board where bno>0;
+
+	public List<ProductParamList> readByCreateTime(Pageable pageable, String manufacturer) {
+		BooleanBuilder condition = new BooleanBuilder();
+
+		condition.and(qproduct.pno.gt(0));
+		if (manufacturer != null) {
+			condition.and(qproduct.manufacturer.eq(manufacturer));
+
+		}
+
+		return factory.from(qproduct)
+				.select(Projections.constructor(ProductDto.ProductParamList.class, qproduct.pno, qproduct.manufacturer,
+						qproduct.name, qproduct.image, qproduct.price, qproduct.avgOfStar, qproduct.reviewCount,
+						qproduct.imageFileName, qproduct.goodCnt, qproduct.goodCnlCnt))
+				.where(qproduct.pno.gt(0)).orderBy(qproduct.createTime.desc()).offset(pageable.getOffset())
+				.limit(pageable.getPageSize()).fetch();
+
+	}
+	
+	public List<ProductParamList> readBySalesAmount(Pageable pageable, String manufacturer) {
+		BooleanBuilder condition = new BooleanBuilder();
+
+		condition.and(qproduct.pno.gt(0));
+		if (manufacturer != null) {
+			condition.and(qproduct.manufacturer.eq(manufacturer));
+
+		}
+
+		return factory.from(qproduct)
+				.select(Projections.constructor(ProductDto.ProductParamList.class, qproduct.pno, qproduct.manufacturer,
+						qproduct.name, qproduct.image, qproduct.price, qproduct.avgOfStar, qproduct.reviewCount,
+						qproduct.imageFileName, qproduct.goodCnt, qproduct.goodCnlCnt))
+				.where(qproduct.pno.gt(0)).orderBy(qproduct.salesAmount.desc()).offset(pageable.getOffset())
+				.limit(pageable.getPageSize()).fetch();
+
+	}
+
 }
