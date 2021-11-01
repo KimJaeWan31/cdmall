@@ -2,6 +2,7 @@
 .layout{
     max-width: 600px;
     margin: 0 auto;
+    height: 900px;
 }
 
 .qna{
@@ -12,6 +13,7 @@
 .qna > li{
   padding: 10px 0;
   box-sizing: border-box;
+  margin-top: 20px;
 }
 .qna > li:nth-child(n+2){ /* 아이템 구분 점선 */
   border-top: 1px dashed #aaa;

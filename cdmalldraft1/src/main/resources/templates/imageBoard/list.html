@@ -72,7 +72,7 @@
 					
 		 			isHearted = heartCheck;
 		 			
-		 			const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ c.ibno).attr("type", "button").attr("class","fa fa-heart-o").css({"color": "black", "font-size": "20px","cursor":"pointer"})
+		 			const $button = $("<goodOn_btn>").attr("id","goodBtn_"+ c.ibno).attr("type", "button").attr("class","far fa-heart").css({"color": "black", "font-size": "20px","cursor":"pointer"})
 					.attr("onclick","like("+c.ibno+")").text("").appendTo($div); // c.writer 처럼 String값을 파라미터로 받으 때 '' 안에 넣어야 함
 					
 					const $button2 = $("<goodOff_btn>").attr("id","goodCancelBtn_" + c.ibno).attr("type", "button").attr("class","fa fa-heart").css({"color": "red", "font-size": "20px", "cursor":"pointer"})
