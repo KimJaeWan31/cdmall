@@ -66,8 +66,9 @@ public class VocBoardController {
 		public ResponseEntity<?> writeReply(@Valid VocBoardDto.WriteReply dto, BindingResult bindingResult, Principal principal) throws BindException {
 			if(bindingResult.hasErrors())
 				throw new BindException(bindingResult);
+			String username = principal.getName();
 			vocService.updateReSeq(dto);
-			VocBoard vocBoard = vocService.writeReply(dto, principal.getName());
+			VocBoard vocBoard = vocService.writeReply(dto, username);
 			URI uri = UriComponentsBuilder.newInstance().path("/customerCenter/vocRead").queryParam("vbno", vocBoard.getVbno()).build().toUri();
 			return ResponseEntity.created(uri).body(vocBoard);
 		}
@@ -105,4 +106,4 @@ public class VocBoardController {
 			return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
 		}
 		
-	}
+}

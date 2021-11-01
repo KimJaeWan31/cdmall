@@ -41,6 +41,9 @@ public class VocBoard extends BaseCreateAndUpdateTimeEntity {
 	@Column(length=10)
 	private String writer;
 	
+	@Column(length=10)
+	private String originalWriter;
+	
 	private Integer attachmentCnt;
 	
 	private Integer re_ref;

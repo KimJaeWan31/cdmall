@@ -37,11 +37,8 @@
 			}
 			
 			$("<a>").attr("href", "/customerCenter/vocRead?vbno=" + c.vbno).text(c.title).appendTo($td);
-			if(c.commentCnt>0)
-				$("<span>").text(" [" + c.commentCnt + "]").appendTo($td);
 			$("<td>").text(c.writer).appendTo($tr);
 			$("<td>").text(createdTime).appendTo($tr);
-			$("<td>").text(c.readCnt).appendTo($tr);
 		}
 	};
 	

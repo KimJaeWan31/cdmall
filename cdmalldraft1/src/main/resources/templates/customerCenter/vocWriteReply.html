@@ -21,9 +21,7 @@ $(document).ready(()=>{
     let param2 = location.search.split('&')[1];
 	
 	const vbno = param1.substr(6);
-	const writer = param2.substr(7);
-	let currentUser = writer;
-	console.log(currentUser);
+	const originalWriter = param2.substr(7);
 
 	const ck = CKEDITOR.replace('content', {
 		height: 400,
@@ -39,6 +37,7 @@ $(document).ready(()=>{
 	$("#writeReply").on("click", ()=>{
 		const formData = new FormData();
 		formData.append("vbno", vbno);
+		formData.append("originalWriter", originalWriter);
 		formData.append("title", $("#title").val());
 		formData.append("content", CKEDITOR.instances['content1'].getData());
 		
@@ -53,7 +52,8 @@ $(document).ready(()=>{
 			method:"post",
 			processData: false,
 	        contentType: false
-		}) .done((result, text, response)=>{ 
+		}) 
+		.done((result, text, response)=>{ 
 			
 			location.href = response.getResponseHeader('Location');
 		})

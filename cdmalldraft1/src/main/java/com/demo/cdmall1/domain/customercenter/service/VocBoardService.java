@@ -31,7 +31,7 @@ private final VocBoardRepository dao;
 //추가
 	@Transactional
 	public VocBoard write(VocBoardDto.Write dto, String loginId) {
-		VocBoard vocBoard = dto.toEntity().setWriter(loginId);
+		VocBoard vocBoard = dto.toEntity().setWriter(loginId).setOriginalWriter(loginId);
 		Jsoup.parseBodyFragment(dto.getContent()).getElementsByTag("img").forEach(img->{
 			// http://localhost:8081/temp/image?imagename=aaa.jpg;
 			String imageUrl = img.attr("src");
@@ -57,9 +57,8 @@ private final VocBoardRepository dao;
 			maxRef++;
 		}
 			
-		vocBoard.setRe_ref(maxRef);
-		vocBoard.setRe_lev(0);
-		vocBoard.setRe_seq(0);
+		vocBoard.setRe_ref(maxRef).setRe_lev(0).setRe_seq(0);
+		
 		if(dto.getVattachments()==null)
 			return dao.save(vocBoard);
 		
@@ -83,9 +82,10 @@ private final VocBoardRepository dao;
 	
 	// 답글
 	@Transactional
-	public VocBoard writeReply(VocBoardDto.WriteReply dto, String loginId) {
+	public VocBoard writeReply(VocBoardDto.WriteReply dto, String username) {
 		
-		VocBoard vocBoard = dto.toEntity().setWriter(loginId);
+		VocBoard vocBoard = dto.toEntity().setWriter(username);
+		System.out.println("0000000000000000000000"+dto);
 	    VocBoard tempVocBoard = dao.getById(dto.getVbno());
 	    vocBoard.setRe_ref(tempVocBoard.getRe_ref());
 	    vocBoard.setRe_lev(tempVocBoard.getRe_lev()+1);
@@ -151,7 +151,7 @@ private final VocBoardRepository dao;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 		map.put("createTime", dtf.format(vocBoard.getCreateTime()));
 		map.put("updateTime", vocBoard.getUpdateTime());
-		map.put("writer", vocBoard.getWriter());
+		map.put("originalWriter", vocBoard.getOriginalWriter());
 		map.put("vattachments", vocBoard.getVattachments());
 		return map;
 	}
@@ -189,7 +189,7 @@ private final VocBoardRepository dao;
 		}
 		return null;
 	}
-
+	
 	@Transactional
 	public Void delete(Integer vbno, String loginId) {
 		VocBoard vocBoard = dao.findById(vbno).orElseThrow(BoardFail.BoardNotFoundException::new);
@@ -198,5 +198,5 @@ private final VocBoardRepository dao;
 		dao.delete(vocBoard);
 		return null;
 	}
-
+	
 }

@@ -41,7 +41,8 @@
 
 		currentAuthority = $("#currentAuthority").val();
 		
-		const $btnArea = $("#btnArea");
+const $btnArea = $("#btnArea");
+		
 		// 비로그인, 글쓴이, 글쓴이 아님에 따른 화면 구성
 		if(isLogin==true && isWriter==true) {
 			$("#title").prop("disabled", false);
@@ -56,7 +57,7 @@
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
 			$("<button>").attr("id","delete").attr("class","btn btn-info").text("삭 제").appendTo($btnArea);
 			$("<span>").html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").appendTo($btnArea);
-			$("<button>").attr("id","reply").attr("class","btn btn-info").attr("onclick", "moveToReply("+vocBoard.vbno+")+'("+ vocBoard.writer +")'").text("답글쓰기").appendTo($btnArea);
+			$("<button>").attr("id","reply").attr("class","btn btn-info").attr("onclick", "moveToReply("+vocBoard.vbno+")+'("+ vocBoard.originalWriter +")'").text("답글쓰기").appendTo($btnArea);
 			$("<button>").attr("id","back").attr("class","btn btn-light").css({"float":"right", "color":"black"}).text("뒤로가기").appendTo($btnArea);
 			
 		}
@@ -69,9 +70,12 @@
 					filebrowserUploadUrl : '/vocBoard/image'
 				});
 				
-				$("<button>").attr("id","reply").attr("class","btn btn-info").attr("onclick", "moveToReply("+vocBoard.vbno+")+'("+ vocBoard.writer +")'").text("답글쓰기").appendTo($btnArea);
+				$("<button>").attr("id","reply").attr("class","btn btn-info").attr("onclick", "moveToReply("+vocBoard.vbno+")+'("+ vocBoard.originalWriter +")'").text("답글쓰기").appendTo($btnArea);
 				$("<button>").attr("id","back").attr("class","btn btn-light").css({"float":"right", "color":"black"}).text("뒤로가기").appendTo($btnArea);	
-		} 
+		}
+		else {
+			$("<button>").attr("id","back").attr("class","btn btn-light").css({"float":"right", "color":"black"}).text("뒤로가기").appendTo($btnArea);
+		}
 	};
 	
 	const printVAttachments=(vattachments)=>{
@@ -101,8 +105,8 @@
 		});
 	};
 	
-	const moveToReply=(vbno,writer)=>{
-		location.href = "/customerCenter/vocWriteReply?vbno="+vbno + "&writer=" +vocBoard.writer ;
+	const moveToReply=(vbno,originalWriter)=>{
+		location.href = "/customerCenter/vocWriteReply?vbno="+vbno + "&writer=" +vocBoard.originalWriter ;
 	}
 
 	$(document).ready(()=>{
@@ -116,7 +120,7 @@
 			
 			// ES6는 키워드없이 변수를 만들 수 없다. 변수의 스코프는 {} , 중괄호는 스코프를 만들지 않습니다
 			vocBoard = result;
-			isWriter = $username == vocBoard.writer;
+			isWriter = $username == vocBoard.originalWriter;
 			//currentUser = $("#username").text();
 			init(vocBoard);
 			printVAttachments(vocBoard.vattachments);

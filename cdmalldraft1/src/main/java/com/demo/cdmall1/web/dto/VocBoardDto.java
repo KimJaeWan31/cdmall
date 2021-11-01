@@ -26,11 +26,12 @@ public class VocBoardDto {
 	@AllArgsConstructor
 	public static class WriteReply {	
 		private Integer vbno;
+		private String originalWriter;
 		private String title;
 		private String content;
 		private java.util.List<MultipartFile> vattachments;
 		public VocBoard toEntity() {
-			return VocBoard.builder().title(title).content(content).build();
+			return VocBoard.builder().originalWriter(originalWriter).title(title).content(content).build();
 		}
 	}
 	
