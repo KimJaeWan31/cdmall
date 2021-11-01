@@ -31,7 +31,7 @@ header, nav, aside, footer, section ,#communitypic, li, span,button, h1, input, 
      width: 1280px;
      margin: auto;
      height: 100px;
-     margin-top: 20px;
+     margin-top: 0px;
      justify-content: space-between; 
      position: fixed; 
      background-color: transparent;
