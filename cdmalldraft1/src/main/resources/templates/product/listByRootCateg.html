@@ -336,7 +336,7 @@ const categoryRootClicked=(categoryCode)=>{
 		if(pageno=="")
 			pageno=1;
 		
-		$.ajax("/products/allByCateg?pageno="+pageno+"&categCode="+categno).done(result=>{
+		$.ajax("/products/allByRootCateg?pageno="+pageno+"&categCode="+categno).done(result=>{
 			page=result;
 			printProduct();
 			printPagination(getPagination());

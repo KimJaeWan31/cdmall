@@ -58,6 +58,21 @@ public class ProductDslRepository {
 				.where(condition).orderBy(qproduct.createTime.desc()).offset(pageable.getOffset())
 				.limit(pageable.getPageSize()).fetch();
 	}
+	
+	public List<ProductList> readByRootCateg(Pageable pageable, String categCode) {
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(qproduct.pno.gt(0));
+		if (categCode != null) {
+			condition.and(qproduct.categoryCode.like(categCode+"%"));
+		}
+			
+		return factory.from(qproduct)
+				.select(Projections.constructor(ProductDto.ProductList.class, qproduct.pno, qproduct.manufacturer,
+						qproduct.name, qproduct.image, qproduct.price, qproduct.avgOfStar, qproduct.reviewCount,
+						qproduct.imageFileName, qproduct.goodCnt, qproduct.goodCnlCnt))
+				.where(condition).orderBy(qproduct.createTime.desc()).offset(pageable.getOffset())
+				.limit(pageable.getPageSize()).fetch();
+	}
 
 	// product & product_member join
 	public List<ProductWishList> readByUsername(Pageable pageable, String username) {

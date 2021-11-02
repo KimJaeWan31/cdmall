@@ -90,6 +90,11 @@ public class ProductController {
 		return ResponseEntity.ok(service.listByCateg(pageno, categCode));
 	}
 	
+	@GetMapping(path="/products/allByRootCateg", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> listByRootCateg(@RequestParam(defaultValue="1") Integer pageno, String categCode) {
+		return ResponseEntity.ok(service.listByRootCateg(pageno, categCode));
+	}
+	
 	@GetMapping("/product/good_or_bad")
 	public ResponseEntity<?> GoodOrBadCnt(@RequestParam Integer pno, @RequestParam Integer state) {
 		Integer cnt = service.goodOrBad(pno, state);

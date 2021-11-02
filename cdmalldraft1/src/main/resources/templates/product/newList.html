@@ -67,7 +67,7 @@ $(function() {
 				// 중분류의 경우 ul을 만들고 li에 붙여서 출력
 				const $sub_ul = $("<ul class='main2'>").appendTo($li);
 				$.each(category.categories, function(idx, sub_category) {
-					const $sub_li = $("<li>").text(sub_category.categoryName).css("cursor","pointer").appendTo($sub_ul);
+					const $sub_li = $("<li>").text(sub_category.categoryName).attr("onclick","categoryRootClicked("+sub_category.categoryCode+")").css("cursor","pointer").appendTo($sub_ul);
 					
 					// 소분류가 있다면
 					if(sub_category.categories.length>0) {
@@ -87,6 +87,11 @@ const categoryClicked=(categoryCode)=>{
 	 let pageno = 1;
 	 location.href = "/product/listByCateg?pageno="+pageno+"&categoryCode="+categoryCode;
 }
+
+const categoryRootClicked=(categoryCode)=>{
+	 let pageno = 1;
+	 location.href = "/product/listByRootCateg?pageno="+pageno+"&categoryCode="+categoryCode;
+}
 	
 	
 	let currentUser = undefined;
@@ -97,21 +102,7 @@ const categoryClicked=(categoryCode)=>{
 		console.log(page.content);
 		const $list = $("#list");
 		// 서버가 보낸 board들은 page.content에 저장되어 있다
-		for(c of page.content) {
-			
-// 			const $tr = $("<tr>").appendTo($list);
-// 			$("<td>").text(c.pno).appendTo($tr);
-// 			const $td = $("<td>").appendTo($tr);
-// 			$("<a>").attr("href", "/product/read?pno=" + c.pno).text(c.name).appendTo($td);
-// 			$("<td>").text(c.manufacturer).appendTo($tr);
-// 			$("<td>").text(c.image).appendTo($tr);
-// 			$("<td>").text(c.price).appendTo($tr);
-// 			$("<td>").text(c.avgOfStar).appendTo($tr);
-// 			$("<td>").text(c.reviewCount).appendTo($tr);
-			
-
-		    
-			
+		for(c of page.content) {			
 			const $li = $("<li>").appendTo($list);
 			const $figure = $("<figure>").appendTo($li);
 			// 
