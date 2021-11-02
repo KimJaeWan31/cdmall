@@ -2,6 +2,7 @@ package com.demo.cdmall1.domain.imageboard.entity;
 
 import java.io.*;
 
+
 import javax.persistence.*;
 
 import org.springframework.beans.factory.annotation.*;
