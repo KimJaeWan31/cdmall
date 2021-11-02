@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://use.fontawesome.com/0206006232.js"></script>
 <!-- 각종 css, js를 읽어오는 js : jQuery를 이용해서 -->
 <script src="/script/main.js"></script>
 <!-- 아래줄을 main.js에 옮기면 자바스크립트는 sec:authorize가 뭔지 모르기때문에 무시. 무조건 실행 -->
@@ -13,6 +14,7 @@
 <link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/main.css">
 <link rel="stylesheet" href="/css/nav.css">
+
 <script th:inline="javascript">
 	const msg = [[${msg}]]
 	$(document).ready(()=>{
@@ -22,7 +24,33 @@
 		}
 	});
 </script>
+<script type="text/javascript">
+$(document).ready(function() {
 
+	// 기존 css에서 플로팅 배너 위치(top)값을 가져와 저장한다.
+	var floatPosition = parseInt($("#floatMenu").css('top'));
+	// 250px 이런식으로 가져오므로 여기서 숫자만 가져온다. parseInt( 값 );
+
+	$(window).scroll(function() {
+	    // 현재 스크롤 위치를 가져온다.
+	    var scrollTop = $(window).scrollTop();
+	    var newPosition = scrollTop + floatPosition + "px";
+
+	    /* 애니메이션 없이 바로 따라감
+	     $("#floatMenu").css('top', newPosition);
+	     */
+
+	    $("#floatMenu").stop().animate({
+	        "top" : newPosition
+	    }, 200);
+
+	}).scroll();
+
+	});
+	
+	
+	
+</script>
 </head>
 <body>
 <div id="page">
@@ -38,7 +66,18 @@
                       <li><a href="/questionBoard/list" style="text-decoration:none">쇼핑몰4</a></li>
                     </ul>
     </div>
-	<div id="main">	
+    
+	<div id="main" style="width: 1600px;" >
+	<div  id="floatMenu" sec:authorize="isAuthenticated()">
+		<ul >
+			<li class="" id="oneOnOneInquiry"><a href="#" target="_blank" id="chat1">1:1문의</a></li>
+			<li><a href="/customerCenter/vocList">고객의소리</a></li>
+			<li><a href="/cart/cart_read">장바구니</a></li>
+			<li><a href="/wish/wish_read">찜목록</a></li>
+			<li> <i class="fas fa-arrow-alt-circle-up top" style="font-size: 30px;"></i> </li>
+		</ul>
+	</div>	
+	
 		<section id="section" style="border: 1px solid aqua;">
 			<div class="alert alert-danger" style="display:none;" id="msg">
   				<strong>작업 실패 </strong> <span id="msg_span"></span>
@@ -113,6 +152,47 @@
 	</div>
 	<footer id="footer" th:replace="/fragments/footer">
 	</footer>
+					<script sec:authorize="hasRole('ADMIN')" th:inline="javascript">
+		$("#chat1").on("click", (e)=>{
+			
+			
+			console.log("in chatting click");
+			// 새창 띄우기 코드
+			var w = 750; //팝업창의 가로크기(임의)
+			var h = 750; //팝업창의 세로크기(임의)
+			var xPos = (document.body.offsetWidth/2) - (w/2);
+			var yPos = (document.body.offsetHeight/2) - (h/2);
+			e.preventDefault();
+			window.open("http://localhost:8081/chatting/chatmain", "pop_name", "width="+w+", height="+h+", left="+xPos+", top="+yPos+", menubar=yes, status=yes, titlebar=yes, resizable=yes");
+		});		
+	</script>
+	<script sec:authorize="hasRole('USER')" th:inline="javascript">
+		$("#chat1").on("click", (e)=>{
+			console.log("in chatting click");
+			
+			var w = 610; //팝업창의 가로크기(임의)
+			var h = 730; //팝업창의 세로크기(임의)
+			var xPos = (document.body.offsetWidth/2) - (w/2);
+			var yPos = (document.body.offsetHeight/2) - (h/2);
+			e.preventDefault();
+			window.open("http://localhost:8081/chatting/chatmain", "pop_name", "width="+w+", height="+h+", left="+xPos+", top="+yPos+", menubar=yes, status=yes, titlebar=yes, resizable=yes");
+		});
+	</script>
+		<script type="text/javascript">
+	$( '.top' ).click( function() {
+		$( 'html, body' ).animate( { scrollTop : 0 }, 400 );
+		return false;
+	} );
+	
+	$( window ).scroll( function() {
+		if ( $( this ).scrollTop() > 200 ) {
+			$( '.top' ).fadeIn();
+		} else {
+			$( '.top' ).fadeOut();
+		}
+	} );
+	
+	</script>
 </div>
 </body>
 </html>
