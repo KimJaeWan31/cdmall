@@ -73,5 +73,22 @@ public class UsedBoardCustomRepositoryImpl extends QuerydslRepositorySupport imp
 		return factory.from(qusedBoard).select(qusedBoard.ubno.count()).where(qusedBoard.ubno.gt(0).and(qusedBoard.warnCnt.goe(10))).fetchOne();
 	}
 
-
+	// 검색
+	public List<UsedBoardDto.ListView> search(Pageable pageable, String word){
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(qusedBoard.ubno.gt(0));
+		if(word!=null) 
+			condition.and(qusedBoard.title.contains(word).or(qusedBoard.writer.contains(word)));
+		return factory.from(qusedBoard).select(Projections.constructor(UsedBoardDto.ListView.class, qusedBoard.ubno, qusedBoard.title, qusedBoard.writer, 
+				qusedBoard.createTime, qusedBoard.readCnt, qusedBoard.attachmentCnt, qusedBoard.commentCnt, qusedBoard.warnCnt)).where(condition)
+				.orderBy(qusedBoard.ubno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();	
+	}
+	
+	public Long countSearch(String word) {
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(qusedBoard.ubno.gt(0));
+		if(word!=null) 
+			condition.and(qusedBoard.title.contains(word).or(qusedBoard.writer.contains(word)));
+		return factory.from(qusedBoard).select(qusedBoard.ubno.count()).where(condition).fetchOne();
+	}
 }

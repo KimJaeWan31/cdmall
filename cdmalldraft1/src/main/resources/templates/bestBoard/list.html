@@ -114,6 +114,23 @@
 		$("#writeMemo").on("click", function() {
 			location.href = "/memo/write?receiver="  + $(this).attr("data-writer");
 		});
+		
+		
+		//찾기
+		$("#searshButton").on("click", ()=>{
+			console.log("================");
+			const words=$("#word").val();
+			const pageno=1;
+		$.ajax({
+			url: "/bestBoard/search",
+			data: {word:words},
+			method:"post",
+		})
+		.done((result, text, response)=>{ location.href = "/bestBoard/search?pageno="+pageno})
+		//.fail((response, text, message)=>{})
+	});
+		
+		
 	});
 </script>
 </head>
@@ -142,6 +159,13 @@
 					</ul>
 				</div>
 				<a class="btn btn-info" role="button" href="/board/write">글쓰기</a>
+				<!-- 찾기버튼 -->
+				<form class="form-inline" style="float: right; width:260px;">
+			<div class="search_button">
+				<input class="form-control mr-sm-2" style="width: 200px;"  type="search" placeholder="Search" aria-label="Search" id="word">
+			    <button class="btn btn-outline-success my-2 my-sm-0"  type="button" id="searshButton"><span class="fas fa-search"></span></button>
+			</div>
+			  </form>
 			</div>
 			<!-- 부트스트랩 모달 -->
 			<div class="modal fade" id="myModal" role="dialog" style="top:40%;">

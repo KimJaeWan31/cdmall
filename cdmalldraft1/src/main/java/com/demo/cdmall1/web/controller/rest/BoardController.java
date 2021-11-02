@@ -140,6 +140,14 @@ private final BoardService service;
 		return ResponseEntity.created(uri).body(board);
 	}
 	
+	// 추천게시판 검색
+	@PostMapping(path="/bestBoard/searchBestAll", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> searchBest(@RequestParam(defaultValue = "1") Integer pageno, HttpSession session){
+		String word = session.getAttribute("word").toString();
+		URI uri = UriComponentsBuilder.newInstance().path("/bestBoard/search").queryParam("word", word).build().toUri();
+		Map<String, Object> board = service.searchBestAll(pageno, word);
+		return ResponseEntity.created(uri).body(board);
+	}
 }
 
 

@@ -39,7 +39,7 @@ public class BoardMvcController {
 	public void map() {
 		
 	}
-	
+	//자유게시판검색
 	@GetMapping("/board/search")
 	public void search() {
 		
@@ -47,6 +47,16 @@ public class BoardMvcController {
 	
 	@PostMapping("/board/search")
 	public void search(@RequestParam (defaultValue = "1") Integer pageno,String word, HttpSession session) {
+		session.setAttribute("word", word);
+	}
+	//추천게시판검색
+	@GetMapping("/bestBoard/search")
+	public void searchBest() {
+		
+	}
+	
+	@PostMapping("/bestBoard/search")
+	public void searchBest(@RequestParam (defaultValue = "1") Integer pageno,String word, HttpSession session) {
 		session.setAttribute("word", word);
 	}
 }

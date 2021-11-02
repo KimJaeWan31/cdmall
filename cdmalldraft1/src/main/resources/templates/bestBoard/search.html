@@ -6,28 +6,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="/script/main.js"></script>
 <link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/main.css">
 <link rel="stylesheet" href="/css/nav.css">
-
+<script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
 <script>
 	// 서버 응답을 저장할 변수
 	let page = null;
 	
-	const printUsedBoard = ()=>{
+	const printBoard = ()=>{
 		console.log(page);
 		const $list = $("#list");
 		// 서버가 보낸 board들은 page.content에 저장되어 있다
 		for(c of page.content) {
 			let createdTime = c.writeTime.substr(-26,10);
 			const $tr = $("<tr>").appendTo($list);
-			$("<td>").text(c.ubno).appendTo($tr);
+			$("<td>").text(c.bno).appendTo($tr);
 			const $td = $("<td>").appendTo($tr);
 			if(c.attachmentCnt>0)
 				$("<i class='fa fa-paperclip'></i>").appendTo($td);
-			$("<a>").attr("href", "/usedBoard/read?ubno=" + c.ubno).text(c.title).appendTo($td);
+			$("<a>").attr("href", "/board/read?bno=" + c.bno).text(c.title).appendTo($td);
 			if(c.commentCnt>0)
 				$("<span>").text(" [" + c.commentCnt + "]").appendTo($td);
 			$("<td>").text(c.writer).appendTo($tr);
@@ -64,7 +63,7 @@
 	// const {pageno, prev, next, first, last} = getPagination();
 	const printPagination = ({pageno, prev, next, first, last}) => {
 		const $pagination = $("ul.pagination");
-		const url = "/usedBoard/list?pageno="
+		const url = "/bestBoard/search?pageno="
 				
 		// 이전으로 
 		if(prev>0) {
@@ -93,10 +92,29 @@
 		if(pageno=="")
 			pageno=1;
 		
-		$.ajax("/usedBoard/all?pageno="+pageno).done(result=>{
+		$.ajax({url:"/bestBoard/searchBestAll?pageno="+pageno,
+			method: "post"			
+		}).done(result=>{
 			page=result;
-			printUsedBoard();
+			printBoard();
 			printPagination(getPagination());
+		});
+		
+		// 1. 모달 대화상자를 띄울 때 -> 클릭한 아이디를 li쪽으로 복사하자
+		$("#list").on("click", ".writer", function() {
+			$(".modal-body li").attr("data-writer", $(this).attr("data-writer"));
+		});
+		
+		// 2. 게시물 보기를 선택하면
+		$("#readById").on("click", function() {
+			location.href = "/board/list?pageno=1&writer=" + $(this).attr("data-writer");
+		});
+		
+		// 3. 가입일 보기를 선택하면
+		
+		// 4. 메모 보내기를 선택하면 /memo/write로 이동
+		$("#writeMemo").on("click", function() {
+			location.href = "/memo/write?receiver="  + $(this).attr("data-writer");
 		});
 		
 		
@@ -106,11 +124,11 @@
 			const words=$("#word").val();
 			const pageno=1;
 		$.ajax({
-			url: "/usedBoard/search",
+			url: "/bestBoard/search",
 			data: {word:words},
 			method:"post",
 		})
-		.done((result, text, response)=>{ location.href = "/usedBoard/search?pageno="+pageno})
+		.done((result, text, response)=>{ location.href = "/bestBoard/search?pageno="+pageno})
 		//.fail((response, text, message)=>{})
 	});
 	});
@@ -118,35 +136,52 @@
 </head>
 <body>
 <div id="page">
-	<header id="header" th:replace="/fragments/headerBoard"> </header>
+	<header id="header" th:replace="/fragments/headerBoard">
+	</header>
 	<nav id="nav" th:replace="/fragments/navBoard">
 	</nav>
-	<div id="communitypic">중 고 게 시 판</div>
+	<div id="communitypic">자 유 게 시 판</div>
+	
 	<div id="main">
-
+		<aside id="aside" th:replace="/fragments/aside">
+		</aside>
 		<section id="section">
 			<div id="wrap">
-			<table class="table table-hover">
-				<tr>
-					<th>번호</th><th>제목</th><th>글쓴이</th><th>시간</th><th>읽기</th>
-				</tr>
-				<tbody id="list">
-				</tbody>
-			</table>
-			
-			<!-- ---------------------------- -->
-			<div id="pagination" style="text-align: center;">
-				<ul class="pagination">
-				</ul>
-			</div>
-			<a class="btn btn-info" role="button" href="/usedBoard/write">글쓰기</a>
-			<form class="form-inline" style="float: right; width:260px;">
+				<table class="table table-hover">
+					<tr>
+						<th>번호</th><th>제목</th><th>글쓴이</th><th>시간</th><th>읽기</th>
+					</tr>
+					<tbody id="list">
+					</tbody>
+				</table>
+				<div id="pagination" style="text-align: center;">
+					<ul class="pagination">
+					</ul>
+				</div>
+				<!--<a class="btn btn-info" role="button" href="/board/write">글쓰기</a> -->
+				<!-- 찾기버튼 -->
+				<form class="form-inline" style="float: right; width:260px;">
 			<div class="search_button">
 				<input class="form-control mr-sm-2" style="width: 200px;"  type="search" placeholder="Search" aria-label="Search" id="word">
 			    <button class="btn btn-outline-success my-2 my-sm-0"  type="button" id="searshButton"><span class="fas fa-search"></span></button>
 			</div>
 			  </form>
-	</div>
+			</div>
+			<!-- 부트스트랩 모달 -->
+			<div class="modal fade" id="myModal" role="dialog" style="top:40%;">
+				<!-- 대화 상자 : header, body, footer -->
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-body" >
+							<ul>
+								<li id="readById" data-dismiss='modal'>게시물 보기</li>
+								<li id="findJoinDate">가입일 보기</li>
+								<li sec:authorize="isAuthenticated()" id="writeMemo">메모 보내기</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
 		</section>
 	</div>
 	<footer id="footer" th:replace="/fragments/footer">

@@ -12,4 +12,8 @@ public interface UsedBoardCustomRepository {
 	
 	List<UsedBoardDto.WarnList> readWarnAll(Pageable pageable, Integer warnCnt);
 	public Long countByWarnCnt();
+	
+	//중고게시판 검색
+	List<UsedBoardDto.ListView> search(Pageable pageable, String word);
+	public Long countSearch(String word);
 }

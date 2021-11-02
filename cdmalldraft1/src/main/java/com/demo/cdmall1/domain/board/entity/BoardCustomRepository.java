@@ -32,4 +32,9 @@ public interface BoardCustomRepository {
 		List<BoardDto.List> search(Pageable pageable, String word);
 		
 		public Long countSearch(String word);
+		
+		//추천게시판 검색
+		List<BoardDto.BestList> searchBest(Pageable pageable, String word);
+		
+		public Long countSearchBest(String word);
 }
