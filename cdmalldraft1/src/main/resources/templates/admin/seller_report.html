@@ -20,10 +20,17 @@ body {
 #page {
 margin-top: 50px;
 }
-
+.seller_active {
+	color : white;
+	border: 0;
+	border-radius: 5px;
+	padding: 6px 12px;
+	margin: 5px 5px;
+		 
+}
 .sidenav {
   height: 100%;
-  width: 300px;
+ width: 250px;
   float: left;
   z-index: 1;
   background-color: #111;
@@ -66,8 +73,8 @@ margin-top: 50px;
 				$("<td>").text("비승인").attr("id", s.username+"state").css("color", "red").appendTo($tr);
 	
 			}
-			$("<button>").attr("data-username", s.username).attr("id","active").text("승인").appendTo($tr);
-			$("<button>").attr("data-username", s.username).attr("id","inactive").text("차단").appendTo($tr);
+			$("<button>").attr("data-username", s.username).attr("class", "seller_active").attr("id","active").css("background-color", "#007BFF").text("승인").appendTo($tr);
+			$("<button>").attr("data-username", s.username).attr("class", "seller_active").attr("id","inactive").css("background-color", "#DC3545").text("차단").appendTo($tr);
 		}
 	};
 	

@@ -8,6 +8,39 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+header, nav, aside, footer , li, a{
+	font-family: 'Jua', sans-serif;
+} 
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,800&family=Zen+Kurenaido&display=swap');
+
+
+ 
+.home_button {
+height: 35px;
+}
+
+#my_home {
+background: white;
+color: black;
+border: none;
+font-size: 20px;
+font-family: 'Open Sans', sans-serif;
+font-family: 'Zen Kurenaido', sans-serif;
+}
+
+#password_input {
+
+}
+#my_home:hover {
+	text-decoration: underline;
+}
+</style>
 <script type="text/javascript">
 $(document).ready(() => {
 	 let obj = new Object();
@@ -45,13 +78,38 @@ $(document).ready(() => {
 		});
 	});
 	
+	$('#cancle').click(function() {
+		location.href ='/member/read';
+	});
+	
+	$('#my_home').click(function() {
+		location.href ='/'
+	});
+	
 })
 </script>
 </head>
 <body>
-	<label for="busniess_no">사업자등록번호 : </label>
-	<input type="text" id="busniess_no">
-	<button type="button" id="sumit">확인</button>
-	<button type="button" id="sumit2">확인2</button>
+<div id="page">
+	<div id="password_check" style="margin-top: 250px;">
+		<section id="login_section_pwCheck">
+		<button class="" id="my_home" style="margin-bottom: 10px;" >HOME으로</button>
+			<div class="alert alert-success" style="width: 500px;" >
+				<span id="target"> 회원님의 판매자 계정 신청을 위해 사업자등록번호 확인이 필요합니다.</span>
+			</div>
+			<div class="form-group">
+				<label for="busniess_no">사업자등록번호  </label>
+				<input type="text" id="busniess_no" class="form-control">
+				<span class="helper-text" id="password_msg"></span>
+			</div>
+			<hr>
+			<div >
+				<button class="btn btn-success" id="sumit" >제출</button>
+				<button class="btn btn-danger" id="cancle" >취소</button>
+			</div>
+			
+		</section>
+	</div>
+</div>
 </body>
 </html>

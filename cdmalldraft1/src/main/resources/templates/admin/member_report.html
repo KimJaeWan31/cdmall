@@ -9,7 +9,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-<link rel="stylesheet" href="/css/admin.css">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <style>
@@ -20,10 +20,17 @@ body {
 margin-top: 50px;
 }
 
-
+.member_active {
+	color : white;
+	border: 0;
+	border-radius: 5px;
+	padding: 6px 12px;
+	margin: 5px 0;
+		 
+}
 .sidenav {
-  height: 100%;
-  width: 300px;
+  height:800px;
+  width: 250px;
   float: left;
   z-index: 1;
   background-color: #111;
@@ -69,11 +76,11 @@ margin-top: 50px;
 			}
 			if(m.enabled ==true){
 				$("<td>").text("활성").attr("id",  m.username+"state").css("color", "blue").appendTo($tr);
-				$("<button>").attr("data-username", m.username).attr("class","user_active").text("비활성").appendTo($tr);
+				$("<button>").attr("data-username", m.username).attr("class","member_active").css("background-color", "#DC3545").text("비활성").appendTo($tr);
 			}
 			else{
 				$("<td>").text("비활성").attr("id", m.username+"state").css("color", "red").appendTo($tr);
-				$("<button>").attr("data-username", m.username).attr("class","user_active").text("활성").appendTo($tr);
+				$("<button>").attr("data-username", m.username).attr("class","member_active").css("background-color", "#007BFF").text("활성").appendTo($tr);
 			}
 		}
 	};
@@ -138,7 +145,7 @@ margin-top: 50px;
 			printUserPagination(getUserPagination());
 		});
 		
-		$("#user_list").on("click",".user_active", function() {
+		$("#user_list").on("click",".member_active", function() {
 			
 			const username = {username :$(this).attr("data-username")}
 			
@@ -147,12 +154,12 @@ margin-top: 50px;
 				if(result==true){
 					Swal.fire('작업 성공', "해당 계정을 활성했습니다.",'success');
 					$("#"+$(this).attr("data-username")+"state").text("활성").css("color", "blue");
-					$(this).text("비활성");
+					$(this).text("비활성").css("background-color", "#DC3545");
 					
 				}else{
 					Swal.fire('작업 성공', "해당 계정을 비활성했습니다.",'success');
 					$("#"+$(this).attr("data-username")+"state").text("비활성").css("color", "red");
-					$(this).text("활성");
+					$(this).text("활성").css("background-color", "#007BFF");
 				}
 				
 			})
@@ -189,18 +196,19 @@ margin-top: 50px;
 				<ul id = "user_ul"class="pagination"></ul>
 			</div>
 		</div>
-	<script th:inline="javascript">
-		$("#logout").on("click", (e)=> {
-			e.preventDefault();
-			let choice = confirm('로그아웃하시겠습니까?');
-			if(choice==false)
-				return;
-			$.ajax({
-				url:"http://localhost:8081/member/logout",
-				method: "post",
-			}).done(()=>location.href="/");
-			
-		});	
-	</script>
+		<script th:inline="javascript">
+			$("#logout").on("click", (e)=> {
+				e.preventDefault();
+				let choice = confirm('로그아웃하시겠습니까?');
+				if(choice==false)
+					return;
+				$.ajax({
+					url:"http://localhost:8081/member/logout",
+					method: "post",
+				}).done(()=>location.href="/");
+				
+			});	
+		</script>
+	</div>
 </body>
 </html>
