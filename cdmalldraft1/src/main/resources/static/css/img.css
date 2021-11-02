@@ -17,10 +17,10 @@
   border: none;
 }
 
-button {
-  cursor: pointer;
-  background: none;
-}
+/* button { */
+/*   cursor: pointer; */
+/*   background: none; */
+/* } */
 
 img {
   display: block;

@@ -12,10 +12,8 @@
 header, nav, aside, footer, section ,li, a{
 	font-family: 'Jua', sans-serif;
 } 
-#menu_authenticated >li {
-	margin-left: 15px;	
-}
 
+	
 
 .search_button {
 float: right;
@@ -42,7 +40,7 @@ float: right;
 			<li><a onclick="loginAccess()">추천게시판</a></li>
 			<li><a onclick="loginAccess()">중고게시판</a></li>
     	</ul>
-    	<ul sec:authorize="isAuthenticated()" class="nav navbar-nav board_authenticated" style="margin-left: 0px;" id="menu_authenticated">
+    	<ul sec:authorize="isAuthenticated()" class="nav navbar-nav board_authenticated"  id="menu_authenticated">
         	<!-- <li><a class="" href="/boardMain">HOME</a></li> -->
 			<li><a href="/noticeBoard/list">공지사항</a></li>
 			<li><a href="/imageBoard/list">사진게시판</a></li>

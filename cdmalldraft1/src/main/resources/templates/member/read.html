@@ -17,13 +17,44 @@
 <script src="/script/member/read.js"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap'); */
 header, nav, aside, footer, section ,li, a,div{
-	font-family: 'Jua', sans-serif;
+/* 	font-family: 'Jua', sans-serif; */
+font-family: "돋움",Dotum;
+font-weight: bold;
 } 
+
 #my_home {
 float: left;
 width: 100px;
+}
+#page {
+height: 900px;
+/* background: #4e73df; */
+background-image: url("/image/member_read2.jpg");
+background-size: cover;
+
+}
+#mainForMemberRead {
+background-color: rgba( 255, 255, 255, 0.3 );
+}
+.button {
+border : 2px solid;
+background: none;
+color: 	black;
+height: 30px;
+width:80px;
+border-radius: 3px;
+}
+
+.button:hover {
+border : 2px solid black;
+  color: #fff;
+  text-shadow: 0 0 8px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
+    0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+}
+.first {
+color: black;
 }
 </style>
 <script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
@@ -38,14 +69,14 @@ $(function() {
 <body>
 <div th:text="${member}"></div>
 <div id="page">
-	<div id="main">
+	<div id="mainForMemberRead">
 		<aside id="aside" th:replace="/fragments/aside">
 		</aside>
-		<section id="section">
+		<section id="sectionForMemberRead">
 			<div id="buttons" style="margin-bottom: 10px; text-align: right;" >
-				<button id="my_home" class="btn btn-primary">HOME</button>
-				<button id="my_info" class="btn btn-info">MY INFO</button>
-				<button id="my_pet" class="btn btn-info">MY PET</button>
+				<button id="my_home" class="button">HOME</button>
+				<button id="my_info" class="button">MY INFO</button>
+				<button id="my_pet" class="button">MY PET</button>
 			</div>
 		
 			<table class="table table-hover">
@@ -54,8 +85,8 @@ $(function() {
 					<col width="70%">
 				</colgroup>
 				<tr>
-					<td colspan="2">
-						<img id="show_sajin" height="200px;">
+					<td colspan="2" >
+						<img id="show_sajin" height="200px;" >
 						<input type="file" name="sajin" id="sajin">
 					</td>
 				</tr>
@@ -67,7 +98,7 @@ $(function() {
 				<tr>
 					<td class="first">비밀번호</td>
 					<td colspan="2">
-						<button type="button" class="btn btn-info" id="activateChangePwd">비밀번호 수정</button>
+						<button type="button" class="button" style="width: 120px" id="activateChangePwd">비밀번호 수정</button>
 						<div id="pwdArea">
 							<span class="key">현재 비밀번호 : </span><input type="password" id="password"><br>
 							<span class="key">새 비밀번호 : </span><input type="password" id="newPassword"><br>
@@ -79,7 +110,7 @@ $(function() {
 				<tr>
 					<td class="first">배송지</td>
 					<td id="address">
-						<button type="button" class="btn btn-info" id="addressBtn">배송지 관리</button>
+						<button type="button" class="button" style="width: 120px" id="addressBtn">배송지 관리</button>
 					</td>
 				</tr>
 				<tr>
@@ -103,8 +134,8 @@ $(function() {
 				<tr>
 					<td class="first">이메일</td>
 					<td>
-						<input id="email" type="text" name="email" class="form-control" style="width: 600px; display: inline-block;">
-						<select id="domain" class="form-control" style="width: 244px; display: inline-block;">
+						<input id="email" type="text" name="email" class="form-control" style="width: 407px; display: inline-block;">
+						<select id="domain" class="form-control" style="width: 230px; display: inline-block;">
 							<option value="0">직접입력</option>
 							<option value="naver.com">naver.com</option>
 							<option value="gmail.com">gmail.com</option>
@@ -118,10 +149,10 @@ $(function() {
 					<td class="first">보유 포인트</td>
 					<td colspan="2" id="point"></td>
 				</tr>
-				<tr>
-					<td class="first">회원정보</td>
+				<tr >
+					<td class="first" id="memberAccount" style="height: 80px;">회원정보</td>
 					<td>
-						<ul>
+						<ul style="height: 25px;">
 							<li>가입일 : <span id="joinday"></span></li>
 							<li>가입기간 : <span id="days"></span></li>
 							<li>레벨 : <span id="level"></span></li>
@@ -133,9 +164,9 @@ $(function() {
 			</table>
 			<hr>
 			<div id="click">
-				<button type="button" class="btn btn-success" id="update">변경하기</button>
-				<button type="button" class="btn btn-danger" id="resign">탈퇴하기</button>
-				<a href="/member/transform/" id="transform" style="font-style: italic; float: right;">판매자 계정 전환 > </a>
+				<button type="button" class="button" id="update">변경하기</button>
+				<button type="button" class="button" id="resign">탈퇴하기</button>
+				<a href="/member/transform/" id="transform" style="font-style:inherit ; float: right;">판매자 계정 전환 > </a>
 			</div>
 		</section>
 	</div>

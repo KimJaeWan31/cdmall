@@ -440,11 +440,28 @@ const categoryRootClicked=(categoryCode)=>{
 			
 			<div>
 				<a sec:authorize="isAuthenticated()" href="/product/insert" class="btn btn-info">제품 추가</a>
+				<button style="float: right; margin-right: 50px;" class="btn btn-info top">위로 이동</button>
 			</div>
 		</section>
 	</div>
 	<footer id="footer" th:replace="/fragments/footer">
 	</footer>
 </div>
+
+	<script type="text/javascript">
+	$( '.top' ).click( function() {
+		$( 'html, body' ).animate( { scrollTop : 0 }, 400 );
+		return false;
+	} );
+	
+	$( window ).scroll( function() {
+		if ( $( this ).scrollTop() > 50 ) {
+			$( '.top' ).fadeIn();
+		} else {
+			$( '.top' ).fadeOut();
+		}
+	} );
+	
+	</script>
 </body>
 </html>

@@ -177,16 +177,29 @@ text-decoration: underline;
 	</nav>
 	<div id="communitypic">자 유 게 시 판</div>
 	<div id="main">
-		<aside id="aside" th:replace="/fragments/aside">
-		</aside>
+
 		<section id="section">
-			<div id="wrap">
-				<table class="table table-hover">
-				<button class="btn btn-primary btn-sm" id="category_button" style="float: right;" type="button" onclick="location.href='/board/list?pageno=1&category=고양이'">고양이</button>
+
+			<div id="wrap" style="width: 1280px;">
+			
+			<div style="height: 25px; margin-bottom: 8px; overflow: hidden">
+							<button class="btn btn-primary btn-sm" id="category_button" style="float: right;" type="button" onclick="location.href='/board/list?pageno=1&category=고양이'">고양이</button>
 				<button class="btn btn-primary btn-sm" id="category_button" style="float: right;" type="button" onclick="location.href='/board/list?pageno=1&category=댕댕이'">댕댕이</button>
 				<button class="btn btn-primary btn-sm" id="category_button" style="float: right;" type="button" onclick="location.href='/board/list?pageno=1&category=유머'">유머</button>
 				<button class="btn btn-primary btn-sm" id="category_button" style="float: right;" type="button" onclick="location.href='/board/list?pageno=1&category=잡담'">잡담</button>
 				<button class="btn btn-primary btn-sm" id="category_button" style="float: left;" type="button" onclick="location.href='/board/list?pageno=1'">홈</button>
+			
+			</div>
+
+				<div style="height: 38px; margin-bottom: 5px; margin-right: 10px;">
+				<form class="form-inline" style="float: right; width:280px; margin-right: 15px;">
+			<div class="search_button">
+				<input class="form-control mr-sm-2" style="width: 220px;"  type="search" placeholder="Search" aria-label="Search" id="word">
+			    <button class="btn btn-outline-success my-2 my-sm-0"  type="button" id="searshButton"><span class="fas fa-search"></span></button>
+			</div>
+			  </form>
+				</div>
+				<table class="table table-hover">
 					<tr>
 						<th>번호</th><th>제목</th><th>글쓴이</th><th>시간</th><th>조회수</th><th>좋아요</th><th>싫어요</th>
 					</tr>
@@ -198,12 +211,7 @@ text-decoration: underline;
 					</ul>
 				</div>
 				<a class="btn btn-info" role="button" href="/board/write">글쓰기</a>
-				<form class="form-inline" style="float: right; width:260px;">
-			<div class="search_button">
-				<input class="form-control mr-sm-2" style="width: 200px;"  type="search" placeholder="Search" aria-label="Search" id="word">
-			    <button class="btn btn-outline-success my-2 my-sm-0"  type="button" id="searshButton"><span class="fas fa-search"></span></button>
-			</div>
-			  </form>
+				<button style="float: right; margin-right: 50px;" class="btn btn-info top">위로 이동</button>
 			</div>
 			<!-- 부트스트랩 모달 -->
 			<div class="modal fade" id="myModal" role="dialog" style="top:40%;">
@@ -225,5 +233,21 @@ text-decoration: underline;
 	<footer id="footer" th:replace="/fragments/footer">
 	</footer>
 </div>
+
+	<script type="text/javascript">
+	$( '.top' ).click( function() {
+		$( 'html, body' ).animate( { scrollTop : 0 }, 400 );
+		return false;
+	} );
+	
+	$( window ).scroll( function() {
+		if ( $( this ).scrollTop() > 50 ) {
+			$( '.top' ).fadeIn();
+		} else {
+			$( '.top' ).fadeOut();
+		}
+	} );
+	
+	</script>
 </body>
 </html>

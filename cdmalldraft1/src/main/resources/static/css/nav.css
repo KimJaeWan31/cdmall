@@ -92,6 +92,7 @@ border-radius: 50px;
 #menu_authenticated li:hover::after {transition: all 250ms ease-out; 
          left: 0%; width: 100%;}
 
+
 #menu_authenticated >li {
 	margin-left: 40px;	
 }

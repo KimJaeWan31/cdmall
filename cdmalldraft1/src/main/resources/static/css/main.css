@@ -34,14 +34,17 @@ header, nav, aside, footer, section , h2, #communitypic, li, span,button, h1, in
 
 
 
-
-
 #join_form {
 	width: 400px;
 	margin: 0 auto;
 }
 
-
+#sectionForMemberRead {
+	width: 980px;
+	padding: 20px;
+	min-height: 600px;
+	margin: 0 auto;
+}
 
 
 
@@ -140,6 +143,21 @@ header, nav, aside, footer, section , h2, #communitypic, li, span,button, h1, in
 	width : 1280px;
 	margin: auto;
 	overflow: hidden;
+}
+
+#mainForMemberRead {
+	width : 1000px;
+	margin: auto;
+	overflow: hidden;
+	
+	
+}
+
+#main_login_read {
+	width: 1000px;
+	margin: auto;
+	overflow: hidden;
+	
 }
 #main1 {
 	 width: 1280px;
@@ -495,6 +513,13 @@ background: linear-gradient(162deg, rgba(105,163,255,1) 0%, rgba(43,125,254,1) 5
 }
 
 #show_sajin {
-	width: 400px;
-	height: 300px;
+	width: 300px;
+	height: 250px;
+	text-align: center;
+}
+
+#sajin {
+	float: right;
+	margin: 220px 300px auto  auto;	
+
 }

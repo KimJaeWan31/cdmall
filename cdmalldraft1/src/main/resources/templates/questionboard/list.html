@@ -126,6 +126,14 @@
 
 		<section id="section">
 			<div id="wrap">
+			<div style="height: 38px; margin-bottom: 5px; margin-right: 10px;">
+				<form class="form-inline" style="float: right; width:280px; margin-right: 15px;">
+			<div class="search_button">
+				<input class="form-control mr-sm-2" style="width: 220px;"  type="search" placeholder="Search" aria-label="Search" id="word">
+			    <button class="btn btn-outline-success my-2 my-sm-0"  type="button" id="searshButton"><span class="fas fa-search"></span></button>
+			</div>
+			  </form>
+				</div>
 			<table class="table table-hover">
 				<tr>
 					<th>번호</th><th>제목</th><th>글쓴이</th><th>시간</th><th>읽기</th>
@@ -139,18 +147,28 @@
 				<ul class="pagination">
 				</ul>
 			</div>
+			<button style="float: right; margin-right: 50px;" class="btn btn-info top">위로 이동</button>
 			<a class="btn btn-info" role="button" href="/questionBoard/write">글쓰기</a>
-			<form class="form-inline" style="float: right; width:260px;">
-			<div class="search_button">
-				<input class="form-control mr-sm-2" style="width: 200px;"  type="search" placeholder="Search" aria-label="Search" id="word">
-			    <button class="btn btn-outline-success my-2 my-sm-0"  type="button" id="searshButton"><span class="fas fa-search"></span></button>
-			</div>
-			  </form>
 </div>
 		</section>
 	</div>
 	<footer id="footer" th:replace="/fragments/footer">
 	</footer>
 </div>
+	<script type="text/javascript">
+	$( '.top' ).click( function() {
+		$( 'html, body' ).animate( { scrollTop : 0 }, 400 );
+		return false;
+	} );
+	
+	$( window ).scroll( function() {
+		if ( $( this ).scrollTop() > 50 ) {
+			$( '.top' ).fadeIn();
+		} else {
+			$( '.top' ).fadeOut();
+		}
+	} );
+	
+	</script>
 </body>
 </html>
