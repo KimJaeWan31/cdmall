@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .layout{
-    max-width: 600px;
+    max-width: 800px;
     margin: 0 auto;
     height: 900px;
 }
@@ -26,6 +26,7 @@
   color: #000;
   margin: 20px 0 0;
   cursor: pointer;
+  font-size: 16.94px;
 }
 .qna label::before { /* 제목 앞 화살표 */
   content: "▶";
@@ -41,7 +42,7 @@
 .qna div { /* 내용 영역 - 기본 감춤 상태 */
   display: none;
   color: #666;
-  font-size: 0.9375em;
+  font-size: 16.94px;
   overflow: hidden;
   padding: 10px 0 10px 30px;
   box-sizing: border-box;
