@@ -4,7 +4,9 @@ import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 import java.security.*;
+import java.util.*;
 
+import javax.servlet.http.*;
 import javax.validation.*;
 
 import org.springframework.http.*;
@@ -89,4 +91,15 @@ public class NoticeBoardController {
 			// ResponseEntity에 header를 추가하려면 new 해야 한다
 			return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
 		}
+		
+		// 검색
+		@PostMapping(path="/noticeBoard/searchAll", produces=MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<?> search(@RequestParam(defaultValue = "1") Integer pageno, HttpSession session){
+			String word = session.getAttribute("word").toString();
+			URI uri = UriComponentsBuilder.newInstance().path("/noticeBoard/search").queryParam("word", word).build().toUri();
+			Map<String, Object> board = noticeService.readSearchAll(pageno, word);
+			return ResponseEntity.created(uri).body(board);
+		}
+		
+		
 }

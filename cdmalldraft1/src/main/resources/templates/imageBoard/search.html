@@ -127,7 +127,7 @@
 	// const {pageno, prev, next, first, last} = getPagination();
 	const printPagination = ({pageno, prev, next, first, last}) => {
 		const $pagination = $("ul.pagination");
-		const url = "/imageBoard/list?pageno="
+		const url = "/imageBoard/search?pageno="
 				
 		// 이전으로 
 		if(prev>0) {
@@ -214,7 +214,10 @@
 		let pageno = location.search.substr(8);
 		if(pageno=="")
 			pageno=1;
-		$.ajax("/imageBoard/all?pageno="+pageno).done(result=>{
+		$.ajax({url:"/imageBoard/searchAll?pageno="+pageno,
+			method: "post"		
+				
+		}).done(result=>{
 			page=result;
 			
 			printImageBoard();

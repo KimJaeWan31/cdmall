@@ -22,5 +22,7 @@ public interface ImageBoardCustomRepository {
 
 	List<ReportList> readWarnAll(Pageable pageable, Integer reportCnt);
 */
-
+	List<ImageBoardDto.List> search(Pageable pageable, String word);
+	
+	public Long countSearch(String word);
 }

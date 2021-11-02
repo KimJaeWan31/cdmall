@@ -21,7 +21,7 @@ public class UsedBoardMvcController {
 	@GetMapping("/usedBoard/write")
 	public void write() {	
 	}
-	//자유게시판검색
+	//중고게시판검색
 	@GetMapping("/usedBoard/search")
 	public void search() {
 		

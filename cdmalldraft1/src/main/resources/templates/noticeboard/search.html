@@ -89,7 +89,7 @@
 	// const {pageno, prev, next, first, last} = getPagination();
 	const printPagination = ({pageno, prev, next, first, last}) => {
 		const $pagination = $("ul.pagination");
-		const url = "/noticeBoard/list?pageno="
+		const url = "/noticeBoard/search?pageno="
 				
 		// 이전으로 
 		if(prev>0) {
@@ -119,7 +119,9 @@
 		if(pageno=="")
 			pageno=1;
 		
-		$.ajax("/noticeBoard/all?pageno="+pageno).done(result=>{
+		$.ajax({url:"/noticeBoard/searchAll?pageno="+pageno,
+			method: "post"		
+		}).done(result=>{
 			page=result;
 			pagenumber = page.pageno;
 			

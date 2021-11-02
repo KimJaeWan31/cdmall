@@ -10,4 +10,8 @@ public interface NoticeBoardCustomRepository {
 	List<NoticeBoardDto.List> readAll(Pageable pageable);
 	
 	public Long countByNbno();
+	
+	List<NoticeBoardDto.List> search(Pageable pageable, String word);
+	
+	public Long countSearch(String word);
 }

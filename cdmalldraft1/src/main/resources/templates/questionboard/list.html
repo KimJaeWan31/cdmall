@@ -98,12 +98,21 @@
 			printQuestionBoard();
 			printPagination(getPagination());
 		});
+		
+		//찾기
+		$("#searshButton").on("click", ()=>{
+			console.log("================");
+			const words=$("#word").val();
+			const pageno=1;
+		$.ajax({
+			url: "/questionBoard/search",
+			data: {word:words},
+			method:"post",
+		})
+		.done((result, text, response)=>{ location.href = "/questionBoard/search?pageno="+pageno})
+		//.fail((response, text, message)=>{})
 	});
-	
-
-	
-	
-	
+	});
 	
 </script>
 </head>
@@ -131,6 +140,12 @@
 				</ul>
 			</div>
 			<a class="btn btn-info" role="button" href="/questionBoard/write">글쓰기</a>
+			<form class="form-inline" style="float: right; width:260px;">
+			<div class="search_button">
+				<input class="form-control mr-sm-2" style="width: 200px;"  type="search" placeholder="Search" aria-label="Search" id="word">
+			    <button class="btn btn-outline-success my-2 my-sm-0"  type="button" id="searshButton"><span class="fas fa-search"></span></button>
+			</div>
+			  </form>
 </div>
 		</section>
 	</div>

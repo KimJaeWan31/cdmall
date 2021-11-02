@@ -54,6 +54,24 @@ public class QuestionBoardCustomRepositoryImpl extends QuerydslRepositorySupport
 		
 		return factory.from(qboard).select(qboard.qbno.count()).where(condition).fetchOne();
 	}
-
-
+	
+	// 검색
+	@Override
+	public List<QuestionBoardDto.ListView> search(Pageable pageable, String word){
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(qboard.qbno.gt(0));
+		if(word!=null)
+			condition.and(qboard.title.contains(word).or(qboard.writer.contains(word)));
+		return factory.from(qboard).select(Projections.constructor(QuestionBoardDto.ListView.class, qboard.qbno, qboard.title, qboard.writer, 
+				qboard.createTime, qboard.readCnt, qboard.attachmentCnt, qboard.commentCnt)).where(condition)
+				.orderBy(qboard.qbno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+	}
+	
+	public Long countSearch(String word) {
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(qboard.qbno.gt(0));
+		if(word!=null) 
+			condition.and(qboard.title.contains(word).or(qboard.writer.contains(word)));
+		return factory.from(qboard).select(qboard.qbno.count()).where(condition).fetchOne();
+	}
 }

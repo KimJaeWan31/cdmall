@@ -14,6 +14,7 @@ import com.demo.cdmall1.domain.imageboard.entity.ImageBoardCustomRepository;
 import com.demo.cdmall1.domain.imageboard.entity.QImageBoard;
 import com.demo.cdmall1.web.dto.ImageBoardDto;
 import com.demo.cdmall1.web.dto.ImageBoardDto.*;
+import com.querydsl.core.*;
 import com.querydsl.core.types.*;
 import com.querydsl.jpa.impl.*;
 
@@ -76,4 +77,25 @@ public class ImageBoardCustomRepositoryImpl extends QuerydslRepositorySupport im
 		QImageBoard imageBoard = QImageBoard.imageBoard;
 		return factory.from(imageBoard).select(imageBoard.ibno.count()).where(imageBoard.ibno.gt(0).and(imageBoard.reportCnt.goe(10))).fetchOne();
 	}*/
+	
+	// 검색
+	public List<ImageBoardDto.List> search(Pageable pageable, String word){
+		QImageBoard imageBoard = QImageBoard.imageBoard;
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(imageBoard.ibno.gt(0));
+		if(word!=null) 
+			condition.and(imageBoard.title.contains(word).or(imageBoard.writer.contains(word)));
+		return factory.from(imageBoard).select(Projections.constructor(ImageBoardDto.List.class, imageBoard.ibno, imageBoard.title, imageBoard.writer,
+				imageBoard.imageFileName, imageBoard.createTime, imageBoard.goodCnt, imageBoard.reportCnt)).where(condition)
+				.orderBy(imageBoard.ibno.desc()).offset(pageable.getOffset()).limit(pageable.getPageSize()).fetch();
+	}
+	
+	public Long countSearch(String word) {
+		QImageBoard imageBoard = QImageBoard.imageBoard;
+		BooleanBuilder condition = new BooleanBuilder();
+		condition.and(imageBoard.ibno.gt(0));
+		if(word!=null) 
+			condition.and(imageBoard.title.contains(word).or(imageBoard.writer.contains(word)));
+		return factory.from(imageBoard).select(imageBoard.ibno.count()).where(condition).fetchOne();
+	}
 }

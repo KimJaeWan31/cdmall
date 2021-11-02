@@ -169,6 +169,15 @@ private final ModelMapper modelMapper;
 		dao.delete(questionBoard);
 	}
 	
-
+	// 검색
+	public Map<String,Object> readSearchAll(Integer pageno,String word){
+		Pageable pageable = PageRequest.of(pageno-1, 10);
+		Map<String,Object> map = new HashMap<>();
+		map.put("content", dao.search(pageable,word));
+		map.put("totalcount", dao.countSearch(word));
+		map.put("pageno", pageno);
+		map.put("pagesize", 10);
+		return map;
+	}
 
 }

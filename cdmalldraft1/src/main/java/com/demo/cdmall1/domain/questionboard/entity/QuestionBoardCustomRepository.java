@@ -10,4 +10,7 @@ public interface QuestionBoardCustomRepository {
 	List<QuestionBoardDto.ListView> readAll(Pageable pageable,String writer);
 	
 	public Long countAll(String writer);
+	
+	List<QuestionBoardDto.ListView> search(Pageable pageable,String word);
+	public Long countSearch(String word);
 }
