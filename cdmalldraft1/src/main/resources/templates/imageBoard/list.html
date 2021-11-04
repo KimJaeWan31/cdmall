@@ -192,16 +192,7 @@
 	 
 	 //이미지 클릭시 이동 
 	 const imageClicked=(ibno)=>{
-			const param = {
-				 url: window.location.href
-			}
-			$.ajax({
-				 url: "/product/continueShopping",
-				data: JSON.stringify(param), 
-				contentType : "application/json", 
-				method: "get",
-				
-			}).done(location.href = "/imageBoard/read?ibno="+ibno);
+			location.href = "/imageBoard/read?ibno="+ibno;
 		 }
 	
 	
@@ -223,7 +214,6 @@
 		
 		//찾기
 		$("#searshButton").on("click", ()=>{
-			console.log("================");
 			const words=$("#word").val();
 			const pageno=1;
 		$.ajax({
