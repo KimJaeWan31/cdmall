@@ -45,7 +45,7 @@
 		  for(c of page.content) {
 			
 			// 사진게시판 화면 구성
-			 const $li = $("<li>").appendTo($list);
+			const $li = $("<li>").appendTo($list);
 			const $figure = $("<figure>").appendTo($li);
 			$("<img>").attr("src", "/upload/ibimage/" + c.imageFileName).css("cursor","pointer").attr("onclick","imageClicked("+ c.ibno +")").attr("class","myPetImg").attr("id", c.ibno+"_"+c.imageFileName).appendTo($figure);
 			const $figcaption = $("<figcaption>").appendTo($li);
@@ -193,7 +193,7 @@
 	 //이미지 클릭시 이동 
 	 const imageClicked=(ibno)=>{
 			location.href = "/imageBoard/read?ibno="+ibno;
-		 }
+	 }
 	
 	
 	 

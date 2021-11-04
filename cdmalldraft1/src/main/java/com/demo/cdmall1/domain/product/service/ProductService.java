@@ -122,15 +122,12 @@ public class ProductService {
 	@Transactional(readOnly=true)
 	public ProductDto.ProductListResponse listBySalesAmount(Integer pageno, String manufacturer) {
 		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
-		Pageable pageable = PageRequest.of(pageno-1, 15);
+		Pageable pageable = PageRequest.of(pageno-1, 9);
 		ProductDto.ProductListResponse dto = new ProductDto.ProductListResponse(dslDao.readAll(pageable, manufacturer), dslDao.countAll(manufacturer), pageno, 15);
 		return dto;
 	}
 	
-	
-	
-	
-	
+
 	@Transactional
 	public Integer goodOrBad(Integer pno, Integer state) {
 		Product product = dao.findById(pno).orElseThrow(BoardFail.BoardNotFoundException::new);
