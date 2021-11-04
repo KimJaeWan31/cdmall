@@ -44,8 +44,6 @@
 	grid-template-columns: 1fr 1fr 1fr;
 }
 
-#list {
-}
 
 .content_css {
 	margin-left: 10px;
@@ -99,7 +97,7 @@ const categoryClicked=(categoryCode)=>{
 		for(c of page.content) {
 			const $li = $("<li>").appendTo($list);
 			const $figure = $("<figure>").appendTo($li);
-			$("<img>").attr("src", "/upload/productimage/" + c.imageFileName).css("cursor","pointer").attr("onclick","imageClicked("+ c.pno +")").attr("class","myPetImg").attr("id", c.pno+"_"+c.imageFileName).appendTo($figure);
+			$("<img>").attr("src", "/upload/productimage/" + c.imageFileName).css({"cursor":"pointer","height":"300px","width":"300px","margin-top":"20px"}).attr("onclick","imageClicked("+ c.pno +")").attr("class","myPetImg").attr("id", c.pno+"_"+c.imageFileName).appendTo($figure);
 			
 			const $figcaption = $("<figcaption>").appendTo($li);
 			$("<p>").text(c.manufacturer).appendTo($figcaption);  //글쓴이 출력
@@ -107,12 +105,6 @@ const categoryClicked=(categoryCode)=>{
 			const $div = $("<div>").css({"border-bottom" :"1px solid black", "width":"350px"}).appendTo($figcaption);
 			$("<a>").attr("href", "/product/read?pno=" + c.pno).text(c.name).text(c.name).css("margin-right","20px").appendTo($div);		
 
-			    $('.myPetImg').hover(function() {
-			$(this).css({'width':'310px','height':'280px','overflow':'hidden'});
-			    }, function(){
-			        $(".myPetImg").css('width','300px');
-			    }); 
-			
 			
 			
 // 			$("<p>").text("평점 :" + c.avgOfStar).appendTo($figcaption).css({"font-size":"15px","margin-top":"-5px"});
@@ -274,8 +266,8 @@ text-align: center;
 }
 .grid-view > li {
 border-style: outset;
- margin-top : 20px;	
- margin-right: 20px;
+ margin-top : 40px;	
+ margin-right: 40px;
 
 }
 .grid-view > li:last-child {
@@ -394,23 +386,40 @@ ul, li {
 					<strong>작업 실패 </strong> <span id="msg_span"></span>
 				</div>
 				<div class="main_text0">
-					<h1 style="font-size: 9em;">베스트 상품 리스트</h1>
+					<h1 style="font-size: 9em; text-align: center;">베스트 상품 리스트</h1>
 					<h1>
 						오늘의 발견 | <span class="newArrival">댕댕의 정석에 새롭게 들어온 상품!</span>
 					</h1>
 					<div>
 						<div class="contents1">
 						<ol id="list" class="image-list grid-view"
-							style="margin-top: 30px;">
+							style="margin-top: 30px; ">
 						</ol>
 					</div>
 					</div>
 
 				</div>
-
 			</section>
+				<div style="height: 40px; margin-top: 20px;">
+					<button style="float: right; margin-right: 0px;" class="btn btn-info top">위로 이동</button>		
+				</div>
 		</div>
 		<footer id="footer" th:replace="/fragments/footer"> </footer>
 	</div>
+		<script type="text/javascript">
+	$( '.top' ).click( function() {
+		$( 'html, body' ).animate( { scrollTop : 0 }, 400 );
+		return false;
+	} );
+	
+	$( window ).scroll( function() {
+		if ( $( this ).scrollTop() > 50 ) {
+			$( '.top' ).fadeIn();
+		} else {
+			$( '.top' ).fadeOut();
+		}
+	} );
+	
+	</script>
 </body>
 </html>
