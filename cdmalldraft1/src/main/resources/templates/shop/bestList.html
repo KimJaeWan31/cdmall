@@ -45,7 +45,6 @@
 }
 
 #list {
-	margin-left: 60px;
 }
 
 .content_css {
@@ -269,6 +268,24 @@ const categoryClicked=(categoryCode)=>{
 
 
 <style>
+.contents1 {
+margin-right: 20px;
+text-align: center;
+}
+.grid-view > li {
+border-style: outset;
+ margin-top : 20px;	
+ margin-right: 20px;
+
+}
+.grid-view > li:last-child {
+ margin-right: 20px;
+}
+/* .grid-view > li:not(:last-child) { */
+/*      margin-right: 20px; */
+    
+/*  } */
+
 a:link {
 	color: blue;
 	text-decoration: none;
@@ -381,11 +398,14 @@ ul, li {
 					<h1>
 						오늘의 발견 | <span class="newArrival">댕댕의 정석에 새롭게 들어온 상품!</span>
 					</h1>
-					<div class="contents1">
+					<div>
+						<div class="contents1">
 						<ol id="list" class="image-list grid-view"
 							style="margin-top: 30px;">
 						</ol>
 					</div>
+					</div>
+
 				</div>
 
 			</section>
