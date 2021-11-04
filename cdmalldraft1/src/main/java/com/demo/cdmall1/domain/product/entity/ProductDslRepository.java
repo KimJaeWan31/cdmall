@@ -22,12 +22,14 @@ public class ProductDslRepository {
 	private JPAQueryFactory factory;
 	private QProduct qproduct;
 	private QProductMember qProductMember;
+	private QCategory qcategory;
 
 	@PostConstruct
 	public void init() {
 		this.factory = new JPAQueryFactory(em);
 		qproduct = QProduct.product;
 		qProductMember = QProductMember.productMember;
+		qcategory= QCategory.category;
 	}
 
 	// select * from board where bno>0;
@@ -73,6 +75,24 @@ public class ProductDslRepository {
 				.where(condition).orderBy(qproduct.createTime.desc()).offset(pageable.getOffset())
 				.limit(pageable.getPageSize()).fetch();
 	}
+	
+	public List<ProductList> readByMultiCateg(Pageable pageable, List<String> categCodes) {
+		BooleanBuilder condition = new BooleanBuilder();
+		if (categCodes != null) {
+			for(String code : categCodes) {
+				condition.or(qcategory.superCategory().categoryCode.like(code+"%"));
+			}
+		}
+		
+		List<String> parentCodes = factory.select(qcategory.categoryCode).from(qcategory).where(condition).fetch();
+			
+		return factory.from(qproduct)
+				.select(Projections.constructor(ProductDto.ProductList.class, qproduct.pno, qproduct.manufacturer,
+						qproduct.name, qproduct.image, qproduct.price, qproduct.avgOfStar, qproduct.reviewCount,
+						qproduct.imageFileName, qproduct.goodCnt, qproduct.goodCnlCnt))
+				.where(qproduct.categoryCode.in(parentCodes)).orderBy(qproduct.createTime.desc()).offset(pageable.getOffset())
+				.limit(pageable.getPageSize()).fetch();
+	} 
 
 	// product & product_member join
 	public List<ProductWishList> readByUsername(Pageable pageable, String username) {
@@ -113,6 +133,21 @@ public class ProductDslRepository {
 			condition.and(qproduct.categoryCode.eq(categCode));
 
 		return factory.from(qproduct).select(qproduct.pno.count()).where(condition).fetchOne();
+	}
+	
+	public Long countByMultiCateg(List<String> categCodes) {
+		BooleanBuilder condition = new BooleanBuilder();
+		//condition.and(qproduct.pno.gt(0));
+				
+		if (categCodes != null) {
+			for(String code : categCodes) {
+				condition.or(qcategory.superCategory().categoryCode.like(code+"%"));
+			}
+		}
+		
+		List<String> parentCodes = factory.select(qcategory.categoryCode).from(qcategory).where(condition).fetch();
+
+		return factory.from(qproduct).select(qproduct.pno.count()).where(qproduct.categoryCode.in(parentCodes)).fetchOne();
 	}
 
 	// select * from board where bno>0;

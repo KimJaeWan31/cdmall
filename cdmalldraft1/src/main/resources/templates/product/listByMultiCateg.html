@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://use.fontawesome.com/0206006232.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="/script/main.js"></script>
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<script src="/script/main.js"></script>
+<script src="/script/product/listByMultiCateg.js"></script>
+<script sec:authorize="isAuthenticated()">
+	const isLogin = true
+</script>
+<script  sec:authorize="isAnonymous()">
+	const isLogin = false;
+</script>
+<style type="text/css">
+ 	#menu > ul{
+ 		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: black;
+		font-size: 25px;
+		width: 1000px;
+	 	}
+	 	
+	.prodImg {
+			display: block;
+  			width: 200px;
+  			height:180px;
+  			object-fit: cover;
+  			border-radius: 10px;
+  			
+	}
+.grid-view {
+  	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	
+
+}
+ #list {
+ 	margin-left: 60px;
+ }
+ .content_css{
+  margin-left: 10px;
+ }
+
+</style>
+<script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
+<script>
+
+
+</script>
+<style>
+	a:link {color: blue; text-decoration: none;}
+	a:visited{color: purple; text-decoration: none;}
+	a:hover {color: red; text-decoration: underline;}
+	
+	/*가로메뉴형*/
+	ul, li {
+		margin: 0;
+		padding: 0;
+		list-style: none;;
+	}
+	
+	#menu {
+		height: 50px;
+		background: #EBFBFF;
+	}
+	.main1 {
+		width: 600px;
+		height: 100%;
+		margin: 0 auto;
+	}
+	.main1>li {
+		float: left;
+		width: 25%;
+		line-height: 50px;
+		text-align: center;
+		position: relative;
+	}
+
+	.main1>li:hover .main2 {
+		left: 0;
+		font-size: 25px;
+	}
+	.main1>li a {
+		display: block;
+	}
+	.main1>li a:hover {
+		background-color: #BEEFFF;
+		color: #fff;
+
+	}
+	.main2 {
+		position: absolute;
+		top: 50px;
+		left: -9999px;
+		background: #9BC3FF;
+		width: 200px;
+	}
+	.main2>li {
+		position: relative;
+	}
+	.main2>li:hover .main3 {
+		left: 100%;
+		
+	}
+	.main2>li a, .main3>li a {
+		border-radius: 10px;
+		margin: 10px;
+	}
+
+	.main3 {
+		position: absolute;
+		top: 0;
+		background: #5AD2FF;
+		width: 80%;
+		left: -9999px;
+		/*left: 100%;*/
+		/*display: none;*/
+	}
+	.main3>li a:hover {
+		background: black;
+		color: #fff;
+		
+	}
+
+</style>
+</head>
+<body>
+<div id="page">
+<div id="username" sec:authentication="name" style="display:none;"></div>
+	<header id="header" th:replace="/fragments/headerStore">
+	</header>
+	<nav id="nav" th:replace="/fragments/navStore">
+	</nav>
+	<div id="main">
+		<aside th:replace="/fragments/aside">
+		</aside>
+		<section id="section" >
+			<div id="menu">
+				<!-- 대분류 출력할 ul -->
+				<ul class="main1" id="ul">
+				</ul>
+			</div>
+			
+			
+			<div id="wrap">
+			
+			
+<!-- 				<table class="table table-hover"> -->
+<!-- 					<tr> -->
+<!-- 						<th>번호</th><th>상품명</th><th>제조사</th><th>사진</th><th>가격</th><th>평점</th><th>리뷰</th> -->
+<!-- 					</tr> -->
+<!-- 					<tbody id="list"> -->
+<!-- 					</tbody> -->
+<!-- 				</table> -->
+				
+						<ol id="list" class="image-list grid-view" style="margin-top: 30px;">
+
+						</ol>
+				
+				
+				
+				<div id="pagination" style="text-align: center;">
+					<ul class="pagination">
+					</ul>
+				</div>
+			</div>
+			
+			<div>
+				<a sec:authorize="isAuthenticated()" href="/product/insert" class="btn btn-info">제품 추가</a>
+			</div>
+		</section>
+	</div>
+	<footer id="footer" th:replace="/fragments/footer">
+	</footer>
+</div>
+</body>
+</html>

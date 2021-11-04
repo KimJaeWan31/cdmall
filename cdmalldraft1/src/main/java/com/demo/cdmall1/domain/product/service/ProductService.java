@@ -95,12 +95,19 @@ public class ProductService {
 	}
 	
 	@Transactional(readOnly=true)
+	public ProductDto.ProductListResponse listByMultiCateg(Integer pageno, List<String> categCodes) {
+		
+		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
+		Pageable pageable = PageRequest.of(pageno-1, 15);
+		ProductDto.ProductListResponse dto = new ProductDto.ProductListResponse(dslDao.readByMultiCateg(pageable, categCodes), dslDao.countByMultiCateg(categCodes), pageno, 15);
+		return dto;
+	}
+	
+	@Transactional(readOnly=true)
 	public ProductDto.ProductWishListResponse wishList(Integer pageno, String username) {
 		// 글의 전체 개수, 페이지 번호, 페이지 사이즈, content(글 목록)을 보내줘야 프론트에서 페이징할 수 있다....Map을 사용하자
 		Pageable pageable = PageRequest.of(pageno-1, 10);
 		ProductDto.ProductWishListResponse dto = new ProductDto.ProductWishListResponse(dslDao.readByUsername(pageable, username), dslDao.wishTotalCount(username), pageno, 10);
-		
-		
 		return dto;
 	}
 	

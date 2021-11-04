@@ -71,8 +71,8 @@ header, nav, aside, footer, section ,li, a{
 			<li><a href="/shop/bestList">BEST</a></li>
 			<li><a href="/product/listByRootCateg?pageno=1&categoryCode=1">댕이용품</a></li>
 			<li><a href="/product/listByRootCateg?pageno=1&categoryCode=2">냥이용품</a></li>
-			<li><a href="/product/list">푸드</a></li>
-			<li><a href="/product/list">패션</a></li>
+			<li><a href="#" id=food>푸드</a></li>
+			<li><a href="#" id=living>리빙</a></li>
 			<nav class="navbar navbar-light bg-light">
 			  <a class="navbar-brand"></a>
 			  <form class="form-inline">
@@ -87,12 +87,11 @@ header, nav, aside, footer, section ,li, a{
 			<li><a href="/shop/bestList">BEST</a></li>
 			<li><a href="/product/listByRootCateg?pageno=1&categoryCode=1">댕이용품</a></li>
 			<li><a href="/product/listByRootCateg?pageno=1&categoryCode=2">냥이용품</a></li>
-			<li><a href="/product/list">푸드</a></li>
-			<li><a href="/product/list">패션</a></li>
+			<li><a href="#" id=food>푸드</a></li>
+			<li><a href="#" id=living>리빙</a></li>
 			<nav class="navbar navbar-light bg-light">
 			  <a class="navbar-brand"></a>
 			  <form class="form-inline">
-			  
 			    <input class="form-control mr-sm-2" style="width:205px; background: white;" type="search" placeholder="찾고싶은 상품을 검색해 보세요!" aria-label="Search" id="word">
 			    <button class="btn btn-outline-success my-2 my-sm-0" type="button" id="searshButton"><span class="fas fa-search"></span></button>
 			  </form>
@@ -100,22 +99,38 @@ header, nav, aside, footer, section ,li, a{
     	</ul>
 	</div>
 	<script th:inline="javascript">
-		$("#menu_authenticated").on("click", "#logout", (e)=> {
+		$("#menu_authenticated").on("click", "#food", (e)=> {
 			// a태그는 클릭하면 이동(동작이 2개, 그때 두번째 동작을 막아버린다)
 			e.preventDefault();
 			
-			// 이벤트가 발생한 곳을 넓은 곳에서 좁은 곳으로 찾는다
-			// <div id="parent"><div id="child"><button>클릭</button></div></div>
-			// e.stopPropagation();
+			const categList = {
+				//pageno : 1
+			};
 			
-			var choice = confirm('로그아웃하시겠습니까?');
-			if(choice==false)
-				return;
-			$.ajax({
-				url:"http://localhost:8081/member/logout",
-				method: "post",
-			}).done(()=> location.href = '/');
+			const arrayList = [11, 21];
+
+			for(let i = 0; i < arrayList.length; i++){
+				categList['categno'+i] = arrayList.at(i);
+			}
 			
+			location.href = "/product/listByMultiCateg?"+$.param(categList);			
+		});
+		
+		$("#menu_authenticated").on("click", "#living", (e)=> {
+			// a태그는 클릭하면 이동(동작이 2개, 그때 두번째 동작을 막아버린다)
+			e.preventDefault();
+			
+			const categList = {
+				//pageno : 1
+			};
+			
+			const arrayList = [12, 22];
+
+			for(let i = 0; i < arrayList.length; i++){
+				categList['categno'+i] = arrayList.at(i);
+			}
+			
+			location.href = "/product/listByMultiCateg?"+$.param(categList);			
 		});	
 	</script>
 </div>

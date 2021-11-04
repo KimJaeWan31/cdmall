@@ -95,6 +95,14 @@ public class ProductController {
 		return ResponseEntity.ok(service.listByRootCateg(pageno, categCode));
 	}
 	
+	@GetMapping(path="/products/allByMultiCateg", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> listByMultiCateg(@Valid ProductDto.ListByMultiCateg dto, BindingResult bindingResult) {
+		return ResponseEntity.ok(service.listByMultiCateg(dto.getPageno(), dto.getCategList()));
+	}
+	
+	
+	
+	
 	@GetMapping("/product/good_or_bad")
 	public ResponseEntity<?> GoodOrBadCnt(@RequestParam Integer pno, @RequestParam Integer state) {
 		Integer cnt = service.goodOrBad(pno, state);

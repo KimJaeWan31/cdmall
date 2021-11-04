@@ -104,8 +104,13 @@ public class ProductDto {
 		private Integer pagesize;
 		
 	}
+	
+	@Data
+	@AllArgsConstructor
+	public static class ListByMultiCateg{
+		private Integer pageno;
+		private List<String> categList;
+	}
 
-	// 중간에 추가한 값이 넘어오는가? null이 뜬다면
-	// 		html에서 name이 틀렸다, jQuery에서 서버로 넘기지 않는다, DTO에 필드가 없다, 엔티티로 변환하는 메서드에서 누락됐다....
 
 }

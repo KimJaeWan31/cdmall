@@ -35,6 +35,11 @@ public class ProductMvcController {
 	public void listByRootCateg() {
 	}
 	
+	
+	@GetMapping("/product/listByMultiCateg")
+	public void listByMultiCateg() {
+	}
+	
 	@GetMapping("/shop/search")
 	public void search() {
 		
