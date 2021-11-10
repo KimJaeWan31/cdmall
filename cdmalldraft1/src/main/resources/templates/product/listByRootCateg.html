@@ -68,6 +68,10 @@ $(function() {
 				const $sub_ul = $("<ul class='main2'>").appendTo($li);
 				$.each(category.categories, function(idx, sub_category) {
 					const $sub_li = $("<li>").text(sub_category.categoryName).attr("onclick","categoryRootClicked("+sub_category.categoryCode+")").css("cursor","pointer").appendTo($sub_ul);
+					$('.main2 li ').hover(function(){
+						$(this).css({'text-decoration':'underline','color':'#1478FF'}); },
+						function(){
+						$(this).css({'text-decoration':'none', 'color':'black'}); })
 					
 					// 소분류가 있다면
 					if(sub_category.categories.length>0) {
@@ -377,15 +381,21 @@ const categoryRootClicked=(categoryCode)=>{
 	.main1>li:hover .main2 {
 		left: 0;
 		font-size: 25px;
+		font-weight: bold;
+		background-color: rgba( 255, 255, 255, 0.5 );
+		border-radius: 10px;
+		
 	}
+	
 	.main1>li a {
 		display: block;
 	}
 	.main1>li a:hover {
 		background-color: #BEEFFF;
 		color: #fff;
-
 	}
+	
+
 	.main2 {
 		position: absolute;
 		top: 50px;
@@ -396,10 +406,18 @@ const categoryRootClicked=(categoryCode)=>{
 	.main2>li {
 		position: relative;
 	}
+
+	
 	.main2>li:hover .main3 {
 		left: 100%;
+		font-weight: bold;
+		background-color: rgba( 255, 255, 255, 0.9 );
+		border-radius: 10px;
+		color: black;
 		
 	}
+	
+	
 	.main2>li a, .main3>li a {
 		border-radius: 10px;
 		margin: 10px;
@@ -414,12 +432,6 @@ const categoryRootClicked=(categoryCode)=>{
 		/*left: 100%;*/
 		/*display: none;*/
 	}
-	.main3>li a:hover {
-		background: black;
-		color: #fff;
-		
-	}
-
 </style>
 </head>
 <body>
