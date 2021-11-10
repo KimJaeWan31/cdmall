@@ -49,6 +49,7 @@ public class MemberMvcController {
 	public void changePassword() {
 	}
 	
+	
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/member/password_check")
 	public String passwordCheck(HttpSession session) {
