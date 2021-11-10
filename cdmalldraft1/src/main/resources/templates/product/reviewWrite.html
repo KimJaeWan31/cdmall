@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://use.fontawesome.com/0206006232.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="/script/main.js"></script>
+<link rel="stylesheet" href="/css/header.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/css/nav.css">
+<script src="/script/main.js"></script>
+<script src="/script/ckeditor/ckeditor.js"></script>
+<script sec:authorize="isAuthenticated()">
+	const isLogin = true
+</script>
+<script  sec:authorize="isAnonymous()">
+	const isLogin = false;
+</script>
+<style type="text/css">
+	#attachment { width: 250px; }
+	.td1 { width: 30px; }
+	.td2 { width: 170px; }
+	.td3 { width: 50px; }
+	#ibimage {
+		width: 600px;
+		display: block; 
+		margin: 0px auto; 
+		size: cover;
+	}
+	
+	#btnArea {
+		margin-top: 20px;
+	}
+	
+	.form-control1 {
+		width: 1238px;
+	}
+
+
+ 	#menu > ul{
+ 		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: black;
+		font-size: 25px;
+		width: 1000px;
+	 	}
+	 	
+	.prodImg {
+			display: block;
+  			width: 200px;
+  			height:180px;
+  			object-fit: cover;
+  			border-radius: 10px;
+  			
+	}
+.grid-view {
+  	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	
+
+}
+ #list {
+ 	margin-left: 60px;
+ }
+ .content_css{
+  margin-left: 10px;
+ }
+	.write_form {
+	width: 1250px;
+	}
+	a:link {color: blue; text-decoration: none;}
+	a:visited{color: purple; text-decoration: none;}
+	a:hover {color: red; text-decoration: underline;}
+	
+	/*가로메뉴형*/
+	ul, li {
+		margin: 0;
+		padding: 0;
+		list-style: none;;
+	}
+	
+	#menu {
+		height: 50px;
+		background: #EBFBFF;
+	}
+	.main1 {
+		width: 600px;
+		height: 100%;
+		margin: 0 auto;
+	}
+	.main1>li {
+		float: left;
+		width: 25%;
+		line-height: 50px;
+		text-align: center;
+		position: relative;
+	}
+
+	.main1>li:hover .main2 {
+		left: 0;
+		font-size: 25px;
+	}
+	.main1>li a {
+		display: block;
+	}
+	.main1>li a:hover {
+		background-color: #BEEFFF;
+		color: #fff;
+
+	}
+	.main2 {
+		position: absolute;
+		top: 50px;
+		left: -9999px;
+		background: #9BC3FF;
+		width: 200px;
+	}
+	.main2>li {
+		position: relative;
+	}
+	.main2>li:hover .main3 {
+		left: 100%;
+		
+	}
+	.main2>li a, .main3>li a {
+		border-radius: 10px;
+		margin: 10px;
+	}
+
+	.main3 {
+		position: absolute;
+		top: 0;
+		background: #5AD2FF;
+		width: 80%;
+		left: -9999px;
+		/*left: 100%;*/
+		/*display: none;*/
+	}
+	.main3>li a:hover {
+		background: black;
+		color: #fff;
+		
+	}
+	
+	.rating .star-wrap{
+		width:29px; 
+		display:inline-block;
+		margin:3px;
+	}
+	
+	.rating .star{
+		margin:3px;
+		width:100%;
+		overflow:hidden;
+	}
+
+	.rating {
+		display: flex;
+		flex-direction: row-reverse;
+		justify-content: center;
+	}
+	
+	.rating>input {
+		display: none
+	}
+	
+	 .rating>label {
+		position: relative;
+		width: 3em;
+		font-size: 3vw;
+		color: #FFD600;
+		cursor: pointer
+	}
+	.rating>span {
+		position: relative;
+		width: 3em;
+		font-size: 3vw;
+		color: #FFD600;
+		cursor: pointer
+	}
+	.rating>input {
+		position: relative;
+		width: 3em;
+		font-size: 3vw;
+		color: #FFD600;
+		cursor: pointer
+	}
+	
+	.rating>label::before {
+		content: "\2605";
+		position: absolute;
+		opacity: 0
+	}
+	
+	.rating>label:hover:before, .rating>label:hover ~label:before {
+		opacity: 1 !important
+	} 
+	
+	.rating>input:checked ~label:before {
+		opacity: 1
+	}
+	
+	.rating:hover>input:checked ~label:before {
+		opacity: 0.4
+	} 
+
+</style>
+<script sec:authorize="isAuthenticated()" src="/script/websocket.js"></script>
+<script>
+$(function() {
+	$.ajax("/categories/all").done(categories=>{
+		const $ul = $("#menu #ul");
+		$.each(categories, function(idx, category) {
+			// 대분류는 li에 붙여서 출력
+			const $li = $("<li>").text(category.categoryName).appendTo($ul);
+			
+			// 중분류가 있다면
+			if(category.categories.length>0) {
+				// 중분류의 경우 ul을 만들고 li에 붙여서 출력
+				const $sub_ul = $("<ul class='main2'>").appendTo($li);
+				$.each(category.categories, function(idx, sub_category) {
+					const $sub_li = $("<li>").text(sub_category.categoryName).attr("onclick","categoryRootClicked("+sub_category.categoryCode+")").css("cursor","pointer").appendTo($sub_ul);
+					
+					// 소분류가 있다면
+					if(sub_category.categories.length>0) {
+						// 소분류의 ul을 만들고 li에 붙여서 출력
+						const $descendant_ul = $("<ul class='main3'>").appendTo($sub_li);
+						$.each(sub_category.categories, function(idx, descendant_category) {
+							$("<li>").data("categoryCode",descendant_category.categoryCode).text(descendant_category.categoryName).attr("onclick","categoryClicked("+descendant_category.categoryCode+")").css("cursor","pointer").appendTo($descendant_ul);
+						});
+					}
+				});
+			}
+		});
+	});
+});
+
+const categoryClicked=(categoryCode)=>{
+	 let pageno = 1;
+	 location.href = "/product/listByCateg?pageno="+pageno+"&categoryCode="+categoryCode;
+}
+
+const categoryRootClicked=(categoryCode)=>{
+	 let pageno = 1;
+	 location.href = "/product/listByRootCateg?pageno="+pageno+"&categoryCode="+categoryCode;
+}
+
+$(document).ready(()=>{
+	/* const ck = CKEDITOR.replace('content', {
+		height: 400,
+		filebrowserUploadUrl : '/board/image'
+	}); */
+	
+	// 첨부파일 추가 버튼을 클릭할 때 첨부 파일 선택 버튼을 추가
+	$("#addAttachment").on("click", function() {
+		const $attachment = $("<input>").attr("type","file").attr("class","form-control-file");
+		$("#attach").append($attachment);
+	});
+	
+	$("#write").on("click", ()=>{
+		const formData = new FormData();
+		
+		var tmpPno = location.search.substr(5);
+		
+		formData.append("pno", parseInt(tmpPno));
+		formData.append("content", $("#content").val());
+		formData.append("star", parseInt($("input[name='rating']:checked").val()));
+		
+		$.each($(".form-control-file"), function(idx, attachment) {
+			if($(this)[0].files[0]!=undefined)
+				formData.append("rattachments", $(this)[0].files[0]);	
+		});
+		
+		$.ajax({
+			url: "/products/reviewNew",
+			data: formData,
+			method:"post",
+			processData: false,
+	        contentType: false
+		})
+// 		.done((result, text, response)=>{ 
+// 			location.href = response.getResponseHeader('Location'); 
+// 		})
+// 		.fail((response, text, message)=>{});
+	});
+	
+	$("#cancle").on("click", ()=>{
+		let choice = confirm('글쓰기를 취소하겠습니까?');
+		if(choice==false)
+			return;
+		//location.href="/board/list";
+		
+	});
+});
+</script>
+</head>
+<body>
+<div id="page">
+	<header id="header" th:replace="/fragments/headerStore">
+	</header>
+	<nav id="nav" th:replace="/fragments/navStore">
+	</nav>
+	<div id="main">
+		<aside id="aside" th:replace="/fragments/aside">
+		</aside>
+		<section id="section">
+			<div id="menu">
+				<!-- 대분류 출력할 ul -->
+				<ul class="main1" id="ul">
+				</ul>
+			</div>
+			<form id="write_form" class="write_form" style="width: 1240px;">
+				<div class="form-group">
+				<label for="title" style="margin-top: 15px; font-size:2em">별점을 선택하세요</label>
+					<div class='rating'>
+						<input type='radio' name='rating' value='5' id='5star'>    
+						<label for='5star'>☆</label>
+						<input type='radio' name='rating' value='4' id='4star'>    
+						<label for='4star'>☆</label>
+						<input type='radio' name='rating' value='3' id='3star'>    
+						<label for='3star'>☆</label>
+						<input type='radio' name='rating' value='2' id='2star'>    
+						<label for='2star'>☆</label>
+						<input type='radio' name='rating' value='1' id='1star'>    
+						<label for='1star'>☆</label>
+					</div>
+				</div>
+				<div class="form-group">
+					<textarea class="form-control" id="content" name="content" style="min-height:600px; "></textarea>
+				</div>
+				<button type="button" class="btn btn-success" id="write">작성</button>
+				<button type="button" class="btn btn-danger" id="cancle">취소</button>
+			</form>
+			<hr>
+			<div class="form-group" id="attach">
+				<button type="button" id="addAttachment">첨부 파일 추가 </button>
+			</div>
+		</section>
+	</div>
+	<footer id="footer" th:replace="/fragments/footer">
+	</footer>
+</div>
+</body>
+</html>

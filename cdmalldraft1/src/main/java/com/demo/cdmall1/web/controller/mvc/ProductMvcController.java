@@ -27,6 +27,14 @@ public class ProductMvcController {
 	public void bestList() {
 	}
 	
+	@GetMapping("/product/reviewList")
+	public void reviewList() {
+	}
+	
+	@GetMapping("/product/reviewWrite")
+	public void reviewWrite() {
+	}
+	
 	@GetMapping("/product/listByCateg")
 	public void listByCateg() {
 	}

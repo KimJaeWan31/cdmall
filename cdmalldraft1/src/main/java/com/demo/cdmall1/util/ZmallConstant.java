@@ -6,9 +6,11 @@ public interface ZmallConstant {
 	public final static String PROFILE_FOLDER = "c:/upload/profile/";
 	public final static String PET_PROFILE_FOLDER = "c:/upload/pet_profile/";
 	public static final String ATTACHMENT_FOLDER = "c:/upload/attachment/";
+	public static final String PRATTACHMENT_FOLDER = "c:/upload/prattachment/";
 	public static final String IMAGE_FOLDER ="c:/upload/image/";
 	public static final String NBIMAGE_FOLDER ="c:/upload/nbimage/";
 	public static final String IBIMAGE_FOLDER ="c:/upload/ibimage/";
+	public static final String PRIMAGE_FOLDER ="c:/upload/primage/";
 	public static final String TEMP_FOLDER = "c:/upload/temp/";
 	public static final String PRODUCT_FOLDER = "c:/upload/product/";
 	public static final String PRODIMAGE_FOLDER ="c:/upload/productimage/";

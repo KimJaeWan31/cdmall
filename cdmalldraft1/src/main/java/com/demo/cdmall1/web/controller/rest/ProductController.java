@@ -10,6 +10,7 @@ import javax.servlet.http.*;
 import javax.validation.*;
 
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.*;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ import lombok.*;
 @RestController
 public class ProductController {
 	private final ProductService service;
+	private final ReviewService reviewService;
 	// 이미지 첨부파일 보기
 	@GetMapping(path={"/products/image", "/ptemp/image"}, produces=MediaType.IMAGE_JPEG_VALUE)
 	public ResponseEntity<?> showImage(@RequestParam String imagename, HttpServletRequest req) throws IOException {
@@ -149,4 +151,27 @@ public class ProductController {
 	public ResponseEntity<?> bestList(@RequestParam(defaultValue="1") Integer pageno, String manufacturer) {
 		return ResponseEntity.ok(service.listBySalesAmount(pageno, manufacturer));
 	}
+	
+	@GetMapping(path="/products/reviewList", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> reviewList(@RequestParam Integer pno, @RequestParam(defaultValue="1")Integer pageno) {
+		return ResponseEntity.ok(reviewService.list(pno, pageno)); 
+	}
+	
+	@GetMapping(path="/products/avgOfStar", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> avgOfstar(@RequestParam Integer pno) {
+		double star = reviewService.avgOfStars(pno);
+		return ResponseEntity.ok(star); 
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping(path="/products/reviewNew", produces=MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> reviewWrite(@Valid ReviewDto.Write dto, BindingResult bindingResult, Principal principal) throws BindException{
+		if(bindingResult.hasErrors())
+			throw new BindException(bindingResult);
+			
+		Review review = reviewService.write(dto, principal.getName());
+		URI uri = UriComponentsBuilder.newInstance().path("/products/reviewRead").queryParam("rna", review.getRno()).build().toUri();
+		return ResponseEntity.created(uri).body(review); 
+	}
+	
 }
